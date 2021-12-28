@@ -1,0 +1,69 @@
+---
+title: Markdown example
+author: Miguel Portela
+date: May 19 2021
+output: pdf
+bibliography: references.bib
+csl: harvard-york-st-john-university.csl
+---
+
+# 1. Exploratory data analysis
+
+```s/
+
+	clear all
+	set more off
+
+
+	quiet use WAGE1, clear
+
+		quiet count if educ < 10
+
+```
+
+We have to clean observations with *missing* data. In our sample we **drop** `s r(N)` observations.
+
+```s/
+	
+	quiet {
+			drop if educ < 10
+			kdensity wage, normal graphregion(color(white)) scheme(sj) legend(region(color(white)))
+				graph export wage_density.png, replace
+	}
+
+	codebook, compact
+
+```
+
+
+![Wage density](wage_density.png){width=35%}
+
+
+# 2. Regression analysis
+
+We will now estimate the following model: $a^2+b^2=c^2$.
+
+
+
+```s/
+	quiet {
+			generate exper2 = exper^2
+			
+			regress lwage educ exper exper2
+				estimates store ols1
+		
+		// # 2.2
+			regress lwage educ exper exper2 female nonwhite
+			local beta = _b[educ]
+				est store ols2
+	}
+
+		esttab ols1 ols2
+```
+
+The return to education is about `s %6.1f `beta'*100` %. One concludes that (...)
+
+According to @cardoso2008, (...)
+
+## References
+---

@@ -1,0 +1,25 @@
+\begin{table}[htbp]\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{Regression analysis -- Wages (logs)}
+\begin{tabular}{l*{2}{c}}
+\hline\hline
+                    &         OLS         &          FE         \\
+\hline
+Experience (years)  &       0.051\sym{***}&       0.044\sym{***}\\
+                    &     (0.001)         &     (0.002)         \\
+[1em]
+Union               &       0.189\sym{***}&       0.101\sym{***}\\
+                    &     (0.007)         &     (0.007)         \\
+\hline
+Observations        &       19238         &       19238         \\
+Firms               &                     &     4150.00         \\
+R-sq-within         &                     &        0.14         \\
+R-sq-between        &                     &        0.25         \\
+Rho                 &                     &        0.69         \\
+corr(u\_i,Xb)        &                     &        0.11         \\
+\hline\hline
+\multicolumn{3}{l}{\footnotesize Notes: robust standard errors in parenthesis (clustered at the sector level).}\\
+\multicolumn{3}{l}{\footnotesize Significance levels: *, 10 %; **, 5 %; ***, 1 %.}\\
+\multicolumn{3}{l}{\footnotesize All regressions include a constant and time dummies.}\\
+\end{tabular}
+\end{table}

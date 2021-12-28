@@ -1,0 +1,465 @@
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/import/logs/import.txt
+  log type:  text
+ opened on:  19 May 2021, 14:54:44
+r; t=0.83 14:54:44
+
+. 
+. // # 1. OPEN A STATA DATA FILE
+.         
+. // # 1.1 use a system file from the web
+.         cd stata
+/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/import/stata
+r; t=0.01 14:54:44
+
+.         
+.         sysuse auto
+(1978 Automobile Data)
+r; t=0.00 14:54:44
+
+.         describe
+
+Contains data from /Applications/Stata/ado/base/a/auto.dta
+  obs:            74                          1978 Automobile Data
+ vars:            12                          13 Apr 2018 17:45
+                                              (_dta has notes)
+---------------------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------------------------------
+make            str18   %-18s                 Make and Model
+price           int     %8.0gc                Price
+mpg             int     %8.0g                 Mileage (mpg)
+rep78           int     %8.0g                 Repair Record 1978
+headroom        float   %6.1f                 Headroom (in.)
+trunk           int     %8.0g                 Trunk space (cu. ft.)
+weight          int     %8.0gc                Weight (lbs.)
+length          int     %8.0g                 Length (in.)
+turn            int     %8.0g                 Turn Circle (ft.)
+displacement    int     %8.0g                 Displacement (cu. in.)
+gear_ratio      float   %6.2f                 Gear Ratio
+foreign         byte    %8.0g      origin     Car type
+---------------------------------------------------------------------------------------------------------------------
+Sorted by: foreign
+r; t=0.00 14:54:44
+
+.         summarize
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        make |          0
+       price |         74    6165.257    2949.496       3291      15906
+         mpg |         74     21.2973    5.785503         12         41
+       rep78 |         69    3.405797    .9899323          1          5
+    headroom |         74    2.993243    .8459948        1.5          5
+-------------+---------------------------------------------------------
+       trunk |         74    13.75676    4.277404          5         23
+      weight |         74    3019.459    777.1936       1760       4840
+      length |         74    187.9324    22.26634        142        233
+        turn |         74    39.64865    4.399354         31         51
+displacement |         74    197.2973    91.83722         79        425
+-------------+---------------------------------------------------------
+  gear_ratio |         74    3.014865    .4562871       2.19       3.89
+     foreign |         74    .2972973    .4601885          0          1
+r; t=0.00 14:54:44
+
+.                 save auto, replace
+file auto.dta saved
+r; t=0.99 14:54:45
+
+. 
+. // # 1.2 open a Stata data file
+.                 use auto, clear
+(1978 Automobile Data)
+r; t=0.02 14:54:45
+
+. 
+. // # 1.3 import data from an internet archive
+.                 use http://www.stata-press.com/data/r13/apple.dta
+(Apple trees)
+r; t=0.47 14:54:45
+
+.                         save apple, replace                                     // save the file in Stata data form
+> at
+file apple.dta saved
+r; t=1.02 14:54:46
+
+. 
+.         cd ..
+/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/import
+r; t=0.00 14:54:46
+
+. 
+.                         
+. // # 2. Excel & ASCII files: import and export options
+. 
+.         // REPLICATE THE ABOVE PROCEDURE USING the AUTOMATIC procedure: go to menu File + Import + Text data (delim
+> ited, *.csv,...), etc.
+.         
+.         cd excel
+/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/import/excel
+r; t=0.00 14:54:46
+
+.         
+.                 // Data source - Penn World Table: https://pwt.sas.upenn.edu/
+. 
+.                 // OPEN THE FILE 'pwt70.csv' WITH Stata doedit TO SEE THE DATA
+.                 // alternative editors include Notepad, Winedit, Oxedit, Sublime Text
+. 
+.                 // Read text data created by a spreadsheet
+.                 // Indicate that variables names are in the first row of the data file
+.         
+.         // # 2.1 read .csv file
+.                         insheet using "pwt70.csv", delimiter(,) names clear
+(37 vars, 11,400 obs)
+r; t=0.71 14:54:47
+
+. 
+.                         keep isocode year pop xrat openc rgdpl rgdpwok
+r; t=0.00 14:54:47
+
+. 
+.         
+.         // # 2.2 Export to other formats
+. 
+.                 // # 2.2.a Save in stata data format
+.                                         save pwt70_short, replace
+file pwt70_short.dta saved
+r; t=0.99 14:54:48
+
+. 
+.                 // # 2.1.b Export in xlsx format
+.                                         export excel using "pwt70_short.xlsx", sheet("data") firstrow(variables) re
+> place
+file pwt70_short.xlsx saved
+r; t=1.62 14:54:50
+
+. 
+.                 // # 2.1.c Export in .csv format
+.                                 
+.                         // # 2.1.c.1
+.                                         export delimited using "pwt70_short.csv", replace
+file pwt70_short.csv saved
+r; t=1.26 14:54:51
+
+.                         
+.                         // # 2.1.c.2
+.                                         export delimited using "pwt70_short_tab.csv", delimiter(tab) replace
+file pwt70_short_tab.csv saved
+r; t=1.19 14:54:52
+
+.                         
+.                         // # 2.1.c.3
+.                                         export delimited using "pwt70_short_semicolon.csv", delimiter(;) replace
+file pwt70_short_semicolon.csv saved
+r; t=1.17 14:54:53
+
+.                                         
+.                                 // In case you want to export your data to be read by other software and it has abo
+> ve
+.                                 // 1 Million observations you better use an ASCII file format (Excel does not handl
+> e very large files)
+.                                         
+.                                         outsheet using "pwt70_short.txt", delimiter("$") replace
+r; t=0.94 14:54:54
+
+.                         
+.                 // # 2.1.d Export in .raw format with a dictionary
+.                                         outfile using "pwt70_short_free.dct", dictionary replace
+r; t=1.14 14:54:55
+
+. 
+. 
+. 
+.         // # 2.3. Import the xlsx file format
+.                         import excel "pwt70_short.xlsx", sheet("data") firstrow case(lower) clear
+(7 vars, 11,400 obs)
+r; t=0.56 14:54:56
+
+. 
+.         // # 2.4. Import the .csv ; file format
+.                         import delimited "pwt70_short_semicolon.csv", delimiter(";") varnames(1) clear
+(7 vars, 11,400 obs)
+r; t=0.11 14:54:56
+
+. 
+.         
+.         // # 2.5. READING DATA FROM ASCII FORMAT: infile using fixed-format files (infile with a dictionary)
+.         
+.                 // # 2.5.a. dictionary and data in the same file
+.                 
+.                         infile using "pwt70_short_free.dct", clear
+
+dictionary {
+        str3    isocode
+        int     year
+        float   pop               `"POP"'
+        double  xrat              `"XRAT"'
+        float   openc
+        float   rgdpl
+_newline
+        float   rgdpwok
+}
+
+(11,400 observations read)
+r; t=0.00 14:54:56
+
+.         
+.                         cd ..
+/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/import
+r; t=0.00 14:54:56
+
+. 
+.                 
+.                 // # 2.5.b. data in a different file from the dictionary
+.         
+.                         cd ascii
+/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/import/ascii
+r; t=0.00 14:54:56
+
+. 
+.                                 // view with Stata doedit the files ascii_example.txt and ascii_example.dct
+.                                 // doedit ascii_example.txt
+.                                 // doedit ascii_example.dct
+. 
+.                                         infile using ascii_example.dct, clear   // read the data to Stata
+
+dictionary using ascii_example.txt {
+_column(1)              int             ano                             %4.0f   "ano"
+_column(5)              double  idemp                   %7.0f   "Número da empresa"
+_column(12)     double  idest                   %7.0f   "Número do estabelecimento"
+_column(19)     long    irc                             %5.0f   "Instrumento Regulamentacao Colectiva do Trabalho"
+_column(24)     long    ircdt           %6.0f   "Data de Eficacia do IRC"
+_column(30)     double  idtrab          %11.0f  "Número do Trabalhador"
+_column(41)     byte    sexo            %1.0f   "Sexo"
+_column(42)     str5    prof            %5s     "Classificação Nacional de Profissões (CNP85 - 5 digitos)"
+_column(47)     str3    prof_3d         %3s     "Classificação Nacional de Profissões (CNP85 - 3 digitos)"
+_column(50)     str2    prof_2d         %2s     "Classificação Nacional de Profissões (CNP85 - 2 digitos)"
+_column(52)     str1    prof_1d         %1s     "Classificação Nacional de Profissões (CNP85 - 1 digito)"
+_column(53)     long    catprof         %6.0f   "Categoria Profissional"
+_column(59)     byte    sitprof         %1.0f   "Situação Profissional"
+_column(60)             float   nqual1          %8.0f   "Níveis de Qualificações (1 digito)"
+_column(68)             int             nqual           %2.0f   "Níveis de Qualificações (2 dígitos)"
+_column(70)             byte    habil1          %8.0f   "Habilitações Escolares (1 digito)"
+_column(78)             int             habil           %3.0f   "Habilitações Escolares (3 dígitos)"
+_column(81)             int             idade           %2.0f   "Idade"
+_column(83)             long    dtadm           %6.0f   "Data de Admissão (AAMM)"
+_column(89)             byte    ctrem           %1.0f   "Controle Remuneração"
+_column(90)             long    rbase           %15.2f  "Remuneração Base (Euros)"
+_column(105)    long    rprg            %15.2f  "Prestações Regulares (Euros)"
+_column(120)    long    rpirg           %15.2f  "Prestações Irregulares (Euros)"
+_column(135)    long    rextr           %15.2f  "Prestações Extraordinárias (Euros)"
+_column(150)    long    nhnor           %3.0f   "Horas Mensais Remuneradas - Normais"
+_column(153)    long    nhext           %3.0f   "Horas Mensais Remuneradas - Extraordinárias"
+}
+
+(5 observations read)
+r; t=1.92 14:54:58
+
+.                                                 des                                                                
+>      // describe the data: variables names, storage type, display format, value label and the variable label
+
+Contains data
+  obs:             5                          
+ vars:            26                          
+---------------------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------------------------------
+ano             int     %8.0g                 ano
+idemp           double  %10.0g                Número da empresa
+idest           double  %10.0g                Número do estabelecimento
+irc             long    %12.0g                Instrumento Regulamentacao Colectiva do Trabalho
+ircdt           long    %12.0g                Data de Eficacia do IRC
+idtrab          double  %10.0g                Número do Trabalhador
+sexo            byte    %8.0g                 Sexo
+prof            str5    %9s                   Classificação Nacional de Profissões (CNP85 - 5 digitos)
+prof_3d         str3    %9s                   Classificação Nacional de Profissões (CNP85 - 3 digitos)
+prof_2d         str2    %9s                   Classificação Nacional de Profissões (CNP85 - 2 digitos)
+prof_1d         str1    %9s                   Classificação Nacional de Profissões (CNP85 - 1 digito)
+catprof         long    %12.0g                Categoria Profissional
+sitprof         byte    %8.0g                 Situação Profissional
+nqual1          float   %9.0g                 Níveis de Qualificações (1 digito)
+nqual           int     %8.0g                 Níveis de Qualificações (2 dígitos)
+habil1          byte    %8.0g                 Habilitações Escolares (1 digito)
+habil           int     %8.0g                 Habilitações Escolares (3 dígitos)
+idade           int     %8.0g                 Idade
+dtadm           long    %12.0g                Data de Admissão (AAMM)
+ctrem           byte    %8.0g                 Controle Remuneração
+rbase           long    %12.0g                Remuneração Base (Euros)
+rprg            long    %12.0g                Prestações Regulares (Euros)
+rpirg           long    %12.0g                Prestações Irregulares (Euros)
+rextr           long    %12.0g                Prestações Extraordinárias (Euros)
+nhnor           long    %12.0g                Horas Mensais Remuneradas - Normais
+nhext           long    %12.0g                Horas Mensais Remuneradas - Extraordinárias
+---------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+     Note: Dataset has changed since last saved.
+r; t=0.00 14:54:58
+
+.                                         
+.                                         save ascii_example, replace                             // save the file in
+>  old Stata format
+file ascii_example.dta saved
+r; t=0.98 14:54:59
+
+. 
+.                         // NOTE: in Stata the decimal is denoted by dot, not comma
+.                                         
+.                                 filefilter data_ascii_example_comma.txt data_ascii_example_dot.txt, from(",") to(".
+> ") replace   // EXERCISE: install filefilter
+(file data_ascii_example_dot.txt was replaced)
+r; t=1.93 14:55:01
+
+. 
+. 
+.         cd ..
+/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/import
+r; t=0.01 14:55:01
+
+. 
+. 
+. // # 3. XML example
+.         cd xml
+/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/import/xml
+r; t=0.00 14:55:01
+
+.         
+.                 sysuse auto, clear
+(1978 Automobile Data)
+r; t=0.00 14:55:01
+
+.                 
+.                 // # 3.1 .xml export
+.                         xmlsave "auto_xml.xml", doctype(excel) replace
+file auto_xml.xml saved
+r; t=0.95 14:55:02
+
+.                 
+.                 // # 3.2 .xml import
+.                         xmluse "auto_xml.xml", doctype(excel) first clear
+r; t=0.00 14:55:02
+
+.                         
+.                                 describe
+
+Contains data from auto_xml.xml
+  obs:            74                          
+ vars:            12                          
+---------------------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------------------------------
+make            str2045 %2045s                
+price           double  %10.0g                
+mpg             double  %10.0g                
+rep78           double  %10.0g                
+headroom        double  %10.0g                
+trunk           double  %10.0g                
+weight          double  %10.0g                
+length          double  %10.0g                
+turn            double  %10.0g                
+displacement    double  %10.0g                
+gear_ratio      double  %10.0g                
+foreign         double  %10.0g                
+---------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+r; t=0.00 14:55:02
+
+.                                 
+.                                 // one can spare space by compressing the data
+.                                 compress
+  variable price was double now int
+  variable mpg was double now byte
+  variable rep78 was double now byte
+  variable trunk was double now byte
+  variable weight was double now int
+  variable length was double now int
+  variable turn was double now byte
+  variable displacement was double now int
+  variable foreign was double now byte
+  variable make was str2045 now str17
+  (154,438 bytes saved)
+r; t=0.00 14:55:02
+
+.                                         describe
+
+Contains data from auto_xml.xml
+  obs:            74                          
+ vars:            12                          
+---------------------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------------------------------
+make            str17   %17s                  
+price           int     %10.0g                
+mpg             byte    %10.0g                
+rep78           byte    %10.0g                
+headroom        double  %10.0g                
+trunk           byte    %10.0g                
+weight          int     %10.0g                
+length          int     %10.0g                
+turn            byte    %10.0g                
+displacement    int     %10.0g                
+gear_ratio      double  %10.0g                
+foreign         byte    %10.0g                
+---------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+     Note: Dataset has changed since last saved.
+r; t=0.00 14:55:02
+
+.                 
+.                 // # 3.3 .xml import: outside example
+.                         xmluse "data_example_xml.xml", doctype(excel) firstrow clear
+r; t=1.00 14:55:03
+
+. 
+. // # 4. ODBC example
+. 
+.         // "Microsoft has still not published a OSBC-Driver for 64bit applications that want to read data from Acce
+> ss Files"
+.         // only Stata 32-bit is able to use ODBC with Microsoft Access database: for this example I am going to use
+>  Stata 12 32-bit
+.         // windows, search for ODBC Administrator
+.         // add 'Microsoft Access Driver' and choose your access data set == we will be using odbc_stata_example.mdb
+. 
+.                 /*
+>                         odbc list
+>                         odbc query "odbc_stata_example", dialog(complete)
+>                         odbc desc "pwt71"
+>                         odbc load, table("pwt71") clear
+>                                 describe
+>                                 
+>                                 gen pop2 = pop^2
+>                                 
+>                                 odbc insert isocode pop2, as("isocode pop2") dsn("odbc_stata_example") table("pwt71
+> _new") create
+>                                 odbc query "odbc_stata_example", dialog(complete)
+>                                 odbc desc "pwt71_new"
+>                                 
+>                                 replace pop2 = -pop2
+>                                 
+>                                 odbc insert isocode pop2, as("isocode pop2") dsn("odbc_stata_example") table(" pwt7
+> 1_new") overwrite
+>                                 odbc query "odbc_stata_example", dialog(complete)
+>                                 odbc desc "pwt71_new"
+>                                 odbc load, table("pwt71_new") clear
+>                                         sum
+>                                         save odbc_example, replace
+>                 */
+. 
+. timer off 1
+r; t=0.00 14:55:03
+
+. timer list 1
+   1:     19.88 /        1 =      19.8780
+r; t=0.00 14:55:03
+
+.                                 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/import/logs/import.txt
+  log type:  text
+ closed on:  19 May 2021, 14:55:03
+---------------------------------------------------------------------------------------------------------------------

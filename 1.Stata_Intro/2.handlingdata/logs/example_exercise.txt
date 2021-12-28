@@ -1,0 +1,755 @@
+---------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/statafep2020/day1/2.handlingdata/logs/example_exercise.tx
+> t
+  log type:  text
+ opened on:  10 Oct 2019, 19:38:28
+r; t=0.00 19:38:28
+
+. 
+. sysuse auto, clear
+(1978 Automobile Data)
+r; t=0.00 19:38:28
+
+. codebook, compact
+
+Variable      Obs Unique      Mean   Min    Max  Label
+---------------------------------------------------------------------------------------------------
+make           74     74         .     .      .  Make and Model
+price          74     74  6165.257  3291  15906  Price
+mpg            74     21   21.2973    12     41  Mileage (mpg)
+rep78          69      5  3.405797     1      5  Repair Record 1978
+headroom       74      8  2.993243   1.5      5  Headroom (in.)
+trunk          74     18  13.75676     5     23  Trunk space (cu. ft.)
+weight         74     64  3019.459  1760   4840  Weight (lbs.)
+length         74     47  187.9324   142    233  Length (in.)
+turn           74     18  39.64865    31     51  Turn Circle (ft.)
+displacement   74     31  197.2973    79    425  Displacement (cu. in.)
+gear_ratio     74     36  3.014865  2.19   3.89  Gear Ratio
+foreign        74      2  .2972973     0      1  Car type
+---------------------------------------------------------------------------------------------------
+r; t=0.05 19:38:28
+
+. tab1 rep78 foreign
+
+-> tabulation of rep78  
+
+     Repair |
+Record 1978 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |          2        2.90        2.90
+          2 |          8       11.59       14.49
+          3 |         30       43.48       57.97
+          4 |         18       26.09       84.06
+          5 |         11       15.94      100.00
+------------+-----------------------------------
+      Total |         69      100.00
+
+-> tabulation of foreign  
+
+   Car type |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   Domestic |         52       70.27       70.27
+    Foreign |         22       29.73      100.00
+------------+-----------------------------------
+      Total |         74      100.00
+r; t=0.00 19:38:28
+
+. 
+. levelsof make,local(brands)
+`"AMC Concord"' `"AMC Pacer"' `"AMC Spirit"' `"Audi 5000"' `"Audi Fox"' `"BMW 320i"' `"Buick Centur
+> y"' `"Buick Electra"' `"Buick LeSabre"' `"Buick Opel"' `"Buick Regal"' `"Buick Riviera"' `"Buick 
+> Skylark"' `"Cad. Deville"' `"Cad. Eldorado"' `"Cad. Seville"' `"Chev. Chevette"' `"Chev. Impala"'
+>  `"Chev. Malibu"' `"Chev. Monte Carlo"' `"Chev. Monza"' `"Chev. Nova"' `"Datsun 200"' `"Datsun 21
+> 0"' `"Datsun 510"' `"Datsun 810"' `"Dodge Colt"' `"Dodge Diplomat"' `"Dodge Magnum"' `"Dodge St. 
+> Regis"' `"Fiat Strada"' `"Ford Fiesta"' `"Ford Mustang"' `"Honda Accord"' `"Honda Civic"' `"Linc.
+>  Continental"' `"Linc. Mark V"' `"Linc. Versailles"' `"Mazda GLC"' `"Merc. Bobcat"' `"Merc. Couga
+> r"' `"Merc. Marquis"' `"Merc. Monarch"' `"Merc. XR-7"' `"Merc. Zephyr"' `"Olds 98"' `"Olds Cutl S
+> upr"' `"Olds Cutlass"' `"Olds Delta 88"' `"Olds Omega"' `"Olds Starfire"' `"Olds Toronado"' `"Peu
+> geot 604"' `"Plym. Arrow"' `"Plym. Champ"' `"Plym. Horizon"' `"Plym. Sapporo"' `"Plym. Volare"' `
+> "Pont. Catalina"' `"Pont. Firebird"' `"Pont. Grand Prix"' `"Pont. Le Mans"' `"Pont. Phoenix"' `"P
+> ont. Sunbird"' `"Renault Le Car"' `"Subaru"' `"Toyota Celica"' `"Toyota Corolla"' `"Toyota Corona
+> "' `"VW Dasher"' `"VW Diesel"' `"VW Rabbit"' `"VW Scirocco"' `"Volvo 260"'
+r; t=0.00 19:38:28
+
+. 
+. foreach asd of local brands {
+  2. display _new(3) "MAKE:  `asd'" _new(1)
+  3.         sum price if make == "`asd'"
+  4. }
+
+
+
+MAKE:  AMC Concord
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4099           .       4099       4099
+
+
+
+MAKE:  AMC Pacer
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4749           .       4749       4749
+
+
+
+MAKE:  AMC Spirit
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        3799           .       3799       3799
+
+
+
+MAKE:  Audi 5000
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        9690           .       9690       9690
+
+
+
+MAKE:  Audi Fox
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        6295           .       6295       6295
+
+
+
+MAKE:  BMW 320i
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        9735           .       9735       9735
+
+
+
+MAKE:  Buick Century
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4816           .       4816       4816
+
+
+
+MAKE:  Buick Electra
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        7827           .       7827       7827
+
+
+
+MAKE:  Buick LeSabre
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5788           .       5788       5788
+
+
+
+MAKE:  Buick Opel
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4453           .       4453       4453
+
+
+
+MAKE:  Buick Regal
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5189           .       5189       5189
+
+
+
+MAKE:  Buick Riviera
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1       10372           .      10372      10372
+
+
+
+MAKE:  Buick Skylark
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4082           .       4082       4082
+
+
+
+MAKE:  Cad. Deville
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1       11385           .      11385      11385
+
+
+
+MAKE:  Cad. Eldorado
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1       14500           .      14500      14500
+
+
+
+MAKE:  Cad. Seville
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1       15906           .      15906      15906
+
+
+
+MAKE:  Chev. Chevette
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        3299           .       3299       3299
+
+
+
+MAKE:  Chev. Impala
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5705           .       5705       5705
+
+
+
+MAKE:  Chev. Malibu
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4504           .       4504       4504
+
+
+
+MAKE:  Chev. Monte Carlo
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5104           .       5104       5104
+
+
+
+MAKE:  Chev. Monza
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        3667           .       3667       3667
+
+
+
+MAKE:  Chev. Nova
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        3955           .       3955       3955
+
+
+
+MAKE:  Datsun 200
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        6229           .       6229       6229
+
+
+
+MAKE:  Datsun 210
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4589           .       4589       4589
+
+
+
+MAKE:  Datsun 510
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5079           .       5079       5079
+
+
+
+MAKE:  Datsun 810
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        8129           .       8129       8129
+
+
+
+MAKE:  Dodge Colt
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        3984           .       3984       3984
+
+
+
+MAKE:  Dodge Diplomat
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4010           .       4010       4010
+
+
+
+MAKE:  Dodge Magnum
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5886           .       5886       5886
+
+
+
+MAKE:  Dodge St. Regis
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        6342           .       6342       6342
+
+
+
+MAKE:  Fiat Strada
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4296           .       4296       4296
+
+
+
+MAKE:  Ford Fiesta
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4389           .       4389       4389
+
+
+
+MAKE:  Ford Mustang
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4187           .       4187       4187
+
+
+
+MAKE:  Honda Accord
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5799           .       5799       5799
+
+
+
+MAKE:  Honda Civic
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4499           .       4499       4499
+
+
+
+MAKE:  Linc. Continental
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1       11497           .      11497      11497
+
+
+
+MAKE:  Linc. Mark V
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1       13594           .      13594      13594
+
+
+
+MAKE:  Linc. Versailles
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1       13466           .      13466      13466
+
+
+
+MAKE:  Mazda GLC
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        3995           .       3995       3995
+
+
+
+MAKE:  Merc. Bobcat
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        3829           .       3829       3829
+
+
+
+MAKE:  Merc. Cougar
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5379           .       5379       5379
+
+
+
+MAKE:  Merc. Marquis
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        6165           .       6165       6165
+
+
+
+MAKE:  Merc. Monarch
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4516           .       4516       4516
+
+
+
+MAKE:  Merc. XR-7
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        6303           .       6303       6303
+
+
+
+MAKE:  Merc. Zephyr
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        3291           .       3291       3291
+
+
+
+MAKE:  Olds 98
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        8814           .       8814       8814
+
+
+
+MAKE:  Olds Cutl Supr
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5172           .       5172       5172
+
+
+
+MAKE:  Olds Cutlass
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4733           .       4733       4733
+
+
+
+MAKE:  Olds Delta 88
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4890           .       4890       4890
+
+
+
+MAKE:  Olds Omega
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4181           .       4181       4181
+
+
+
+MAKE:  Olds Starfire
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4195           .       4195       4195
+
+
+
+MAKE:  Olds Toronado
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1       10371           .      10371      10371
+
+
+
+MAKE:  Peugeot 604
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1       12990           .      12990      12990
+
+
+
+MAKE:  Plym. Arrow
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4647           .       4647       4647
+
+
+
+MAKE:  Plym. Champ
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4425           .       4425       4425
+
+
+
+MAKE:  Plym. Horizon
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4482           .       4482       4482
+
+
+
+MAKE:  Plym. Sapporo
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        6486           .       6486       6486
+
+
+
+MAKE:  Plym. Volare
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4060           .       4060       4060
+
+
+
+MAKE:  Pont. Catalina
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5798           .       5798       5798
+
+
+
+MAKE:  Pont. Firebird
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4934           .       4934       4934
+
+
+
+MAKE:  Pont. Grand Prix
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5222           .       5222       5222
+
+
+
+MAKE:  Pont. Le Mans
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4723           .       4723       4723
+
+
+
+MAKE:  Pont. Phoenix
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4424           .       4424       4424
+
+
+
+MAKE:  Pont. Sunbird
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4172           .       4172       4172
+
+
+
+MAKE:  Renault Le Car
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        3895           .       3895       3895
+
+
+
+MAKE:  Subaru
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        3798           .       3798       3798
+
+
+
+MAKE:  Toyota Celica
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5899           .       5899       5899
+
+
+
+MAKE:  Toyota Corolla
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        3748           .       3748       3748
+
+
+
+MAKE:  Toyota Corona
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5719           .       5719       5719
+
+
+
+MAKE:  VW Dasher
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        7140           .       7140       7140
+
+
+
+MAKE:  VW Diesel
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        5397           .       5397       5397
+
+
+
+MAKE:  VW Rabbit
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        4697           .       4697       4697
+
+
+
+MAKE:  VW Scirocco
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1        6850           .       6850       6850
+
+
+
+MAKE:  Volvo 260
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |          1       11995           .      11995      11995
+r; t=0.00 19:38:28
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/statafep2020/day1/2.handlingdata/logs/example_exercise.tx
+> t
+  log type:  text
+ closed on:  10 Oct 2019, 19:38:28
+---------------------------------------------------------------------------------------------------

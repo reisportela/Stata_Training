@@ -1,0 +1,496 @@
+-------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/3.dataanalysis/graphs/l
+> ogs/graphs.txt
+  log type:  text
+ opened on:  21 May 2021, 21:04:55
+r; t=0.00 21:04:55
+
+. 
+. 
+.         use data/graph_data, clear
+r; t=0.00 21:04:55
+
+. 
+.         // # 1. describe the data
+.                         codebook, compact                       
+
+Variable   Obs Unique      Mean       Min       Max  Label
+-------------------------------------------------------------------------------------------
+country    839    106         .         .         .  Country name
+year       839      9  1980.906      1960      2000  Year of observation
+education  839    574  4.794076       .04     12.25  Education
+lngdp      839    838  9.308131  5.983335  12.51058  Log Real GDP per Worker
+open       839      2  .4982122         0         1  1 = high degree of openness; 0 othe...
+gdp        839    838  20100.66  396.7612  271192.2  GDP level
+-------------------------------------------------------------------------------------------
+r; t=0.01 21:04:55
+
+. 
+. 
+. 
+.         // # 2. Histogram
+. 
+.                 // # 2.1
+.                         histogram education if year == 2000
+(bin=9, start=.76, width=1.2766667)
+r; t=0.51 21:04:55
+
+.                 
+.                 // # 2.2
+.                         histogram education if year == 2000, normal
+(bin=9, start=.76, width=1.2766667)
+r; t=0.24 21:04:55
+
+.                 
+.                 // # 2.3
+.                         histogram education if year == 2000, freq addlabels
+(bin=9, start=.76, width=1.2766667)
+r; t=0.24 21:04:56
+
+. 
+.                 // # 2.4
+.                         histogram education, ytitle(Densidade) xtitle(Educacao) xlabel(1 
+> 3 5 7 9 12) title(Distribuicao da Educacao em 2020)
+(bin=28, start=.04, width=.43607143)
+r; t=0.22 21:04:56
+
+. 
+. 
+. 
+.         // # 3. Scatter
+. 
+.                 // # 3.1 full command
+.                         graph twoway scatter lngdp education
+r; t=0.21 21:04:56
+
+.                 
+.                 // # 3.2 we do not need twoway
+.                         twoway scatter lngdp education
+r; t=0.21 21:04:56
+
+.                 
+.                 // # 3.3 for this type of graph we can just type
+.                         scatter lngdp education
+r; t=0.21 21:04:56
+
+.                 
+.                 // # 3.4.a schemes, option a: use set scheme
+.                         scatter lngdp education || lfit lngdp education
+r; t=0.27 21:04:57
+
+.                                 set scheme economist
+r; t=0.00 21:04:57
+
+.                         scatter lngdp education || lfit lngdp education
+r; t=0.43 21:04:57
+
+.                                 set scheme s2mono
+r; t=0.00 21:04:57
+
+.                         scatter lngdp education || lfit lngdp education
+r; t=0.37 21:04:57
+
+.                 
+.         
+.         set scheme s2color // set scheme back
+r; t=0.00 21:04:57
+
+. 
+. 
+.                 // # 3.4.a schemes, alternative: define the scheme as an option to the gr
+> aph command
+.                         scatter lngdp education, scheme(sj)
+r; t=0.33 21:04:58
+
+.                 
+.                 // # 3.5.b overlap two graphs; in this example the 2nd graph is a linear 
+> fit
+.                         scatter lngdp education || lfit lngdp education, scheme(sj)
+r; t=0.37 21:04:58
+
+.                 
+.                 // # 3.5.c overlap two graphs; in this example the 2nd graph is a polynom
+> ial fit
+.                         scatter lngdp education || fpfit lngdp education, scheme(s2color)
+r; t=0.58 21:04:59
+
+.                 
+.                 // # 3.6 combine a set of graphs with overlap; save the intermediate grap
+> hs
+.                         scatter lngdp education if year == 1960 || lfit lngdp education i
+> f year == 1960, scheme(s1mono) xlabel(0(2)12) ylabel(6(1.5)12) ///
+>                                         title(Income vs. Education: 1960)legend(region(lw
+> idth(none)) cols(1)) saving(graphs/inc_educ_60, replace)
+(file graphs/inc_educ_60.gph saved)
+r; t=0.43 21:04:59
+
+.                 
+.                         scatter lngdp education if year == 2000 || lfit lngdp education i
+> f year == 2000, scheme(s1mono) /*
+>                                         */ xlabel(0(2)12) ylabel(6(1.5)12) saving(graphs/
+> inc_educ_00, replace) /*
+>                                         */ title(Income vs. Education: 2000)legend(region
+> (lwidth(none)) cols(1))
+(file graphs/inc_educ_00.gph saved)
+r; t=0.45 21:05:00
+
+.                                 
+.                         graph combine graphs/inc_educ_60.gph graphs/inc_educ_00.gph, note
+> (Source: Own computations.) graphregion(color(white))
+r; t=0.76 21:05:00
+
+.                                 graph export graphs/inc_educ.png, replace       // APPROP
+> RIATE FOR WORD FILES; open the file 'inc_educ.wmf' with Windows Explorer
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/3.dataanalysis/graphs/graphs/i
+> nc_educ.png written in PNG format)
+r; t=0.12 21:05:01
+
+.                                 graph export graphs/inc_educ.eps, replace       // APPROP
+> RIATE FOR LATEX FILES
+(file graphs/inc_educ.eps written in EPS format)
+r; t=0.00 21:05:01
+
+. 
+.                         
+. 
+.         // # 4. Line
+. 
+.                 // # 4.1
+.                         line lngdp year if country == "denmark"
+r; t=0.38 21:05:01
+
+.                 
+.                 // # 4.2
+.                         twoway (line education year if country == "sweden", c(dash)) (lin
+> e education year if country == "united states",c(l)), ///
+>                                         yline(9) xline(1980) xlabel(1960(5)2000) ///
+>                                         text(12.25 1985 "United States", placement(e)) te
+> xt(11.25 1990 "Sweden", placement(e)) ///
+>                                         scheme(s2mono) ylabel(6 9 10 12) legend(off) note
+> (Source: Own Computations.) ///
+>                                         xtitle(Year of observation) ytitle(Average educat
+> ion)
+(note:  named style dash not found in class connectstyle, default attributes used)
+r; t=0.36 21:05:01
+
+.                         
+.                                 graph export graphs/education_pt_us.png, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/3.dataanalysis/graphs/graphs/e
+> ducation_pt_us.png written in PNG format)
+r; t=0.01 21:05:01
+
+. 
+.                         
+. 
+.         // # 5. Whisker plot ("grafico de extremos e quartis")
+.                 
+.                 // # 5.1 basic box plot
+.                         graph box education if year == 2000
+r; t=0.40 21:05:02
+
+. 
+.                 // # 5.2 box plot of education for two different years
+.                 // preserve & restore the data
+.                         preserve
+r; t=0.00 21:05:02
+
+.                                 keep if year == 1960 | year == 2000
+(663 observations deleted)
+r; t=0.00 21:05:02
+
+.                                 tab year
+
+    Year of |
+observation |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1960 |         78       44.32       44.32
+       2000 |         98       55.68      100.00
+------------+-----------------------------------
+      Total |        176      100.00
+r; t=0.00 21:05:02
+
+.                                 graph box education, by(year)
+r; t=0.39 21:05:02
+
+.                         restore
+r; t=0.00 21:05:02
+
+. 
+.                 // # 5.3 box plot of education for two different years
+.                         graph box education if (country == "denmark" | country == "portug
+> al" | ///
+>                                         country == "united states" | country == "italy" |
+>  country == "spain"), ///
+>                                         over(country, label(alternate) sort(lngdp)) ///
+>                                         graphregion(color(white)) bgcolor(white) scheme(s
+> 2mono) ///
+>                                         title("Distribution of education by country") ///
+>                                         subtitle("(countries ordered by average gdp)") //
+> /
+>                                         note("Source: own computations.")
+r; t=0.39 21:05:02
+
+.                                 
+.                                 graph export graphs/boxplot_education.tif, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/3.dataanalysis/graphs/graphs/b
+> oxplot_education.tif written in TIFF format)
+r; t=0.01 21:05:02
+
+. 
+.                         
+. 
+.         // # 6. PIE
+.                 
+.                 // # 6.1 Example 1
+.                 graph pie gdp if (country == "denmark" | country == "portugal" | country 
+> == "united states") & year == 2000, ///
+>                                         scheme(s2color) over(country) title(Income share 
+> among countries) ///
+>                                         plabel(1 percent, size(*1.5) color(white) format(
+> %3.1f)) ///
+>                                         plabel(2 percent, size(*1.5) color(white) format(
+> %3.1f)) ///
+>                                         plabel(3 percent, size(*1.5) color(white) format(
+> %3.1f)) ///
+>                                         legend(on) plotregion(lstyle(none)) ///
+>                                         note("Source: Own computations.")
+r; t=0.38 21:05:03
+
+.                                         
+.                         graph export graphs/pie_1.png, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/3.dataanalysis/graphs/graphs/p
+> ie_1.png written in PNG format)
+r; t=0.01 21:05:03
+
+. 
+.                 // # 6.2 Example 2
+.                 graph pie gdp if (country == "denmark" | country == "portugal" | country 
+> == "united states") & year == 2000, ///
+>                                         scheme(s2color) over(country) title(Income share 
+> among countries) ///
+>                                         plabel(1 name, size(*1.5) color(white)) ///
+>                                         plabel(2 name, size(*1.5) color(white)) ///
+>                                         plabel(3 name, size(*1.5) color(white)) ///
+>                                         legend(off) plotregion(lstyle(none)) ///
+>                                         note("Source: Own computations.")
+r; t=0.31 21:05:03
+
+.                         
+.                         graph export graphs/pie_2.png, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/3.dataanalysis/graphs/graphs/p
+> ie_2.png written in PNG format)
+r; t=0.01 21:05:03
+
+. 
+. 
+. 
+.         // # 7. DOT graph
+.                 
+.                 // # 7.1 utilizar o menu
+.                         
+.                         // help graph dot
+.                         // Graphics > Dot chart
+.                         // country == "portugal" | country == "spain"
+.                         // a. Main: Statistic = mean; Variables: education
+.                         // b. Categories: tick Group 1 and choose as grouping variable 'c
+> ountry'
+.                         // c. if/in: expression + Create..., country == "portugal" | coun
+> try == "spain"
+.                         // d. Y axis: Title:, Average education
+.                         // e. Titles, Title: "Countries' education, 1960-2000"
+.                         
+.                         // outcome
+.                         
+.                         graph dot (mean) education if country == "portugal" | country == 
+> "spain", /*
+>                                 */ over(country) ytitle(Average education) title("Countri
+> es' education, 1960-2000")
+r; t=0.34 21:05:04
+
+.                                 
+.                                 // optional
+.                                 
+.                                                 // start graph editor
+.                                                 // activate the record button
+.                                                 // add box to legend
+.                                                 // replace spain by Spain
+.                                                 // replace portugal by Portugal
+.                                                 // stop recording
+.                                                 // save the resulting grc file in your wo
+> rking folder
+.                                                 // open the .grc file with Stata doedit
+.                                                 // the following lines are used to replic
+> ate the above changes to the graph
+. 
+.                                                         gr_edit scaleaxis.title.style.edi
+> tstyle drawbox(yes) editcopy
+r; t=0.04 21:05:04
+
+. 
+.                                                         gr_edit grpaxis.major.num_rule_ti
+> cks = 0
+r; t=0.03 21:05:04
+
+.                                                         gr_edit grpaxis.edit_tick 1 25 `"
+> Spain"', tickset(major)
+r; t=0.03 21:05:04
+
+. 
+.                                                         gr_edit grpaxis.major.num_rule_ti
+> cks = 0
+r; t=0.03 21:05:04
+
+.                                                         gr_edit grpaxis.edit_tick 2 75 `"
+> Portugal"', tickset(major)
+r; t=0.03 21:05:04
+
+. 
+.                 
+.                 
+.                 // # 7.2 'simple formulation'
+.                         graph dot (mean) education if (country == "denmark" | country == 
+> "portugal" | ///
+>                                         country == "united states" | country == "italy" |
+>  country == "spain"), ///
+>                                         over(country, sort((mean) lngdp))
+r; t=0.26 21:05:04
+
+.                 
+.                 // # 7.3 add scheme, title and legend
+.                         separate education, by(open)
+
+              storage   display    value
+variable name   type    format     label      variable label
+-------------------------------------------------------------------------------------------
+education0      double  %10.0g                education, open == 0
+education1      double  %10.0g                education, open == 1
+r; t=0.00 21:05:04
+
+.                         label var education0 "Low openness"
+r; t=0.00 21:05:04
+
+.                         label var education1 "High openness"
+r; t=0.00 21:05:04
+
+. 
+.                         graph dot (mean) education0 education1 if (country == "denmark" |
+>  country == "portugal" | ///
+>                                         country == "united states" | country == "italy" |
+>  country == "spain"), ///
+>                                         over(country, sort((mean) lngdp)) scheme(sj) ytit
+> le("Education") ///
+>                                         legend(label(1 "Low openness") label(2 "High open
+> ness"))
+r; t=0.44 21:05:04
+
+. 
+.                 // # 7.4 increase the complexity of the graph
+.                         sum education if year == 2000,detail
+
+                          Education
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%          .76            .76
+ 5%         1.91            .82
+10%         2.23           1.14       Obs                  98
+25%         4.42           1.19       Sum of Wgt.          98
+
+50%         6.09                      Mean           6.291735
+                        Largest       Std. Dev.      2.843706
+75%         8.53          11.43
+90%          9.9          11.52       Variance       8.086662
+95%        11.36          11.86       Skewness      -.0281713
+99%        12.25          12.25       Kurtosis       2.172931
+r; t=0.00 21:05:04
+
+.                                 
+.                                 global a = r(p50)
+r; t=0.00 21:05:04
+
+.                                 global b = r(p10)
+r; t=0.00 21:05:04
+
+.                                 local c = r(p90)
+r; t=0.00 21:05:04
+
+.                         
+.                         graph dot (mean) education if (country == "denmark" | country == 
+> "portugal" | country == "united states" | country == "italy" | country == "spain"),over(c
+> ountry, sort((max) lngdp)) ///
+>                                 title("Maximum level of education between 1960 and 2000",
+>  span) ///
+>                                 note("Notes: Countries are ordered by maximum GDP." "Valu
+> es in the axis are percentiles 10, 50 and 90 of education, respectively, in 2000.") ///
+>                                 ytitle("Education") yline($a $b `c') ylabel($a $b `c',for
+> mat(%3.1g)) ///
+>                                 graphregion(color(white)) bgcolor(white) scheme(s2color)
+r; t=0.42 21:05:05
+
+.                         
+.                         // export the graph in .png format; other formats are, for exampl
+> e, .tif, .eps or .wmf
+.                         graph export graphs/example1.png, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/3.dataanalysis/graphs/graphs/e
+> xample1.png written in PNG format)
+r; t=0.02 21:05:05
+
+.                         graph export graphs/example1.eps, replace
+(file graphs/example1.eps written in EPS format)
+r; t=0.00 21:05:05
+
+.         
+. 
+.                 
+.         // # 8. Kernel density
+.                 
+.                 // # 8.1 basic kernel
+.                         kdensity lngdp if year == 2000, bwidth(100)
+r; t=0.22 21:05:05
+
+.                 
+.                 // # 8.2 overlap two densites for different years
+.                         twoway (kdensity lngdp if year == 1960, lpattern(dash)) || (kdens
+> ity lngdp if year == 2000), ///
+>                                 legend(label(1 "Year 1960") label(2 "Year 2000")) scheme(
+> economist) ///
+>                                 xtitle("ln GDP") ytitle("Density")
+r; t=0.41 21:05:06
+
+.                 
+.                 // # 8.3 extended use of kernel density
+.                 
+.                         twoway (kdensity lngdp if open == 0) || (kdensity lngdp if open =
+> = 1, lpattern(dash_dot_dot)), ///
+>                                 legend(label(1 "Low-Open") label(2 "High-Open")) title(In
+> come by Openness) ///
+>                                 xtitle("Log (Income)") ytitle("Density") scheme(economist
+> )
+r; t=0.44 21:05:06
+
+.                                 
+.                                         graph export graphs/density.png, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/3.dataanalysis/graphs/graphs/d
+> ensity.png written in PNG format)
+r; t=0.02 21:05:06
+
+. 
+.         set scheme s2color
+r; t=0.00 21:05:06
+
+. 
+. timer off 1
+r; t=0.00 21:05:06
+
+. timer list 1
+   1:     11.49 /        1 =      11.4890
+r; t=0.00 21:05:06
+
+.                                 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/3.dataanalysis/graphs/l
+> ogs/graphs.txt
+  log type:  text
+ closed on:  21 May 2021, 21:05:06
+-------------------------------------------------------------------------------------------

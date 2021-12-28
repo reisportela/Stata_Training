@@ -1,0 +1,499 @@
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/4.output_export/logs/outreg2_example.txt
+  log type:  text
+ opened on:  19 May 2021, 15:44:16
+r; t=0.00 15:44:16
+
+. 
+.         use data/tablef7_1, clear
+(Cost Data for U.S. Airlines, 90 Oservations On 6 Firms For 15 Years, 1970-1984)
+r; t=0.00 15:44:16
+
+. 
+. gen lncost=ln(c)
+r; t=0.00 15:44:16
+
+. gen lnoutput=ln(q)
+r; t=0.00 15:44:16
+
+. gen lnoutput2=lnoutput^2
+r; t=0.00 15:44:16
+
+. gen lnfuelprice=ln(pf)
+r; t=0.00 15:44:16
+
+. 
+.         label var lnoutput "Output"
+r; t=0.00 15:44:16
+
+.         label var lnfuelprice "Fuel Price"
+r; t=0.00 15:44:16
+
+.         label var lf "Load Factor"
+r; t=0.00 15:44:16
+
+. 
+. // OLS
+. reg lncost lnoutput lnfuelprice lf
+
+      Source |       SS           df       MS      Number of obs   =        90
+-------------+----------------------------------   F(3, 86)        =   2419.34
+       Model |  112.705452         3  37.5684839   Prob > F        =    0.0000
+    Residual |  1.33544153        86   .01552839   R-squared       =    0.9883
+-------------+----------------------------------   Adj R-squared   =    0.9879
+       Total |  114.040893        89  1.28135835   Root MSE        =    .12461
+
+------------------------------------------------------------------------------
+      lncost |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .8827385   .0132545    66.60   0.000     .8563895    .9090876
+ lnfuelprice |    .453977   .0203042    22.36   0.000     .4136136    .4943404
+          lf |   -1.62751    .345302    -4.71   0.000    -2.313948   -.9410727
+       _cons |   9.516923   .2292445    41.51   0.000       9.0612    9.972645
+------------------------------------------------------------------------------
+r; t=0.04 15:44:16
+
+.         est store OLS
+r; t=0.00 15:44:16
+
+.         outreg2 using logs/mainregs, dec(4) alpha(0.001, 0.01, 0.05) sortvar(lnoutput lnfuelprice lf) keep(lnoutput
+>  lnfuelprice lf) nocons/*
+>                 */      word label addnote(Source: Own computations; Greene, 2008) replace ctitle(OLS) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+logs/mainregs.rtf
+dir : seeout
+r; t=0.10 15:44:16
+
+. 
+. // LSDV
+. reg lncost lnoutput lnfuelprice lf i.i
+
+      Source |       SS           df       MS      Number of obs   =        90
+-------------+----------------------------------   F(8, 81)        =   3935.79
+       Model |   113.74827         8  14.2185338   Prob > F        =    0.0000
+    Residual |  .292622872        81  .003612628   R-squared       =    0.9974
+-------------+----------------------------------   Adj R-squared   =    0.9972
+       Total |  114.040893        89  1.28135835   Root MSE        =    .06011
+
+------------------------------------------------------------------------------
+      lncost |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .9192846   .0298901    30.76   0.000     .8598126    .9787565
+ lnfuelprice |   .4174918   .0151991    27.47   0.000     .3872503    .4477333
+          lf |  -1.070396     .20169    -5.31   0.000    -1.471696   -.6690963
+             |
+           i |
+          2  |  -.0412359   .0251839    -1.64   0.105    -.0913441    .0088722
+          3  |  -.2089211   .0427986    -4.88   0.000    -.2940769   -.1237652
+          4  |   .1845557   .0607527     3.04   0.003     .0636769    .3054345
+          5  |   .0240547   .0799041     0.30   0.764    -.1349293    .1830387
+          6  |   .0870617   .0841995     1.03   0.304     -.080469    .2545924
+             |
+       _cons |   9.705942    .193124    50.26   0.000     9.321686     10.0902
+------------------------------------------------------------------------------
+r; t=0.00 15:44:16
+
+.         est store LSDV
+r; t=0.00 15:44:16
+
+.         outreg2 using logs/mainregs, dec(4) alpha(0.001, 0.01, 0.05) sortvar(lnoutput lnfuelprice lf)  keep(lnoutpu
+> t lnfuelprice lf) nocons /*
+>                 */      word label addnote(Source: Own computations; Greene, 2008) append ctitle(LSDV) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+logs/mainregs.rtf
+dir : seeout
+r; t=0.01 15:44:16
+
+. 
+. // FIXED-EFFECTS
+. xtset i t
+       panel variable:  i (strongly balanced)
+        time variable:  t, 1 to 15
+                delta:  1 unit
+r; t=0.00 15:44:16
+
+. xtreg lncost lnoutput lnfuelprice lf, fe
+
+Fixed-effects (within) regression               Number of obs     =         90
+Group variable: i                               Number of groups  =          6
+
+R-sq:                                           Obs per group:
+     within  = 0.9926                                         min =         15
+     between = 0.9856                                         avg =       15.0
+     overall = 0.9873                                         max =         15
+
+                                                F(3,81)           =    3604.80
+corr(u_i, Xb)  = -0.3475                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+      lncost |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .9192846   .0298901    30.76   0.000     .8598126    .9787565
+ lnfuelprice |   .4174918   .0151991    27.47   0.000     .3872503    .4477333
+          lf |  -1.070396     .20169    -5.31   0.000    -1.471696   -.6690963
+       _cons |   9.713528    .229641    42.30   0.000     9.256614    10.17044
+-------------+----------------------------------------------------------------
+     sigma_u |   .1320775
+     sigma_e |  .06010514
+         rho |  .82843653   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(5, 81) = 57.73                      Prob > F = 0.0000
+r; t=0.01 15:44:16
+
+.         est store FE
+r; t=0.00 15:44:16
+
+.         outreg2 using logs/mainregs, dec(4) alpha(0.001, 0.01, 0.05) sortvar(lnoutput lnfuelprice lf)  keep(lnoutpu
+> t lnfuelprice lf) nocons /*
+>                 */      word label addnote(Source: Own computations; Greene, 2008) append ctitle(FE) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll), F test that all u_i=0, e(F_f))
+warning: addnote ignored in appended columns
+logs/mainregs.rtf
+dir : seeout
+r; t=0.02 15:44:16
+
+. 
+. // BETWEEN-GROUPS ESTIMATOR
+. xtreg lncost lnoutput lnfuelprice lf, be
+
+Between regression (regression on group means)  Number of obs     =         90
+Group variable: i                               Number of groups  =          6
+
+R-sq:                                           Obs per group:
+     within  = 0.8808                                         min =         15
+     between = 0.9936                                         avg =       15.0
+     overall = 0.1371                                         max =         15
+
+                                                F(3,2)            =     104.12
+sd(u_i + avg(e_i.))=  .1258491                  Prob > F          =     0.0095
+
+------------------------------------------------------------------------------
+      lncost |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .7824552   .1087663     7.19   0.019     .3144715    1.250439
+ lnfuelprice |  -5.523978   4.478802    -1.23   0.343    -24.79471    13.74675
+          lf |  -1.751016    2.74319    -0.64   0.589    -13.55401    10.05198
+       _cons |   85.80901   56.48302     1.52   0.268    -157.2178    328.8358
+------------------------------------------------------------------------------
+r; t=0.00 15:44:16
+
+.         est store BE
+r; t=0.00 15:44:16
+
+.         outreg2 using logs/mainregs, dec(4) alpha(0.001, 0.01, 0.05) sortvar(lnoutput lnfuelprice lf)  keep(lnoutpu
+> t lnfuelprice lf) nocons /*
+>                 */      word label addnote(Source: Own computations; Greene, 2008) append ctitle(BE) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+logs/mainregs.rtf
+dir : seeout
+r; t=0.02 15:44:16
+
+. 
+. // INTRODUCE TIME EFFECTS
+. xtreg lncost lnoutput lnfuelprice lf i.t, i(i) fe
+
+Fixed-effects (within) regression               Number of obs     =         90
+Group variable: i                               Number of groups  =          6
+
+R-sq:                                           Obs per group:
+     within  = 0.9955                                         min =         15
+     between = 0.9859                                         avg =       15.0
+     overall = 0.9885                                         max =         15
+
+                                                F(17,67)          =     873.24
+corr(u_i, Xb)  = 0.3361                         Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+      lncost |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .8172487    .031851    25.66   0.000     .7536739    .8808235
+ lnfuelprice |     .16861    .163478     1.03   0.306    -.1576935    .4949135
+          lf |  -.8828142   .2617373    -3.37   0.001    -1.405244   -.3603843
+             |
+           t |
+          2  |   .0547017   .0302618     1.81   0.075    -.0057012    .1151046
+          3  |   .0973352   .0326845     2.98   0.004     .0320967    .1625737
+          4  |   .1509845   .0370793     4.07   0.000     .0769739    .2249952
+          5  |   .2200954   .1117987     1.97   0.053    -.0030557    .4432464
+          6  |   .2659341   .1539895     1.73   0.089    -.0414302    .5732983
+          7  |   .2971599   .1690435     1.76   0.083    -.0402522    .6345721
+          8  |   .3532919   .1923205     1.84   0.071    -.0305814    .7371653
+          9  |    .421245   .2097703     2.01   0.049     .0025418    .8399482
+         10  |   .4657525   .2707517     1.72   0.090    -.0746701    1.006175
+         11  |    .581335    .339615     1.71   0.092    -.0965395    1.259209
+         12  |   .6594972   .3662185     1.80   0.076    -.0714779    1.390472
+         13  |   .6754036   .3565651     1.89   0.063    -.0363033    1.387111
+         14  |   .6744931   .3440841     1.96   0.054    -.0123016    1.361288
+         15  |   .6931382   .3378385     2.05   0.044     .0188098    1.367467
+             |
+       _cons |   12.29286   1.891685     6.50   0.000     8.517039    16.06868
+-------------+----------------------------------------------------------------
+     sigma_u |   .1306712
+     sigma_e |  .05137639
+         rho |  .86611203   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(5, 67) = 69.05                      Prob > F = 0.0000
+r; t=0.01 15:44:16
+
+.         est store FE_time
+r; t=0.00 15:44:16
+
+.         outreg2 using logs/mainregs, dec(4) sortvar(lnoutput lnfuelprice lf)  keep(lnoutput lnfuelprice lf) nocons 
+> /*
+>                 */      word label addnote(Source: Own computations; Greene, 2008) append ctitle(FE_time) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll), F test that all u_i=0, e(F_f))
+warning: addnote ignored in appended columns
+logs/mainregs.rtf
+dir : seeout
+r; t=0.02 15:44:16
+
+. 
+. // RANDOM EFFECTS ESTIMATOR
+. xtreg lncost lnoutput lnfuelprice lf, re
+
+Random-effects GLS regression                   Number of obs     =         90
+Group variable: i                               Number of groups  =          6
+
+R-sq:                                           Obs per group:
+     within  = 0.9925                                         min =         15
+     between = 0.9856                                         avg =       15.0
+     overall = 0.9876                                         max =         15
+
+                                                Wald chi2(3)      =   11091.33
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      lncost |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .9066805    .025625    35.38   0.000     .8564565    .9569045
+ lnfuelprice |   .4227784   .0140248    30.15   0.000     .3952904    .4502665
+          lf |  -1.064499   .2000703    -5.32   0.000    -1.456629    -.672368
+       _cons |   9.627909    .210164    45.81   0.000     9.215995    10.03982
+-------------+----------------------------------------------------------------
+     sigma_u |  .12488859
+     sigma_e |  .06010514
+         rho |  .81193816   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+r; t=0.04 15:44:16
+
+.         est store RE
+r; t=0.00 15:44:16
+
+.         outreg2 using logs/mainregs, dec(6) alpha(0.001, 0.01, 0.05) sortvar(lnoutput lnfuelprice lf)  keep(lnoutpu
+> t lnfuelprice lf) nocons /*
+>                 */      word label addnote(Source: Own computations; Greene, 2008) append ctitle(RE) /*
+>                 */ adds(RMSE, e(rmse), rho, e(rho))
+warning: addnote ignored in appended columns
+logs/mainregs.rtf
+dir : seeout
+r; t=0.02 15:44:16
+
+.                 
+.                 // SEE OUTPUT TABLE: click on the link 'mainregs.rtf' in the output window
+.                 // help outreg2; explore further the command
+. 
+. // ALTERNATIVE IMPLEMENTATION OF 'outreg2' & EXPLORATION OF 'estimates'
+.         
+.         // help outreg2
+.         // help estimates
+.         
+.         estimates dir
+
+---------------------------------------------------------------------------------------------
+        name | command      depvar       npar  title 
+-------------+-------------------------------------------------------------------------------
+         OLS | regress      lncost          4  Linear regression
+        LSDV | regress      lncost         10  Linear regression
+          FE | xtreg        lncost          4  
+          BE | xtreg        lncost          4  Between regression (regression on group means)
+     FE_time | xtreg        lncost         19  
+          RE | xtreg        lncost          4  
+---------------------------------------------------------------------------------------------
+r; t=0.00 15:44:16
+
+.         estimates query
+(active results produced by xtreg; also stored as RE)
+r; t=0.00 15:44:16
+
+.         estimates describe
+
+  Estimation results produced by
+
+     . xtreg lncost lnoutput lnfuelprice lf, re
+r; t=0.00 15:44:16
+
+.         
+.         estimates restore OLS
+(results OLS are active now)
+r; t=0.00 15:44:16
+
+.         estimates query
+(active results produced by regress; also stored as OLS)
+r; t=0.00 15:44:16
+
+.         estimates describe
+
+  Estimation results produced by
+
+     . regress lncost lnoutput lnfuelprice lf
+r; t=0.00 15:44:16
+
+.         
+.         estimates replay FE
+
+---------------------------------------------------------------------------------------------------------------------
+Model FE
+---------------------------------------------------------------------------------------------------------------------
+
+Fixed-effects (within) regression               Number of obs     =         90
+Group variable: i                               Number of groups  =          6
+
+R-sq:                                           Obs per group:
+     within  = 0.9926                                         min =         15
+     between = 0.9856                                         avg =       15.0
+     overall = 0.9873                                         max =         15
+
+                                                F(3,81)           =    3604.80
+corr(u_i, Xb)  = -0.3475                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+      lncost |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .9192846   .0298901    30.76   0.000     .8598126    .9787565
+ lnfuelprice |   .4174918   .0151991    27.47   0.000     .3872503    .4477333
+          lf |  -1.070396     .20169    -5.31   0.000    -1.471696   -.6690963
+       _cons |   9.713528    .229641    42.30   0.000     9.256614    10.17044
+-------------+----------------------------------------------------------------
+     sigma_u |   .1320775
+     sigma_e |  .06010514
+         rho |  .82843653   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(5, 81) = 57.73                      Prob > F = 0.0000
+r; t=0.00 15:44:16
+
+.         estimates query
+(active results produced by regress; also stored as OLS)
+r; t=0.00 15:44:16
+
+. 
+.         estimates table LSDV FE
+
+----------------------------------------
+    Variable |    LSDV          FE      
+-------------+--------------------------
+    lnoutput |  .91928455    .91928455  
+ lnfuelprice |  .41749177    .41749177  
+          lf | -1.0703961   -1.0703961  
+             |
+           i |
+          2  | -.04123592               
+          3  | -.20892109               
+          4  |   .1845557               
+          5  |  .02405471               
+          6  |  .08706171               
+             |
+       _cons |  9.7059421    9.7135279  
+----------------------------------------
+r; t=0.01 15:44:16
+
+. 
+.         estimates stats LSDV FE
+
+Akaike's information criterion and Bayesian information criterion
+
+-----------------------------------------------------------------------------
+       Model |          N   ll(null)  ll(model)      df        AIC        BIC
+-------------+---------------------------------------------------------------
+        LSDV |         90  -138.3581   130.0861       9  -242.1723   -219.674
+          FE |         90  -90.48794   130.0861       4  -252.1723  -242.1731
+-----------------------------------------------------------------------------
+Note: BIC uses N = number of observations. See [R] BIC note.
+r; t=0.00 15:44:16
+
+.         
+.         estimates table OLS LSDV FE BE FE_time RE, keep(lnoutput lnfuelprice lf) b(%7.4f) se(%7.4f) stats(N r2_a)
+
+--------------------------------------------------------------------------
+    Variable |   OLS      LSDV       FE        BE      FE_time     RE     
+-------------+------------------------------------------------------------
+    lnoutput |  0.8827    0.9193    0.9193    0.7825    0.8172    0.9067  
+             |  0.0133    0.0299    0.0299    0.1088    0.0319    0.0256  
+ lnfuelprice |  0.4540    0.4175    0.4175   -5.5240    0.1686    0.4228  
+             |  0.0203    0.0152    0.0152    4.4788    0.1635    0.0140  
+          lf | -1.6275   -1.0704   -1.0704   -1.7510   -0.8828   -1.0645  
+             |  0.3453    0.2017    0.2017    2.7432    0.2617    0.2001  
+-------------+------------------------------------------------------------
+           N |      90        90        90        90        90        90  
+        r2_a |  0.9879    0.9972    0.9918    0.9841    0.9940            
+--------------------------------------------------------------------------
+                                                              legend: b/se
+r; t=0.03 15:44:16
+
+.         estimates table OLS LSDV FE BE FE_time RE, keep(lnoutput lnfuelprice lf) b(%7.4f) star stats(N r2_a)
+
+--------------------------------------------------------------------------------------------
+    Variable |    OLS          LSDV          FE           BE        FE_time         RE      
+-------------+------------------------------------------------------------------------------
+    lnoutput |  0.8827***    0.9193***    0.9193***    0.7825*      0.8172***    0.9067***  
+ lnfuelprice |  0.4540***    0.4175***    0.4175***   -5.5240       0.1686       0.4228***  
+          lf | -1.6275***   -1.0704***   -1.0704***   -1.7510      -0.8828**    -1.0645***  
+-------------+------------------------------------------------------------------------------
+           N |      90           90           90           90           90           90     
+        r2_a |  0.9879       0.9972       0.9918       0.9841       0.9940                  
+--------------------------------------------------------------------------------------------
+                                                    legend: * p<0.05; ** p<0.01; *** p<0.001
+r; t=0.01 15:44:16
+
+.         
+.         // EXPORT THE OUTPUT
+. 
+.         // WORD output file
+. 
+.         outreg2 [OLS LSDV FE BE FE_time RE] using logs/mainregs_alternative, replace dec(3) alpha(0.001, 0.01, 0.05
+> ) sortvar(lnoutput lnfuelprice lf) /*
+>                 */ keep(lnoutput lnfuelprice lf) nocons /*
+>                 */ word label addnote(Source: Own computations; Greene, 2008)
+logs/mainregs_alternative.rtf
+dir : seeout
+r; t=0.10 15:44:16
+
+. 
+.         // EXCEL output file
+. 
+.         outreg2 [OLS LSDV FE BE FE_time RE] using logs/mainregs_alternative, replace dec(3) alpha(0.001, 0.01, 0.05
+> ) sortvar(lnoutput lnfuelprice lf) /*
+>                 */ keep(lnoutput lnfuelprice lf) nocons /*
+>                 */ excel label addnote(Source: Own computations; Greene, 2008)
+logs/mainregs_alternative.xml
+dir : seeout
+r; t=0.12 15:44:17
+
+.         
+.         // LATEX output file
+. 
+.         outreg2 [OLS LSDV FE BE FE_time RE] using logs/mainregs_alternative, replace dec(3) alpha(0.001, 0.01, 0.05
+> ) sortvar(lnoutput lnfuelprice lf) /*
+>                 */ keep(lnoutput lnfuelprice lf) nocons /*
+>                 */ tex label addnote(Source: Own computations; Greene, 2008)
+logs/mainregs_alternative.tex
+dir : seeout
+r; t=0.12 15:44:17
+
+. 
+. timer off 1
+r; t=0.00 15:44:17
+
+. timer list 1
+   1:      0.76 /        1 =       0.7630
+r; t=0.00 15:44:17
+
+.                                 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/4.output_export/logs/outreg2_example.txt
+  log type:  text
+ closed on:  19 May 2021, 15:44:17
+---------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,15 @@
+{\rtf1\fs24
+\trowd\trgaph75\trleft-75\intbl\trqc\clbrdrt\brdrs\cellx1152\clbrdrt\brdrs\cellx1728\clbrdrt\brdrs\cellx2736\clbrdrt\brdrs\cellx3744\clbrdrt\brdrs\cellx4896\clbrdrt\brdrs\cellx5760\clbrdrt\brdrs\cellx7200
+\ql \cell\qc (1)\cell\qc (2)\cell\qc (3)\cell\qc (4)\cell\qc (5)\cell\qc (6)\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx1152\cellx1728\cellx2736\cellx3744\cellx4896\cellx5760\cellx7200
+\trowd\trgaph75\trleft-75\trqc\clbrdrb\brdrs\cellx1152\clbrdrb\brdrs\cellx1728\clbrdrb\brdrs\cellx2736\clbrdrb\brdrs\cellx3744\clbrdrb\brdrs\cellx4896\clbrdrb\brdrs\cellx5760\clbrdrb\brdrs\cellx7200
+\ql VARIABLES\cell\qc N\cell\qc mean\cell\qc p50\cell\qc sd\cell\qc min\cell\qc max\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx1152\cellx1728\cellx2736\cellx3744\cellx4896\cellx5760\cellx7200
+\ql \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\row
+\ql pop\cell\qc 896\cell\qc 36,524\cell\qc 8,099\cell\qc 124,848\cell\qc 41.66\cell\qc 1.264e+06\cell\row
+\ql ki\cell\qc 856\cell\qc 23.16\cell\qc 21.38\cell\qc 11.74\cell\qc 1.446\cell\qc 111.3\cell\row
+\ql openk\cell\qc 856\cell\qc 63.34\cell\qc 50.05\cell\qc 52.06\cell\qc 2.320\cell\qc 396.0\cell\row
+\ql rgdpwok\cell\qc 855\cell\qc 19,846\cell\qc 12,841\cell\qc 21,522\cell\qc 396.8\cell\qc 271,192\cell\row
+\trowd\trgaph75\trleft-75\trqc\trbrdrb\brdrs\clbrdrb\brdrs\cellx1152\clbrdrb\brdrs\cellx1728\clbrdrb\brdrs\cellx2736\clbrdrb\brdrs\cellx3744\clbrdrb\brdrs\cellx4896\clbrdrb\brdrs\cellx5760\clbrdrb\brdrs\cellx7200
+\ql \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\row
+}

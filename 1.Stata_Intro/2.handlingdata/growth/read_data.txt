@@ -1,0 +1,63 @@
+----------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\miguel\Dropbox\stata_mexico_2015\day1\data\1.handlingdata\growth\read_data.txt
+  log type:  text
+ opened on:   6 Jun 2015, 08:21:47
+r; t=0.00 8:21:47
+
+. 
+. // Import data from an internet archive
+.     use http://www.stata-press.com/data/r12/apple.dta
+(Apple trees)
+r; t=0.44 8:21:47
+
+.     save apple, replace
+(note: file apple.dta not found)
+file apple.dta saved
+r; t=0.00 8:21:47
+
+. 
+. // Data source - Penn World Table: https://pwt.sas.upenn.edu/
+. 
+. // OPEN THE FILE 'pwt71_wo_country_names_wo_g_vars.csv' WITH Stata doedit TO SEE THE DATA
+. 
+. // Read text data created by a spreadsheet
+. // Indicate that variables names are in the first row of the data file
+. 
+. insheet using "pwt71.csv", delimiter(,) names clear
+file pwt71.csv not found
+r(601); t=0.00 8:21:47
+
+end of do-file
+
+r(601); t=0.49 8:21:47
+
+. do "C:\Users\mangelo\AppData\Local\Temp\STD00000000.tmp"
+
+. //////////////////////////////////////////////////////////////////////////////////////////
+> // 2-Day Stata & Econometrics Course                                                                                            
+>         //
+. // �Data management, regression, panel data analysis and research output using Stata�       //
+. // February 12 and 13, 2015                                                                                                     
+>                         //
+. // Cass Business School, London, UK                                                                                             
+>                 //
+. // Jo�o Cerejeira & Miguel Portela                                                                                              
+>               //
+. //////////////////////////////////////////////////////////////////////////////////////////
+> 
+. clear all
+r; t=0.03 8:22:26
+
+. set more off
+r; t=0.00 8:22:26
+
+. 
+. // FILE menu
+. // Define the working directory
+. 
+. capture cd "C:\miguel\Dropbox\stata_mexico_2015\day1\data\2.datafiles"
+r; t=0.00 8:22:26
+
+. 
+. capture log close

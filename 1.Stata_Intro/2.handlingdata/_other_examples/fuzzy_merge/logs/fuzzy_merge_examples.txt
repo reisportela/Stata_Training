@@ -1,0 +1,270 @@
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/_other_examples/fuzzy_merge/logs/f
+> uzzy_merge_examples.txt
+  log type:  text
+ opened on:  19 May 2021, 14:51:36
+r; t=0.00 14:51:36
+
+. 
+. // # 1. 'prepare the data for the example'
+. 
+. use country using data/pwt70, clear
+r; t=0.00 14:51:36
+
+.         bysort country: keep if _n == 1
+(11,210 observations deleted)
+r; t=0.00 14:51:36
+
+.         ren country countrya
+r; t=0.06 14:51:36
+
+.         unique countrya
+Number of unique values of countrya is  190
+Number of records is  190
+r; t=0.00 14:51:36
+
+.         save tmp_files/countrya, replace
+file tmp_files/countrya.dta saved
+r; t=0.00 14:51:36
+
+. 
+. use country using data/data_educ, clear
+r; t=0.00 14:51:36
+
+.         bysort country: keep if _n == 1
+(944 observations deleted)
+r; t=0.00 14:51:36
+
+.         ren country countryb
+r; t=0.00 14:51:36
+
+.         unique countryb
+Number of unique values of countryb is  142
+Number of records is  142
+r; t=0.00 14:51:36
+
+.         save tmp_files/countryb, replace
+file tmp_files/countryb.dta saved
+r; t=0.00 14:51:36
+
+.         
+. use tmp_files/countrya, clear
+r; t=0.00 14:51:36
+
+.         cross using tmp_files/countryb
+r; t=0.01 14:51:36
+
+. 
+. // # 2. 'jarowinkler'
+. ssc install jarowinkler
+checking jarowinkler consistency and verifying not already installed...
+all files already exist and are up to date.
+r; t=1.67 14:51:38
+
+. 
+.         cd tmp_files
+/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/_other_examples/fuzzy_merge/tmp_files
+r; t=0.00 14:51:38
+
+. 
+.         jarowinkler countrya countryb,gen(strdist1)
+r; t=0.69 14:51:39
+
+.         
+.         gsort countrya -strdist1
+r; t=0.02 14:51:39
+
+.         gen strdist1a = 1 - strdist1
+r; t=0.00 14:51:39
+
+.         bysort countrya (strdist1a): keep if _n <= 5
+(26,030 observations deleted)
+r; t=0.00 14:51:39
+
+.         
+.         drop strdist1a
+r; t=0.00 14:51:39
+
+.         fl if countrya == "antigua and barbuda"
+
+     +-------------------------------------------------------------------------+
+     |                 countrya                          countryb     strdist1 |
+     |-------------------------------------------------------------------------|
+ 21. |      antigua and barbuda                   antigua & barb.        0.887 |
+ 22. |      antigua and barbuda                       afghanistan        0.651 |
+ 23. |      antigua and barbuda                   united arab em.        0.634 |
+ 24. |      antigua and barbuda                            canada        0.632 |
+ 25. |      antigua and barbuda                            panama        0.626 |
+     +-------------------------------------------------------------------------+
+r; t=0.00 14:51:39
+
+.         fl if countrya == "central african republic"
+
+     +-------------------------------------------------------------------------+
+     |                 countrya                          countryb     strdist1 |
+     |-------------------------------------------------------------------------|
+161. | central african republic                   central afr. r.        0.882 |
+162. | central african republic                             benin        0.656 |
+163. | central african republic                            canada        0.652 |
+164. | central african republic                        costa rica        0.627 |
+165. | central african republic                              mali        0.625 |
+     +-------------------------------------------------------------------------+
+r; t=0.00 14:51:39
+
+.         
+. // # 3. 'strdist'
+. capture ssc install strdist
+r; t=2.37 14:51:41
+
+.         strdist countrya countryb,gen(strdist2)
+Hint: From Stata 14 onwards, use of the unicode-compatible ustrdist method is recommended.
+r; t=0.03 14:51:41
+
+. 
+.         fl if countrya == "antigua and barbuda"
+
+     +------------------------------------------------------------------------------------+
+     |                 countrya                          countryb     strdist1   strdist2 |
+     |------------------------------------------------------------------------------------|
+ 21. |      antigua and barbuda                   antigua & barb.        0.887          6 |
+ 22. |      antigua and barbuda                       afghanistan        0.651         14 |
+ 23. |      antigua and barbuda                   united arab em.        0.634         14 |
+ 24. |      antigua and barbuda                            canada        0.632         14 |
+ 25. |      antigua and barbuda                            panama        0.626         15 |
+     +------------------------------------------------------------------------------------+
+r; t=0.00 14:51:41
+
+.         fl if countrya == "central african republic"
+
+     +------------------------------------------------------------------------------------+
+     |                 countrya                          countryb     strdist1   strdist2 |
+     |------------------------------------------------------------------------------------|
+161. | central african republic                   central afr. r.        0.882         11 |
+162. | central african republic                             benin        0.656         20 |
+163. | central african republic                            canada        0.652         20 |
+164. | central african republic                        costa rica        0.627         16 |
+165. | central african republic                              mali        0.625         21 |
+     +------------------------------------------------------------------------------------+
+r; t=0.00 14:51:41
+
+. 
+. // # 4. 'soundex'
+. 
+.         gen soundex1 = soundex(countrya)
+r; t=0.00 14:51:41
+
+.         gen soundex2 = soundex(countryb)
+r; t=0.00 14:51:41
+
+. 
+.         export excel using country_check_a.xlsx, firstrow(variables) replace
+file country_check_a.xlsx saved
+r; t=0.03 14:51:41
+
+. 
+. // # 5. 'strgroup'
+. ssc install strgroup, replace
+checking strgroup consistency and verifying not already installed...
+all files already exist and are up to date.
+r; t=4.26 14:51:45
+
+. use countrya, clear
+r; t=0.00 14:51:45
+
+.         ren country countryb
+r; t=0.00 14:51:45
+
+.         merge 1:1 countryb using countryb
+(note: variable countryb was str24, now str31 to accommodate using data's values)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                           106
+        from master                        77  (_merge==1)
+        from using                         29  (_merge==2)
+
+    matched                               113  (_merge==3)
+    -----------------------------------------
+r; t=0.00 14:51:45
+
+.         
+.         // "file strgroup.plugin not found"
+.         // https://ideas.repec.org/c/boc/bocode/s457151.html
+.         // rename the correct 'plugin' to strgroup.plugin
+.         
+.         strgroup countryb if _merge!=3, gen(group) threshold(0.25)
+Could not load plugin: /Users/miguelportela/Library/Application Support/Stata/ado/plus/s/strgroup.plugin
+(error occurred while loading strgroup.ado)
+r(9999); t=0.00 14:51:45
+
+end of do-file
+
+r(9999); t=9.24 14:51:45
+
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+
+.         strgroup countryb if _merge!=3, gen(group) threshold(0.25)
+Could not load plugin: /Users/miguelportela/Library/Application Support/Stata/ado/plus/s/strgroup.plugin
+(error occurred while loading strgroup.ado)
+r(9999); t=0.00 14:53:01
+
+end of do-file
+
+r(9999); t=0.00 14:53:01
+
+. discard
+r; t=0.01 14:53:07
+
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+
+.         strgroup countryb if _merge!=3, gen(group) threshold(0.25)
+Could not load plugin: /Users/miguelportela/Library/Application Support/Stata/ado/plus/s/strgroup.plugin
+(error occurred while loading strgroup.ado)
+r(9999); t=0.00 14:53:12
+
+end of do-file
+
+r(9999); t=0.00 14:53:12
+
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+
+. //////////////////////////////////////////////
+> // EEGS - Introduction to Stata                         //
+. // April, 2021                                                          //
+. // EEG / Universidade do Minho, Portugal        //
+. // Miguel Portela                                                       //
+. //////////////////////////////////////////////
+> 
+.         clear all                                                                                               // 
+> CLEAR STATA'S MEMORY; START A NEW SESSION
+r; t=0.05 14:53:32
+
+.         set more off                                                                                    // ALLOW SC
+> REENS TO PASS BY
+r; t=0.00 14:53:32
+
+.         set rmsg on                                                                                             // 
+> CONTROL THE TIME NEEDED TO RUN EACH COMMAND
+r; t=0.00 14:53:32
+
+.         
+.         timer on 1
+r; t=0.00 14:53:32
+
+.         
+.                 capture cd "C:\Users\reisportela_win\Dropbox\Stata/stata_training\day1\2.handlingdata\_other_exampl
+> es\fuzzy_merge"
+r; t=0.00 14:53:32
+
+.                 capture cd "D:\miguel\Dropbox\Stata/stata_training\day1\2.handlingdata\_other_examples\fuzzy_merge"
+r; t=0.00 14:53:32
+
+.                 capture cd "/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/_other_examples/f
+> uzzy_merge"
+r; t=0.00 14:53:32
+
+. 
+. // FUZZY MERGE EXERCISE # 1.: 'matchit'
+. 
+. capture log close

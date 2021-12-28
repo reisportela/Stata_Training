@@ -1,0 +1,613 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/1.Stata_Intro/1.men
+> us/logs/read_data.txt
+  log type:  text
+ opened on:  28 Dec 2021, 18:08:32
+r; t=0.00 18:08:32
+
+. 
+. // # 1.3 OPEN A STATA DATA FILE
+. 
+. // # 1.3.1 use a system file from the web
+. 
+.                 // Import data from an internet archive
+.                         capture use http://www.stata-press.com/data/r12/apple.dta
+r; t=0.41 18:08:32
+
+.                         capture save data/apple, replace                           
+>              // save the file in Stata data format
+r; t=0.01 18:08:32
+
+. 
+. // # 1.3.2 open a Stata data file
+.                 use data/apple, clear
+(Apple trees)
+r; t=0.00 18:08:32
+
+. 
+. // # 1.4 import and export options
+.         
+.                 // Data source - Penn World Table: https://pwt.sas.upenn.edu/
+. 
+.                 // OPEN THE FILE 'pwt71.csv' WITH Stata doedit TO SEE THE DATA
+. 
+.                 // Read text data created by a spreadsheet
+.                 // Indicate that variables names are in the first row of the data f
+> ile
+. 
+.                 insheet using "data/pwt71.csv", delimiter(,) names clear
+(36 vars, 11,590 obs)
+r; t=0.13 18:08:32
+
+. 
+.                 keep isocode year pop xrat openc rgdpl rgdpwok
+r; t=0.00 18:08:32
+
+. 
+.                 save data/pwt71_short, replace
+file data/pwt71_short.dta saved
+r; t=0.00 18:08:32
+
+. 
+.                 // Export in xlsx format
+.                         export excel using "data/pwt71_short.xlsx", firstrow(variab
+> les) replace
+file data/pwt71_short.xlsx saved
+r; t=0.34 18:08:32
+
+. 
+.                 // Import the xlsx file format
+.                         import excel "data/pwt71_short.xlsx", sheet("Sheet1") first
+> row case(lower) clear
+(7 vars, 11,590 obs)
+r; t=0.56 18:08:33
+
+. 
+.                 // Load the Stata native binary format '.dta'
+.                         use data/pwt71_short, clear
+r; t=0.00 18:08:33
+
+. 
+.                 // In case you want to export your data to be read by other softwar
+> e and it has above
+.                 // 1 Million observations you better use an ASCII file format (Exce
+> l does not handle very large files)
+.                         
+.                         outsheet using "data/pwt71_short.txt",delimiter("$") replac
+> e
+r; t=0.04 18:08:33
+
+. 
+. // # 1.5 Explore example data sets
+.                 sysuse auto, clear
+(1978 automobile data)
+r; t=0.00 18:08:33
+
+.                 sysuse census, clear
+(1980 Census data by state)
+r; t=0.00 18:08:33
+
+. 
+. // # 1.6 ODBC example
+. 
+.         // "Microsoft has still not published a OSBC-Driver for 64bit applications 
+> that want to read data from Access Files"
+.         // only Stata 32-bit is able to use ODBC with Microsoft Access database: fo
+> r this example I am going to use Stata 12 32-bit
+.         // windows, search for ODBC Administrator
+.         // add 'Microsoft Access Driver' and choose your access data set == we will
+>  be using odbc_stata_example.mdb
+. 
+.                 /*
+>                         odbc list
+>                         odbc query "odbc_stata_example", dialog(complete)
+>                         odbc desc "pwt71"
+>                         odbc load, table("pwt71") clear
+>                                 describe
+>                                 
+>                                 gen pop2 = pop^2
+>                                 
+>                                 odbc insert isocode pop2, as("isocode pop2") dsn("o
+> dbc_stata_example") table("pwt71_new") create
+>                                 odbc query "odbc_stata_example", dialog(complete)
+>                                 odbc desc "pwt71_new"
+>                                 
+>                                 replace pop2 = -pop2
+>                                 
+>                                 odbc insert isocode pop2, as("isocode pop2") dsn("o
+> dbc_stata_example") table(" pwt71_new") overwrite
+>                                 odbc query "odbc_stata_example", dialog(complete)
+>                                 odbc desc "pwt71_new"
+>                                 odbc load, table("pwt71_new") clear
+>                                         sum
+>                                         save odbc_example, replace
+>                 */
+. 
+. // # 2. EDIT menu: explore the following two items
+. 
+.                 // Clear Results window
+.                 // Preferences
+. 
+. // # 3. DATA menu: examples
+. 
+.                 use data/pwt71_short, clear
+r; t=0.00 18:08:33
+
+.                 
+.                 describe                        // Describe data in memory
+
+Contains data from data/pwt71_short.dta
+ Observations:        11,590                  
+    Variables:             7                  28 Dec 2021 18:08
+-------------------------------------------------------------------------------------
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+-------------------------------------------------------------------------------------
+isocode         str3    %9s                   
+year            int     %8.0g                 
+pop             float   %9.0g                 POP
+xrat            float   %9.0g                 XRAT
+openc           float   %9.0g                 
+rgdpl           float   %9.0g                 
+rgdpwok         float   %9.0g                 
+-------------------------------------------------------------------------------------
+Sorted by: 
+r; t=0.00 18:08:33
+
+.                 inspect pop                     // Display simple summary of data's
+>  attributes
+
+pop:  POP                                       Number of observations
+---------                              ---------------------------------------
+                                             Total      Integers   Nonintegers
+|  #                         Negative            -             -             -
+|  #                         Zero                -             -             -
+|  #                         Positive       11,590           322        11,268
+|  #                                   -----------   -----------   -----------
+|  #                         Total          11,590           322        11,268
+|  #   .   .   .   .         Missing             -
++----------------------                -----------
+7.251           1330141                     11,590
+(More than 99 unique values)
+r; t=0.00 18:08:33
+
+.                 ds                                      // Compactly list variable 
+> names
+isocode  year     pop      xrat     openc    rgdpl    rgdpwok
+r; t=0.00 18:08:33
+
+.                 summarize                       // Summary statistics
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+     isocode |          0
+        year |     11,590        1980    17.60758       1950       2010
+         pop |     11,590     28727.5    117884.8      7.251    1330141
+        xrat |     10,268     204.452    1170.835   6.63e-15      31900
+       openc |      8,960    74.32737    48.50965   1.861683   440.4322
+-------------+---------------------------------------------------------
+       rgdpl |      8,940    8454.265    11006.97   160.7972     136311
+     rgdpwok |      8,521    19455.19    22822.63   443.4694   277872.8
+r; t=0.00 18:08:33
+
+.                 sum pop, detail         // Additional statistics 
+
+                             POP
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%       35.821          7.251
+ 5%       76.595          7.448
+10%      163.346          7.651       Obs              11,590
+25%     1091.675          7.859       Sum of wgt.      11,590
+
+50%     4492.856                      Mean            28727.5
+                        Largest       Std. dev.      117884.8
+75%     13311.65        1323592
+90%        48333        1323592       Variance       1.39e+10
+95%     87092.23        1330141       Skewness       7.994082
+99%     735903.8        1330141       Kurtosis       72.41567
+r; t=0.00 18:08:33
+
+.                 range x 1 100           // Generate numerical range
+r; t=0.00 18:08:33
+
+. 
+.                 // Define variable labels
+. 
+.                 label var isocode       "Country Code"
+r; t=0.00 18:08:33
+
+.                 label var year          "Year of Observation"
+r; t=0.00 18:08:33
+
+.                 label var pop           "Population (in thousands)"
+r; t=0.00 18:08:33
+
+.                 label var xrat          "Exchange Rate to US$: national currency un
+> its per US dollar"
+r; t=0.00 18:08:33
+
+.                 label var openc         "Openness at Current Prices (%)"
+r; t=0.00 18:08:33
+
+.                 label var rgdpl         "PPP Converted GDP Per Capita (Laspeyres), 
+> derived from growth rates of c, g, i, at 2005 constant prices"
+note: label truncated to 80 characters
+r; t=0.00 18:08:33
+
+.                 label var rgdpwok       "PPP Converted GDP Chain per worker at 2005
+>  constant prices"
+r; t=0.00 18:08:33
+
+. 
+.                 order isocode year xrat // Change order of variables
+r; t=0.00 18:08:33
+
+.                 gsort +year -rgdpwok    // Ascending and descending sort
+r; t=0.01 18:08:33
+
+. 
+. // # 4. GRAPHICS menu
+. 
+.                 twoway (scatter rgdpwok openc, sort)
+r; t=0.68 18:08:34
+
+.                 histogram rgdpwok if year == 2010
+(bin=13, start=606.12775, width=13976.226)
+r; t=0.33 18:08:34
+
+. 
+.                 preserve
+r; t=0.00 18:08:34
+
+.                         keep if year == 1960 | year == 1970 | year == 1980 | year =
+> = 1990 | year == 2000 | year == 2010
+(10,450 observations deleted)
+r; t=0.00 18:08:34
+
+.                         graph box rgdpwok, by(year)
+r; t=1.28 18:08:35
+
+.                         sleep 2700
+r; t=2.71 18:08:38
+
+.                         graph box rgdpwok, by(year) nooutsides scheme(sj)
+r; t=1.32 18:08:39
+
+.                                 //graph export graphs\rgdpwok_boxp.wmf, replace
+.                                 graph export graphs/rgdpwok_boxp.png, replace
+file
+    /Users/miguelportela/Documents/GitHub/Stata_Training/1.Stata_Intro/1.menus/grap
+    > hs/rgdpwok_boxp.png saved as PNG format
+r; t=0.14 18:08:40
+
+.                 restore
+r; t=0.00 18:08:40
+
+. 
+.                 quantile rgdpwok if year == 1960, title(1960) recast(area) name(g19
+> 60, replace)
+r; t=2.11 18:08:42
+
+.                 quantile rgdpwok if year == 2010, title(2010) recast(area) name(g20
+> 10, replace)
+r; t=0.32 18:08:42
+
+. 
+.                 graph combine g1960 g2010, ycommon
+r; t=1.00 18:08:43
+
+.                 graph combine g1960 g2010
+r; t=0.97 18:08:44
+
+.                         //graph export graphs\rgdpwok_comb.wmf, replace
+.                         graph export graphs/rgdpwok_comb.png, replace
+file
+    /Users/miguelportela/Documents/GitHub/Stata_Training/1.Stata_Intro/1.menus/grap
+    > hs/rgdpwok_comb.png saved as PNG format
+r; t=0.38 18:08:44
+
+. 
+.                 kdensity rgdpwok if year == 2010
+r; t=0.24 18:08:45
+
+.                         //graph export graphs\rgdpwok_dens.wmf, replace
+.                         graph export graphs/rgdpwok_dens.png, replace
+file
+    /Users/miguelportela/Documents/GitHub/Stata_Training/1.Stata_Intro/1.menus/grap
+    > hs/rgdpwok_dens.png saved as PNG format
+r; t=0.13 18:08:45
+
+. 
+. // # 5. STATISTICS menu
+. 
+.                 tabstat rgdpwok if year == 1960 | year == 2010, statistics(mean sd 
+> p25 p50 p75 p90 p99 ) by(year)
+
+Summary for variables: rgdpwok
+Group variable: year (Year of Observation)
+
+    year |      Mean        SD       p25       p50       p75       p90       p99
+---------+----------------------------------------------------------------------
+    1960 |  10543.55   11190.1  2034.302  6672.242  15810.41  25336.88  41537.63
+    2010 |  26773.01  28332.59  5342.025  15974.63  38697.01  68296.17  101180.5
+---------+----------------------------------------------------------------------
+   Total |  20561.05  24587.05  3277.805  11243.97   26669.2   59737.2  101094.3
+--------------------------------------------------------------------------------
+r; t=0.00 18:08:45
+
+. 
+. // # 6. Window
+. 
+. // # 7. HELP menu
+.                 help summarize
+r; t=0.06 18:08:45
+
+.                 h su
+r; t=0.06 18:08:45
+
+. 
+. // # 8. NOTES
+.         clear
+r; t=0.00 18:08:45
+
+.         cls                                     // CLEAR THE RESULTS WINDOW
+r; t=0.00 18:08:45
+
+. 
+.         sysuse auto
+(1978 automobile data)
+r; t=0.00 18:08:45
+
+.         
+.                 label define lbl_f 0 "Domestic" 1 "Foreign", replace
+r; t=0.00 18:08:45
+
+.                 tab foreign
+
+ Car origin |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   Domestic |         52       70.27       70.27
+    Foreign |         22       29.73      100.00
+------------+-----------------------------------
+      Total |         74      100.00
+r; t=0.00 18:08:45
+
+.                 tab foreign, nolabel
+
+ Car origin |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |         52       70.27       70.27
+          1 |         22       29.73      100.00
+------------+-----------------------------------
+      Total |         74      100.00
+r; t=0.00 18:08:45
+
+. 
+.                 ge logprice = log(price)
+r; t=0.00 18:08:45
+
+.                 ge lnprice = ln(price)
+r; t=0.00 18:08:45
+
+.                 compare lnprice logprice
+
+                                        ---------- Difference ----------
+                            Count       Minimum      Average     Maximum
+------------------------------------------------------------------------
+lnprice=logprice               74
+                       ----------
+Jointly defined                74             0            0           0
+                       ----------
+Total                          74
+r; t=0.00 18:08:45
+
+.                 sum price if foreign == 0
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |         52    6072.423    3097.104       3291      15906
+r; t=0.00 18:08:45
+
+.                 sum price if foreign == 1
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |         22    6384.682    2621.915       3748      12990
+r; t=0.00 18:08:45
+
+.                 bysort foreign: sum price
+
+-------------------------------------------------------------------------------------
+-> foreign = Domestic
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |         52    6072.423    3097.104       3291      15906
+
+-------------------------------------------------------------------------------------
+-> foreign = Foreign
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |         22    6384.682    2621.915       3748      12990
+
+r; t=0.00 18:08:45
+
+.                 tabstat price,by(foreign)
+
+Summary for variables: price
+Group variable: foreign (Car origin)
+
+ foreign |      Mean
+---------+----------
+Domestic |  6072.423
+ Foreign |  6384.682
+---------+----------
+   Total |  6165.257
+--------------------
+r; t=0.00 18:08:45
+
+.                 tabstat price,by(foreign) stat(mean sd p25 p99)
+
+Summary for variables: price
+Group variable: foreign (Car origin)
+
+ foreign |      Mean        SD       p25       p99
+---------+----------------------------------------
+Domestic |  6072.423  3097.104      4184     15906
+ Foreign |  6384.682  2621.915      4499     12990
+---------+----------------------------------------
+   Total |  6165.257  2949.496      4195     15906
+--------------------------------------------------
+r; t=0.00 18:08:45
+
+.                 egen meanprice = mean(price),by(foreign)
+r; t=0.00 18:08:45
+
+.                 egen nmiss = rmiss(price mpg)
+r; t=0.00 18:08:45
+
+.                 drop nmiss
+r; t=0.00 18:08:45
+
+.                 egen nmiss = rmiss(_all)
+r; t=0.00 18:08:45
+
+.                 collapse (mean) price mpg ,by(foreign)
+r; t=0.00 18:08:45
+
+. 
+. 
+.         sysuse auto, clear
+(1978 automobile data)
+r; t=0.00 18:08:45
+
+. 
+.                 list if regexm(make,"Buick")
+
+     +---------------------------------------------------------------------------+
+  4. | make          |  price | mpg | rep78 | headroom | trunk | weight | length |
+     | Buick Century |  4,816 |  20 |     3 |      4.5 |    16 |  3,250 |    196 |
+     |---------------+-----------------------------------------------------------|
+     |     turn      |     displa~t      |     gear_r~o      |      foreign      |
+     |       40      |          196      |         2.93      |     Domestic      |
+     +---------------------------------------------------------------------------+
+
+     +---------------------------------------------------------------------------+
+  5. | make          |  price | mpg | rep78 | headroom | trunk | weight | length |
+     | Buick Electra |  7,827 |  15 |     4 |      4.0 |    20 |  4,080 |    222 |
+     |---------------+-----------------------------------------------------------|
+     |     turn      |     displa~t      |     gear_r~o      |      foreign      |
+     |       43      |          350      |         2.41      |     Domestic      |
+     +---------------------------------------------------------------------------+
+
+     +---------------------------------------------------------------------------+
+  6. | make          |  price | mpg | rep78 | headroom | trunk | weight | length |
+     | Buick LeSabre |  5,788 |  18 |     3 |      4.0 |    21 |  3,670 |    218 |
+     |---------------+-----------------------------------------------------------|
+     |     turn      |     displa~t      |     gear_r~o      |      foreign      |
+     |       43      |          231      |         2.73      |     Domestic      |
+     +---------------------------------------------------------------------------+
+
+     +---------------------------------------------------------------------------+
+  7. | make          |  price | mpg | rep78 | headroom | trunk | weight | length |
+     | Buick Opel    |  4,453 |  26 |     . |      3.0 |    10 |  2,230 |    170 |
+     |---------------+-----------------------------------------------------------|
+     |     turn      |     displa~t      |     gear_r~o      |      foreign      |
+     |       34      |          304      |         2.87      |     Domestic      |
+     +---------------------------------------------------------------------------+
+
+     +---------------------------------------------------------------------------+
+  8. | make          |  price | mpg | rep78 | headroom | trunk | weight | length |
+     | Buick Regal   |  5,189 |  20 |     3 |      2.0 |    16 |  3,280 |    200 |
+     |---------------+-----------------------------------------------------------|
+     |     turn      |     displa~t      |     gear_r~o      |      foreign      |
+     |       42      |          196      |         2.93      |     Domestic      |
+     +---------------------------------------------------------------------------+
+
+     +---------------------------------------------------------------------------+
+  9. | make          |  price | mpg | rep78 | headroom | trunk | weight | length |
+     | Buick Riviera | 10,372 |  16 |     3 |      3.5 |    17 |  3,880 |    207 |
+     |---------------+-----------------------------------------------------------|
+     |     turn      |     displa~t      |     gear_r~o      |      foreign      |
+     |       43      |          231      |         2.93      |     Domestic      |
+     +---------------------------------------------------------------------------+
+
+     +---------------------------------------------------------------------------+
+ 10. | make          |  price | mpg | rep78 | headroom | trunk | weight | length |
+     | Buick Skylark |  4,082 |  19 |     3 |      3.5 |    13 |  3,400 |    200 |
+     |---------------+-----------------------------------------------------------|
+     |     turn      |     displa~t      |     gear_r~o      |      foreign      |
+     |       42      |          231      |         3.08      |     Domestic      |
+     +---------------------------------------------------------------------------+
+r; t=0.00 18:08:45
+
+.                 //br if regexm(make,"Buick")
+.                 //h functions
+.                 keep make
+r; t=0.00 18:08:45
+
+.                 gen f4 = substr(make,1,4)
+r; t=0.00 18:08:45
+
+.                 gen dot = substr(make,1,strpos(make,"."))
+(44 missing values generated)
+r; t=0.00 18:08:45
+
+.                 drop dot
+r; t=0.00 18:08:45
+
+.                 gen first = word(make,1)
+r; t=0.00 18:08:45
+
+.                 //help string functions
+.                 ssc install ascii
+checking ascii consistency and verifying not already installed...
+all files already exist and are up to date.
+r; t=1.09 18:08:46
+
+.                 ssc install charlist
+checking charlist consistency and verifying not already installed...
+all files already exist and are up to date.
+r; t=1.24 18:08:47
+
+.                 charlist make
+ -.0123456789ABCDEFGHILMNOPRSTVWXZabcdefghiklmnopqrstuvwxyz
+r; t=0.04 18:08:47
+
+.                 ascii
+33  ! 34  " 35  # 36  $ 37  % 38  & 39  ' 40  ( 41  ) 42  * 43  + 44  , 45  - 46  .
+47  / 48  0 49  1 50  2 51  3 52  4 53  5 54  6 55  7 56  8 57  9 58  : 59  ; 60  <
+61  = 62  > 63  ? 64  @ 65  A 66  B 67  C 68  D 69  E 70  F 71  G 72  H 73  I 74  J
+75  K 76  L 77  M 78  N 79  O 80  P 81  Q 82  R 83  S 84  T 85  U 86  V 87  W 88  X
+89  Y 90  Z 91  [ 92  \ 93  ] 94  ^ 95  _ 96  ` 97  a 98  b 99  c 100 d 101 e 102 f
+103 g 104 h 105 i 106 j 107 k 108 l 109 m 110 n 111 o 112 p 113 q 114 r 115 s 116 t
+117 u 118 v 119 w 120 x 121 y 122 z 123 { 124 | 125 } 126 ~ 127  128 € 129  130 ‚
+131 ƒ 132 „ 133 … 134 † 135 ‡ 136 ˆ 137 ‰ 138 Š 139 ‹ 140 Œ 141  142 Ž 143  144 
+145 ‘ 146 ’ 147 “ 148 ” 149 • 150 – 151 — 152 ˜ 153 ™ 154 š 155 › 156 œ 157  158 ž
+159 Ÿ 160   161 ¡ 162 ¢ 163 £ 164 ¤ 165 ¥ 166 ¦ 167 § 168 ¨ 169 © 170 ª 171 « 172 ¬
+173 ­ 174 ® 175 ¯ 176 ° 177 ± 178 ² 179 ³ 180 ´ 181 µ 182 ¶ 183 · 184 ¸ 185 ¹ 186 º
+187 » 188 ¼ 189 ½ 190 ¾ 191 ¿ 192 À 193 Á 194 Â 195 Ã 196 Ä 197 Å 198 Æ 199 Ç 200 È
+201 É 202 Ê 203 Ë 204 Ì 205 Í 206 Î 207 Ï 208 Ð 209 Ñ 210 Ò 211 Ó 212 Ô 213 Õ 214 Ö
+215 × 216 Ø 217 Ù 218 Ú 219 Û 220 Ü 221 Ý 222 Þ 223 ß 224 à 225 á 226 â 227 ã 228 ä
+229 å 230 æ 231 ç 232 è 233 é 234 ê 235 ë 236 ì 237 í 238 î 239 ï 240 ð 241 ñ 242 ò
+243 ó 244 ô 245 õ 246 ö 247 ÷ 248 ø 249 ù 250 ú 251 û 252 ü 253 ý 254 þ 255 ÿr; t=0.0
+> 0 18:08:47
+
+.                 di  char(98)
+b
+r; t=0.00 18:08:47
+
+. 
+. clear all
+r; t=0.05 18:08:47
+
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/1.Stata_Intro/1.men
+> us/logs/read_data.txt
+  log type:  text
+ closed on:  28 Dec 2021, 18:08:47
+-------------------------------------------------------------------------------------

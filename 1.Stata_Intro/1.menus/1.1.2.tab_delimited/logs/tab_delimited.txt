@@ -1,0 +1,70 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/1.menus/1.1.2.tab_delimited/logs/tab_delimited.txt
+  log type:  text
+ opened on:  19 May 2021, 14:37:42
+r; t=1.19 14:37:42
+
+. 
+. sysuse auto, clear
+(1978 Automobile Data)
+r; t=0.00 14:37:42
+
+. 
+. export delimited using "data/auto_tab.txt", delimiter(tab) replace
+file data/auto_tab.txt saved
+r; t=0.79 14:37:43
+
+. 
+.         sleep 500
+r; t=0.51 14:37:44
+
+. 
+. filefilter data/auto_tab.txt data/auto_tab_clean.txt, from(\t) to(";") replace
+(file data/auto_tab_clean.txt was replaced)
+r; t=0.82 14:37:44
+
+. 
+. 
+. // OPEN FILE 'auto_tab.txt auto_tab_clean.txt' WITH NOTEPAD == SEE THE STRUCTURE OF THE FILE
+. 
+.         import delimited data/auto_tab_clean.txt, delimiter(";") varnames(1) clear
+(12 vars, 74 obs)
+r; t=0.05 14:37:44
+
+. 
+.         sleep 500
+r; t=0.51 14:37:45
+
+. 
+. filefilter data/auto_tab.txt data/auto_tab_clean.txt, from(";") to("") replace
+(file data/auto_tab_clean.txt was replaced)
+r; t=0.00 14:37:45
+
+. 
+. // OPEN FILE 'auto_tab.txt auto_tab_clean.txt' WITH NOTEPAD == SEE THE STRUCTURE OF THE FILE
+.         
+.         import delimited data/auto_tab_clean.txt, varnames(1) clear
+(12 vars, 74 obs)
+r; t=0.00 14:37:45
+
+. 
+. save data/auto_tab, replace
+file data/auto_tab.dta saved
+r; t=1.05 14:37:46
+
+. 
+. timer off 1
+r; t=0.00 14:37:46
+
+. timer list 1
+   1:      4.95 /        1 =       4.9450
+r; t=0.00 14:37:46
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/1.menus/1.1.2.tab_delimited/logs/tab_delimited.txt
+  log type:  text
+ closed on:  19 May 2021, 14:37:46
+--------------------------------------------------------------------------------------------------------------------------------------------------------

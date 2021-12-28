@@ -1,0 +1,28 @@
+StataFileTM:00001:01100:GREC:                          :
+00004:00004:00001:
+*! classname: dotchartgraph_g
+*! family: bar
+*! date: 17 Aug 2016
+*! time: 14:18:32
+*! graph_scheme: s2color
+*! naturallywhite: 1
+*! end
+
+// File created by Graph Editor Recorder.
+// Edit only if you know what you are doing.
+
+.scaleaxis.title.style.editstyle drawbox(yes) editcopy
+// title draw bounding box
+
+.grpaxis.major.num_rule_ticks = 0
+.grpaxis.edit_tick 1 25 `"Spain"', tickset(major)
+// grpaxis edits
+
+.grpaxis.major.num_rule_ticks = 0
+.grpaxis.edit_tick 2 75 `"Portugal"', tickset(major)
+// grpaxis edits
+
+
+// <end>
+
+

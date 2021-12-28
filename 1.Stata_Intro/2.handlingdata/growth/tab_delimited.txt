@@ -1,0 +1,59 @@
+---------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  D:\miguel\Dropbox\1.miguel\1.stata_workshop\stata_intro\2.handlingda
+> ta\growth\tab_delimited.txt
+  log type:  text
+ opened on:  14 Oct 2016, 21:05:11
+r; t=0.00 21:05:11
+
+. 
+. sysuse auto, clear
+(1978 Automobile Data)
+r; t=0.00 21:05:11
+
+. 
+. export delimited using "auto_tab.txt", delimiter(tab) replace
+(note: file auto_tab.txt not found)
+file auto_tab.txt saved
+r; t=0.01 21:05:11
+
+. 
+. filefilter auto_tab.txt auto_tab_clean.txt, from(\t) to(";") replace
+r; t=0.01 21:05:11
+
+. 
+. 
+. // OPEN FILE 'auto_tab.txt auto_tab_clean.txt' WITH NOTEPAD == SEE THE STRUCTUR
+> E OF THE FILE
+. 
+.         import delimited auto_tab_clean.txt, delimiter(";") varnames(1) clear
+(12 vars, 74 obs)
+r; t=0.02 21:05:11
+
+. 
+. filefilter auto_tab.txt auto_tab_clean.txt, from(";") to("") replace
+(file auto_tab_clean.txt was replaced)
+r; t=0.00 21:05:11
+
+. 
+. // OPEN FILE 'auto_tab.txt auto_tab_clean.txt' WITH NOTEPAD == SEE THE STRUCTUR
+> E OF THE FILE
+.         
+.         import delimited auto_tab_clean.txt, varnames(1) clear
+(12 vars, 74 obs)
+r; t=0.01 21:05:11
+
+. 
+. save auto_tab, replace
+(note: file auto_tab.dta not found)
+file auto_tab.dta saved
+r; t=0.01 21:05:11
+
+. 
+. log close
+      name:  <unnamed>
+       log:  D:\miguel\Dropbox\1.miguel\1.stata_workshop\stata_intro\2.handlingda
+> ta\growth\tab_delimited.txt
+  log type:  text
+ closed on:  14 Oct 2016, 21:05:11
+---------------------------------------------------------------------------------

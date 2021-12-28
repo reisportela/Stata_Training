@@ -1,0 +1,778 @@
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/_other_examples/fuzzy_merge/logs/r
+> eclink.txt
+  log type:  text
+ opened on:  19 May 2021, 14:45:15
+r; t=0.00 14:45:15
+
+. 
+. // MERGE INCOME DATA WITH EDUCATION DATA
+. use data/pwt70, clear   // upload to the memory the gdp data, pwt70.dta
+r; t=0.00 14:45:15
+
+. 
+.         merge 1:1 country year using data/data_educ     // the variables country & year are used to link/merge the 
+> two datasets
+(note: variable country was str24, now str31 to accommodate using data's values)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        10,646
+        from master                    10,480  (_merge==1)
+        from using                        166  (_merge==2)
+
+    matched                               920  (_merge==3)
+    -----------------------------------------
+r; t=0.01 14:45:15
+
+.         
+.         // identify the countries in each merge category
+.         // keep in mind that many countries only appear in some years
+.         
+.         tab country if _merge == 3
+
+                   Country name |      Freq.     Percent        Cum.
+--------------------------------+-----------------------------------
+                    afghanistan |          9        0.98        0.98
+                        algeria |         10        1.09        2.07
+                      argentina |         10        1.09        3.15
+                      australia |          9        0.98        4.13
+                        austria |          9        0.98        5.11
+                        bahrain |          9        0.98        6.09
+                     bangladesh |          9        0.98        7.07
+                       barbados |          9        0.98        8.04
+                        belgium |          9        0.98        9.02
+                         belize |          3        0.33        9.35
+                          benin |          9        0.98       10.33
+                        bolivia |          9        0.98       11.30
+                       botswana |          9        0.98       12.28
+                         brazil |          9        0.98       13.26
+                         brunei |          3        0.33       13.59
+                       bulgaria |         10        1.09       14.67
+                        burundi |          1        0.11       14.78
+                       cameroon |          9        0.98       15.76
+                         canada |         10        1.09       16.85
+                          chile |         10        1.09       17.93
+                       colombia |         10        1.09       19.02
+                     costa rica |         10        1.09       20.11
+                        croatia |          3        0.33       20.43
+                           cuba |         10        1.09       21.52
+                         cyprus |          9        0.98       22.50
+                        denmark |          9        0.98       23.48
+                       dominica |          2        0.22       23.70
+                        ecuador |         10        1.09       24.78
+                          egypt |          9        0.98       25.76
+                    el salvador |         10        1.09       26.85
+                        estonia |          1        0.11       26.96
+                       ethiopia |          1        0.11       27.07
+                           fiji |          9        0.98       28.04
+                        finland |         10        1.09       29.13
+                         france |         10        1.09       30.22
+                          ghana |          9        0.98       31.20
+                         greece |         10        1.09       32.28
+                      guatemala |         10        1.09       33.37
+                         guyana |          9        0.98       34.35
+                          haiti |         10        1.09       35.43
+                       honduras |          9        0.98       36.41
+                      hong kong |          9        0.98       37.39
+                        hungary |          9        0.98       38.37
+                        iceland |          9        0.98       39.35
+                          india |          9        0.98       40.33
+                      indonesia |          9        0.98       41.30
+                           iraq |          9        0.98       42.28
+                        ireland |          9        0.98       43.26
+                         israel |         10        1.09       44.35
+                          italy |         10        1.09       45.43
+                        jamaica |          9        0.98       46.41
+                          japan |         10        1.09       47.50
+                         jordan |          9        0.98       48.48
+                          kenya |          9        0.98       49.46
+                         kuwait |          9        0.98       50.43
+                         latvia |          1        0.11       50.54
+                        lesotho |          9        0.98       51.52
+                        liberia |          9        0.98       52.50
+                          libya |          3        0.33       52.83
+                      lithuania |          1        0.11       52.93
+                         malawi |          9        0.98       53.91
+                       malaysia |          9        0.98       54.89
+                           mali |          9        0.98       55.87
+                          malta |         10        1.09       56.96
+                     mauritania |          1        0.11       57.07
+                      mauritius |         10        1.09       58.15
+                         mexico |         10        1.09       59.24
+                        moldova |          1        0.11       59.35
+                     mozambique |          9        0.98       60.33
+                        namibia |          2        0.22       60.54
+                          nepal |          9        0.98       61.52
+                    netherlands |          9        0.98       62.50
+                    new zealand |          9        0.98       63.48
+                      nicaragua |         10        1.09       64.57
+                          niger |          9        0.98       65.54
+                         norway |         10        1.09       66.63
+                       pakistan |          9        0.98       67.61
+                         panama |         10        1.09       68.70
+                       paraguay |         10        1.09       69.78
+                           peru |          9        0.98       70.76
+                    philippines |         11        1.20       71.96
+                         poland |          9        0.98       72.93
+                       portugal |          9        0.98       73.91
+                        romania |         10        1.09       75.00
+                         rwanda |          9        0.98       75.98
+                        senegal |          9        0.98       76.96
+                     seychelles |          3        0.33       77.28
+                   sierra leone |          9        0.98       78.26
+                      singapore |          9        0.98       79.24
+                       slovenia |          3        0.33       79.57
+                solomon islands |          1        0.11       79.67
+                   south africa |          9        0.98       80.65
+                          spain |          9        0.98       81.63
+                      sri lanka |          9        0.98       82.61
+                          sudan |         10        1.09       83.70
+                      swaziland |          9        0.98       84.67
+                         sweden |          9        0.98       85.65
+                    switzerland |          9        0.98       86.63
+                          syria |          9        0.98       87.61
+                         taiwan |          9        0.98       88.59
+                     tajikistan |          1        0.11       88.70
+                       thailand |          9        0.98       89.67
+                           togo |          9        0.98       90.65
+                        tunisia |          9        0.98       91.63
+                         turkey |         10        1.09       92.72
+                         uganda |          9        0.98       93.70
+                 united kingdom |         10        1.09       94.78
+                  united states |         10        1.09       95.87
+                        uruguay |          9        0.98       96.85
+                        vanuatu |          1        0.11       96.96
+                      venezuela |         10        1.09       98.04
+                         zambia |          9        0.98       99.02
+                       zimbabwe |          9        0.98      100.00
+--------------------------------+-----------------------------------
+                          Total |        920      100.00
+r; t=0.00 14:45:15
+
+.                 ret li
+
+scalars:
+                  r(N) =  920
+                  r(r) =  113
+r; t=0.00 14:45:15
+
+.         tab country if _merge == 1
+
+                   Country name |      Freq.     Percent        Cum.
+--------------------------------+-----------------------------------
+                    afghanistan |         51        0.49        0.49
+                        albania |         60        0.57        1.06
+                        algeria |         50        0.48        1.54
+                         angola |         60        0.57        2.11
+            antigua and barbuda |         60        0.57        2.68
+                      argentina |         50        0.48        3.16
+                        armenia |         60        0.57        3.73
+                      australia |         51        0.49        4.22
+                        austria |         51        0.49        4.70
+                     azerbaijan |         60        0.57        5.28
+                        bahamas |         60        0.57        5.85
+                        bahrain |         51        0.49        6.34
+                     bangladesh |         51        0.49        6.82
+                       barbados |         51        0.49        7.31
+                        belarus |         60        0.57        7.88
+                        belgium |         51        0.49        8.37
+                         belize |         57        0.54        8.91
+                          benin |         51        0.49        9.40
+                        bermuda |         60        0.57        9.97
+                         bhutan |         60        0.57       10.54
+                        bolivia |         51        0.49       11.03
+         bosnia and herzegovina |         60        0.57       11.60
+                       botswana |         51        0.49       12.09
+                         brazil |         51        0.49       12.58
+                         brunei |         57        0.54       13.12
+                       bulgaria |         50        0.48       13.60
+                   burkina faso |         60        0.57       14.17
+                        burundi |         59        0.56       14.73
+                       cambodia |         60        0.57       15.31
+                       cameroon |         51        0.49       15.79
+                         canada |         50        0.48       16.27
+                     cape verde |         60        0.57       16.84
+       central african republic |         60        0.57       17.41
+                           chad |         60        0.57       17.99
+                          chile |         50        0.48       18.46
+                china version 1 |         60        0.57       19.04
+                china version 2 |         60        0.57       19.61
+                       colombia |         50        0.48       20.09
+                        comoros |         60        0.57       20.66
+               congo, dem. rep. |         60        0.57       21.23
+             congo, republic of |         60        0.57       21.80
+                     costa rica |         50        0.48       22.28
+                  cote d`ivoire |         60        0.57       22.85
+                        croatia |         57        0.54       23.40
+                           cuba |         50        0.48       23.87
+                         cyprus |         51        0.49       24.36
+                 czech republic |         60        0.57       24.93
+                        denmark |         51        0.49       25.42
+                       djibouti |         60        0.57       25.99
+                       dominica |         58        0.55       26.55
+             dominican republic |         60        0.57       27.12
+                        ecuador |         50        0.48       27.60
+                          egypt |         51        0.49       28.08
+                    el salvador |         50        0.48       28.56
+              equatorial guinea |         60        0.57       29.13
+                        eritrea |         60        0.57       29.70
+                        estonia |         59        0.56       30.27
+                       ethiopia |         59        0.56       30.83
+                           fiji |         51        0.49       31.32
+                        finland |         50        0.48       31.79
+                         france |         50        0.48       32.27
+                          gabon |         60        0.57       32.84
+                    gambia, the |         60        0.57       33.42
+                        georgia |         60        0.57       33.99
+                        germany |         60        0.57       34.56
+                          ghana |         51        0.49       35.05
+                         greece |         50        0.48       35.52
+                        grenada |         60        0.57       36.10
+                      guatemala |         50        0.48       36.57
+                         guinea |         60        0.57       37.15
+                  guinea-bissau |         60        0.57       37.72
+                         guyana |         51        0.49       38.21
+                          haiti |         50        0.48       38.68
+                       honduras |         51        0.49       39.17
+                      hong kong |         51        0.49       39.66
+                        hungary |         51        0.49       40.14
+                        iceland |         51        0.49       40.63
+                          india |         51        0.49       41.12
+                      indonesia |         51        0.49       41.60
+                           iran |         60        0.57       42.18
+                           iraq |         51        0.49       42.66
+                        ireland |         51        0.49       43.15
+                         israel |         50        0.48       43.63
+                          italy |         50        0.48       44.10
+                        jamaica |         51        0.49       44.59
+                          japan |         50        0.48       45.07
+                         jordan |         51        0.49       45.55
+                     kazakhstan |         60        0.57       46.13
+                          kenya |         51        0.49       46.61
+                       kiribati |         60        0.57       47.19
+             korea, republic of |         60        0.57       47.76
+                         kuwait |         51        0.49       48.24
+                     kyrgyzstan |         60        0.57       48.82
+                           laos |         60        0.57       49.39
+                         latvia |         59        0.56       49.95
+                        lebanon |         60        0.57       50.52
+                        lesotho |         51        0.49       51.01
+                        liberia |         51        0.49       51.50
+                          libya |         57        0.54       52.04
+                      lithuania |         59        0.56       52.60
+                     luxembourg |         60        0.57       53.18
+                          macao |         60        0.57       53.75
+                      macedonia |         60        0.57       54.32
+                     madagascar |         60        0.57       54.90
+                         malawi |         51        0.49       55.38
+                       malaysia |         51        0.49       55.87
+                       maldives |         60        0.57       56.44
+                           mali |         51        0.49       56.93
+                          malta |         50        0.48       57.40
+               marshall islands |         60        0.57       57.98
+                     mauritania |         59        0.56       58.54
+                      mauritius |         50        0.48       59.02
+                         mexico |         50        0.48       59.49
+          micronesia, fed. sts. |         60        0.57       60.07
+                        moldova |         59        0.56       60.63
+                       mongolia |         60        0.57       61.20
+                     montenegro |         60        0.57       61.77
+                        morocco |         60        0.57       62.35
+                     mozambique |         51        0.49       62.83
+                        namibia |         58        0.55       63.39
+                          nepal |         51        0.49       63.87
+                    netherlands |         51        0.49       64.36
+                    new zealand |         51        0.49       64.85
+                      nicaragua |         50        0.48       65.32
+                          niger |         51        0.49       65.81
+                        nigeria |         60        0.57       66.38
+                         norway |         50        0.48       66.86
+                           oman |         60        0.57       67.43
+                       pakistan |         51        0.49       67.92
+                          palau |         60        0.57       68.49
+                         panama |         50        0.48       68.97
+               papua new guinea |         60        0.57       69.54
+                       paraguay |         50        0.48       70.02
+                           peru |         51        0.49       70.51
+                    philippines |         49        0.47       70.97
+                         poland |         51        0.49       71.46
+                       portugal |         51        0.49       71.95
+                    puerto rico |         60        0.57       72.52
+                          qatar |         60        0.57       73.09
+                        romania |         50        0.48       73.57
+                         russia |         60        0.57       74.14
+                         rwanda |         51        0.49       74.63
+                          samoa |         60        0.57       75.20
+          sao tome and principe |         60        0.57       75.77
+                   saudi arabia |         60        0.57       76.35
+                        senegal |         51        0.49       76.83
+                         serbia |         60        0.57       77.40
+                     seychelles |         57        0.54       77.95
+                   sierra leone |         51        0.49       78.44
+                      singapore |         51        0.49       78.92
+                slovak republic |         60        0.57       79.49
+                       slovenia |         57        0.54       80.04
+                solomon islands |         59        0.56       80.60
+                        somalia |         60        0.57       81.17
+                   south africa |         51        0.49       81.66
+                          spain |         51        0.49       82.15
+                      sri lanka |         51        0.49       82.63
+              st. kitts & nevis |         60        0.57       83.21
+                      st. lucia |         60        0.57       83.78
+        st.vincent & grenadines |         60        0.57       84.35
+                          sudan |         50        0.48       84.83
+                       suriname |         60        0.57       85.40
+                      swaziland |         51        0.49       85.89
+                         sweden |         51        0.49       86.37
+                    switzerland |         51        0.49       86.86
+                          syria |         51        0.49       87.35
+                         taiwan |         51        0.49       87.83
+                     tajikistan |         59        0.56       88.40
+                       tanzania |         60        0.57       88.97
+                       thailand |         51        0.49       89.46
+                    timor-leste |         60        0.57       90.03
+                           togo |         51        0.49       90.52
+                          tonga |         60        0.57       91.09
+               trinidad &tobago |         60        0.57       91.66
+                        tunisia |         51        0.49       92.15
+                         turkey |         50        0.48       92.62
+                   turkmenistan |         60        0.57       93.20
+                         uganda |         51        0.49       93.68
+                        ukraine |         60        0.57       94.26
+           united arab emirates |         60        0.57       94.83
+                 united kingdom |         50        0.48       95.31
+                  united states |         50        0.48       95.78
+                        uruguay |         51        0.49       96.27
+                     uzbekistan |         60        0.57       96.84
+                        vanuatu |         59        0.56       97.40
+                      venezuela |         50        0.48       97.88
+                        vietnam |         60        0.57       98.45
+                          yemen |         60        0.57       99.03
+                         zambia |         51        0.49       99.51
+                       zimbabwe |         51        0.49      100.00
+--------------------------------+-----------------------------------
+                          Total |     10,480      100.00
+r; t=0.01 14:45:15
+
+.                 ret li
+
+scalars:
+                  r(N) =  10480
+                  r(r) =  190
+r; t=0.00 14:45:15
+
+.         tab country if _merge == 2
+
+                   Country name |      Freq.     Percent        Cum.
+--------------------------------+-----------------------------------
+                antigua & barb. |          1        0.60        0.60
+                central afr. r. |          9        5.42        6.02
+                          china |          9        5.42       11.45
+                          congo |          9        5.42       16.87
+                          czech |          3        1.81       18.67
+                 czechoslovakia |          7        4.22       22.89
+                 dominican rep. |          9        5.42       28.31
+                         gambia |          9        5.42       33.73
+                  germany, east |          7        4.22       37.95
+                germany, united |          3        1.81       39.76
+                  germany, west |          7        4.22       43.98
+                  iran, i.r. of |         10        6.02       50.00
+                    kazakhastan |          1        0.60       50.60
+                          korea |         10        6.02       56.63
+                myanmar (burma) |         10        6.02       62.65
+                papua new guin. |          9        5.42       68.07
+                     pueto rico |          1        0.60       68.67
+                        reunion |          2        1.20       69.88
+                       slovakia |          3        1.81       71.69
+                st.kitts& nevis |          2        1.20       72.89
+                       st.lucia |          2        1.20       74.10
+                st.vincent & g. |          1        0.60       74.70
+                trinidad & tob. |          9        5.42       80.12
+                       u.s.s.r. |          9        5.42       85.54
+                united arab em. |          1        0.60       86.14
+                       viet nam |          1        0.60       86.75
+                  western samoa |          4        2.41       89.16
+                     yugoslavia |          8        4.82       93.98
+                          zaire |         10        6.02      100.00
+--------------------------------+-----------------------------------
+                          Total |        166      100.00
+r; t=0.00 14:45:15
+
+.                 ret li
+
+scalars:
+                  r(N) =  166
+                  r(r) =  29
+r; t=0.00 14:45:15
+
+. 
+.         preserve
+r; t=0.00 14:45:15
+
+.                 keep if _merge == 3
+(10,646 observations deleted)
+r; t=0.00 14:45:15
+
+.                 keep country year
+r; t=0.00 14:45:15
+
+.                 bysort country (year): keep if _n == 1  // you just need one observation per country; we are keepin
+> g the first observations
+(807 observations deleted)
+r; t=0.00 14:45:15
+
+.                 drop year
+r; t=0.00 14:45:15
+
+.                 
+.                 // the (year) means that I am sorting observations by year within country but we just apply the 'by
+> sort' to country
+.                 // if you do bysort country year you will have just 1 observation per combination of country and ye
+> ar
+.                 // using bysort country (year) you have as many observations per country as the number of years
+.                 
+.                 sort country
+r; t=0.00 14:45:15
+
+.                 saveold tmp_files/country3, replace     // saveold means you are saving the data file in a previous
+>  version of Stata, in this case Stata 12
+(saving in Stata 13 format)
+(FYI, saveold has options version(12) and version(11) that write files in older Stata formats)
+file tmp_files/country3.dta saved
+r; t=0.00 14:45:15
+
+.         restore
+r; t=0.00 14:45:15
+
+.         
+.         preserve
+r; t=0.00 14:45:15
+
+.                 keep if _merge == 1
+(1,086 observations deleted)
+r; t=0.00 14:45:15
+
+.                 keep country
+r; t=0.00 14:45:15
+
+.                 bysort country: keep if _n == 1
+(10,290 observations deleted)
+r; t=0.00 14:45:15
+
+.                 sort country
+r; t=0.00 14:45:15
+
+.                 saveold tmp_files/country1, replace
+(saving in Stata 13 format)
+(FYI, saveold has options version(12) and version(11) that write files in older Stata formats)
+file tmp_files/country1.dta saved
+r; t=0.00 14:45:15
+
+.         restore
+r; t=0.00 14:45:15
+
+. 
+.         preserve
+r; t=0.00 14:45:15
+
+.                 keep if _merge == 2
+(11,400 observations deleted)
+r; t=0.00 14:45:15
+
+.                 keep country
+r; t=0.00 14:45:15
+
+.                 bysort country: keep if _n == 1
+(137 observations deleted)
+r; t=0.00 14:45:15
+
+.                 sort country
+r; t=0.00 14:45:15
+
+.                 saveold tmp_files/country2, replace
+(saving in Stata 13 format)
+(FYI, saveold has options version(12) and version(11) that write files in older Stata formats)
+file tmp_files/country2.dta saved
+r; t=0.00 14:45:15
+
+.         restore
+r; t=0.00 14:45:15
+
+. 
+.         use tmp_files/country1, clear
+r; t=0.00 14:45:15
+
+.         merge 1:1 country using tmp_files/country3
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                            77
+        from master                        77  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                               113  (_merge==3)
+    -----------------------------------------
+r; t=0.00 14:45:15
+
+.                 keep if _merge == 1
+(113 observations deleted)
+r; t=0.00 14:45:15
+
+.                 drop _merge
+r; t=0.00 14:45:15
+
+.                 ren country country1
+r; t=0.05 14:45:15
+
+.                 sort country1
+r; t=0.00 14:45:15
+
+.                 saveold tmp_files/country1_miss, replace
+(saving in Stata 13 format)
+(FYI, saveold has options version(12) and version(11) that write files in older Stata formats)
+file tmp_files/country1_miss.dta saved
+r; t=0.00 14:45:15
+
+. 
+.         use tmp_files/country2, clear
+r; t=0.00 14:45:15
+
+.         merge 1:1 country using tmp_files/country3
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                           142
+        from master                        29  (_merge==1)
+        from using                        113  (_merge==2)
+
+    matched                                 0  (_merge==3)
+    -----------------------------------------
+r; t=0.00 14:45:15
+
+.                 keep if _merge == 1
+(113 observations deleted)
+r; t=0.00 14:45:15
+
+.                 drop _merge
+r; t=0.00 14:45:15
+
+.                 ren country country2
+r; t=0.00 14:45:15
+
+.                 sort country2
+r; t=0.00 14:45:15
+
+.                 saveold tmp_files/country2_miss, replace
+(saving in Stata 13 format)
+(FYI, saveold has options version(12) and version(11) that write files in older Stata formats)
+file tmp_files/country2_miss.dta saved
+r; t=0.00 14:45:15
+
+. 
+. 
+. //////////////////////////////////////////////
+> 
+.         
+.         use tmp_files/country1_miss, clear
+r; t=0.00 14:45:15
+
+.                 ren country1 country
+r; t=0.00 14:45:15
+
+.                 gen double id1 = _n
+r; t=0.00 14:45:15
+
+.         saveold tmp_files/country1_miss_fm, replace
+(saving in Stata 13 format)
+(FYI, saveold has options version(12) and version(11) that write files in older Stata formats)
+file tmp_files/country1_miss_fm.dta saved
+r; t=0.00 14:45:15
+
+. 
+.         use tmp_files/country2_miss, clear
+r; t=0.00 14:45:15
+
+.                 ren country2 country
+r; t=0.00 14:45:15
+
+.                 gen double id2 = _n
+r; t=0.00 14:45:15
+
+.         saveold tmp_files/country2_miss_fm, replace
+(saving in Stata 13 format)
+(FYI, saveold has options version(12) and version(11) that write files in older Stata formats)
+file tmp_files/country2_miss_fm.dta saved
+r; t=0.00 14:45:15
+
+. 
+. use tmp_files/country1_miss_fm, clear
+r; t=0.00 14:45:15
+
+. 
+. preserve
+r; t=0.00 14:45:15
+
+.         reclink country using tmp_files/country2_miss_fm, idmaster(id1) idusing(id2) gen(myscore) wmatch(1) wnomatc
+> h(9) minscore(.3) minbigram(0.8)
+
+0 perfect matches found
+
+
+Added: id2= identifier from tmp_files/country2_miss_fm   myscore = matching score
+Observations:  Master N = 77    tmp_files/country2_miss_fm N= 29 
+  Unique Master Cases: matched = 13 (exact = 0), unmatched = 64
+r; t=0.04 14:45:15
+
+. 
+.         sort Ucountry country
+r; t=0.00 14:45:15
+
+.         order Ucountry country
+r; t=0.00 14:45:15
+
+.         
+.         l Ucountry country if Ucountry ~= ""
+
+     +-------------------------------------------+
+     |        Ucountry                   country |
+     |-------------------------------------------|
+ 65. | antigua & barb.       antigua and barbuda |
+ 66. |  dominican rep.        dominican republic |
+ 67. |          gambia               gambia, the |
+ 68. |   germany, east                   germany |
+ 69. |   germany, west                   germany |
+     |-------------------------------------------|
+ 70. |     kazakhastan                kazakhstan |
+ 71. | papua new guin.          papua new guinea |
+ 72. |      pueto rico               puerto rico |
+ 73. | st.kitts& nevis         st. kitts & nevis |
+ 74. |        st.lucia                 st. lucia |
+     |-------------------------------------------|
+ 75. | st.vincent & g.   st.vincent & grenadines |
+ 76. | trinidad & tob.          trinidad &tobago |
+ 77. | united arab em.      united arab emirates |
+ 78. |        viet nam                   vietnam |
+     +-------------------------------------------+
+r; t=0.00 14:45:15
+
+. restore
+r; t=0.00 14:45:15
+
+. 
+. preserve
+r; t=0.00 14:45:15
+
+.         reclink country using tmp_files/country2_miss_fm, idmaster(id1) idusing(id2) gen(myscore) wmatch(1) wnomatc
+> h(9) minscore(.5) minbigram(0.8)
+
+0 perfect matches found
+
+
+Added: id2= identifier from tmp_files/country2_miss_fm   myscore = matching score
+Observations:  Master N = 77    tmp_files/country2_miss_fm N= 29 
+  Unique Master Cases: matched = 11 (exact = 0), unmatched = 66
+r; t=0.03 14:45:15
+
+. 
+.         sort Ucountry country
+r; t=0.00 14:45:15
+
+.         order Ucountry country
+r; t=0.00 14:45:15
+
+.         
+.         l Ucountry country if Ucountry ~= ""
+
+     +-------------------------------------------+
+     |        Ucountry                   country |
+     |-------------------------------------------|
+ 67. | antigua & barb.       antigua and barbuda |
+ 68. |  dominican rep.        dominican republic |
+ 69. |     kazakhastan                kazakhstan |
+ 70. | papua new guin.          papua new guinea |
+ 71. |      pueto rico               puerto rico |
+     |-------------------------------------------|
+ 72. | st.kitts& nevis         st. kitts & nevis |
+ 73. |        st.lucia                 st. lucia |
+ 74. | st.vincent & g.   st.vincent & grenadines |
+ 75. | trinidad & tob.          trinidad &tobago |
+ 76. | united arab em.      united arab emirates |
+     |-------------------------------------------|
+ 77. |        viet nam                   vietnam |
+     +-------------------------------------------+
+r; t=0.00 14:45:15
+
+. restore
+r; t=0.00 14:45:15
+
+. 
+.         // ... NOW ...
+.         
+.         use data/pwt70, clear
+r; t=0.00 14:45:15
+
+.         
+.                 replace country = "antigua & barb." if country == "antigua and barbuda"
+(60 real changes made)
+r; t=0.00 14:45:15
+
+.                 replace country = "dominican rep." if country == "dominican republic"
+(60 real changes made)
+r; t=0.00 14:45:15
+
+.                 replace country = "kazakhastan" if country == "kazakhstan"
+(60 real changes made)
+r; t=0.00 14:45:15
+
+.                 replace country = "papua new guin." if country == "papua new guinea"
+(60 real changes made)
+r; t=0.00 14:45:15
+
+.                 replace country = "pueto rico" if country == "puerto rico"
+(60 real changes made)
+r; t=0.00 14:45:15
+
+.                 replace country = "st.kitts& nevis" if country == "st. kitts & nevis"
+(60 real changes made)
+r; t=0.00 14:45:15
+
+.                 replace country = "st.lucia" if country == "st. lucia"
+(60 real changes made)
+r; t=0.00 14:45:15
+
+.                 replace country = "st.vincent & g." if country == "st.vincent & grenadines"
+(60 real changes made)
+r; t=0.00 14:45:15
+
+.                 replace country = "trinidad & tob." if country == "trinidad &tobago"
+(60 real changes made)
+r; t=0.00 14:45:15
+
+.                 replace country = "united arab em." if country == "united arab emirates"
+(60 real changes made)
+r; t=0.00 14:45:15
+
+.                 replace country = "viet nam" if country == "vietnam"
+(60 real changes made)
+r; t=0.00 14:45:15
+
+.                 
+.                 // (...)
+.                 
+. timer off 1
+r; t=0.00 14:45:15
+
+. timer list 1
+   1:      0.19 /        1 =       0.1860
+r; t=0.00 14:45:15
+
+.                 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/_other_examples/fuzzy_merge/logs/r
+> eclink.txt
+  log type:  text
+ closed on:  19 May 2021, 14:45:15
+---------------------------------------------------------------------------------------------------------------------

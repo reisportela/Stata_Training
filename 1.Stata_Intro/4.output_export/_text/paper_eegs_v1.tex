@@ -1,0 +1,58 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[paperwidth=210mm,paperheight=297mm,left=27mm,right=27mm,top=27mm,bottom=27mm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{blindtext}
+\usepackage{adjustbox}
+\usepackage{natbib}
+\usepackage{lipsum}
+
+\usepackage{bibentry}
+
+\bibliographystyle{jmr}
+
+\title{EEGS - Introduction to Stata\thanks{Escola de Economia e Gestão, Universidade do Minho, Portugal}}
+\date{May, 2021}
+\author{Anabela Carneiro\\ U Porto
+\and João Cerejeira \\ U Minho
+\and Miguel Portela \\ U Minho 
+\and Paulo Guimarães \\ Banco de Portugal \& U Porto}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+
+Figure \ref{fig:incdensity} sets the stage for our example, while Table \ref{tb:descriptives} shows descriptive statistics for the data used in the regression analysis. It shows a kerndel density for income. Table \ref{tb:regresults} presents our regressions. One could follow the book by \cite{acemoglu2016} to motivate the discussion. A thorough discussion of Econometrics is provided by \cite{greene2017} (see also \citep{verbeek2012}).\footnote{\cite{wooldridge2015introductory} makes a good introduction to Econometrics.}
+
+\lipsum
+
+\begin{table}[ht]
+\begin{center}
+\caption{Descriptive statistics}\label{tb:descriptives}
+\resizebox{0.9\textwidth}{!}
+	{\input{tables/descriptives_table1.tex}}
+\end{center}
+\end{table}
+
+\lipsum
+
+\lipsum
+
+\begin{figure}[ht]
+	\begin{center}
+		\includegraphics[scale = 0.9,trim = 0.0 0.0 0.0 0.0,clip]{figures/fig_wage_density_union.eps}
+		\caption{Income density}\label{fig:incdensity}
+	\end{center}
+\end{figure}
+
+\lipsum
+
+\include{tables/regression_table1.tex}
+
+\lipsum
+
+\bibliography{references}
+
+\end{document}

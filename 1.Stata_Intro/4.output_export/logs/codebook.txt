@@ -1,0 +1,21 @@
+
+Variable   Obs Unique      Mean       Min       Max  Label
+---------------------------------------------------------------------------------------------------------------------
+country    896    114         .         .         .  Country_name
+year       896      9  1980.089      1960      2000  Year_of_observation
+isocode    896    114         .         .         .  Country_code
+pop        896    896  36524.41    41.662   1263638  Population_(in_thousands)
+xrat       890    651  77.96626  6.80e-14  8421.775  Exchange_Rate_to_US$;_national_currency_units_per_US_dollar
+ppp        858    850  37.42437  6.51e-14  2420.972  Purchasing_Power_Parity_over_GDP_(in_national_currency_units_...
+rgdpl      856    856  8332.913   156.134  99462.73  PPP_Converted_GDP_Per_Capita_(Laspeyres),_derived_from_growth...
+kc         856    856  71.74116  5.099385  189.4834  Consumption_Share_of_PPP_Converted_GDP_Per_Capita_at_2005_con...
+kg         856    856  10.04281  .2877948  43.33043  Government_Consumption_Share_of_PPP_Converted_GDP_Per_Capita_...
+ki         856    856   23.1607  1.446131  111.2905  Investment_Share_of_PPP_Converted_GDP_Per_Capita_at_2005_cons...
+openk      856    856  63.34099  2.319838  395.9767  Openness_at_2005_constant_prices_(%)
+rgdpwok    855    855  19846.39  396.7613  271192.1  PPP_Converted_GDP_Chain_per_worker_at_2005_constant_prices
+education  880    588   4.73675       .04     12.25  education
+k          235    235  5.48e+11  1.19e+09  1.12e+13  
+lngdp      855    854  9.290201  5.983335  12.51058  
+lnk        235    235  25.20918   20.9011  30.04742  
+high_open  896      2  .3716518         0         1  
+---------------------------------------------------------------------------------------------------------------------

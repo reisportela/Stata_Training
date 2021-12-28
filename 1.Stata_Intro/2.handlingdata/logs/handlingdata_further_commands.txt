@@ -1,0 +1,3942 @@
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/logs/handlingdata_further_commands
+> .txt
+  log type:  text
+ opened on:  19 May 2021, 14:43:18
+r; t=0.00 14:43:18
+
+. 
+.         use growth/growth_data, clear
+r; t=0.00 14:43:18
+
+.         codebook, compact
+
+Variable   Obs Unique      Mean       Min       Max  Label
+---------------------------------------------------------------------------------------------------------------------
+country    896    114         .         .         .  Country name
+year       896      9  1980.089      1960      2000  Year of observation
+isocode    896    114         .         .         .  Country code
+pop        896    896  36524.41    41.662   1263638  Population (in thousands)
+xrat       890    628  77.96626  6.80e-14  8421.775  Exchange Rate to US$; national currency units per US dollar
+ppp        858    850  37.42437  6.51e-14  2420.972  Purchasing Power Parity over GDP (in national currency units ...
+rgdpl      856    856  8332.913   156.134  99462.73  PPP Converted GDP Per Capita (Laspeyres), derived from growth...
+kc         856    856  71.74116  5.099385  189.4834  Consumption Share of PPP Converted GDP Per Capita at 2005 con...
+kg         856    856  10.04281  .2877948  43.33043  Government Consumption Share of PPP Converted GDP Per Capita ...
+ki         856    856   23.1607  1.446131  111.2905  Investment Share of PPP Converted GDP Per Capita at 2005 cons...
+openk      856    856  63.34099  2.319838  395.9767  Openness at 2005 constant prices (%)
+rgdpwok    855    855  19846.39  396.7613  271192.1  PPP Converted GDP Chain per worker at 2005 constant prices
+education  880    588   4.73675       .04     12.25  education
+k          235    235  5.48e+11  1.19e+09  1.12e+13  Capital
+lngdp      855    854  9.290201  5.983335  12.51058  Log Real GDP per Worker
+lnk        235    235  25.20918   20.9011  30.04742  Log Capital
+---------------------------------------------------------------------------------------------------------------------
+r; t=0.03 14:43:18
+
+.         
+. 
+.         // # 1. commands to see and edit data
+.         
+.                 //      edit: Edit data with Data Editor                        // be careful: you can damage the d
+> ata by doing this; avoid using this command
+.                 //      browse: Browse data with Data Editor
+. 
+.         
+.         // # 2. DISPLAY A GIVEN MESSAGE OR computation: examples
+.         
+.         display 2^3
+8
+r; t=0.00 14:43:18
+
+.         di _new _new "Computation, ln(23) =     " ln(23) _new   // insert 2 blank lines before the display and 1 af
+> ter
+
+
+Computation, ln(23) =     3.1354942
+
+r; t=0.00 14:43:18
+
+.                 
+.         
+.         // # 3. commands over variables
+.         
+.                 // # 3.1 create a new variabe
+.                         generate education2 = education^2               // generate a new variable with the square 
+> of education
+(16 missing values generated)
+r; t=0.00 14:43:18
+
+.                         ge lnpop = ln(pop)                                              // generate a new variable 
+> with the log of population
+r; t=0.00 14:43:18
+
+.                                                                                                         // for Stat
+> a log = ln; log10 is the log base 10
+. 
+.                         clonevar cty = country                                  // clone existing variable
+r; t=0.00 14:43:18
+
+.                                 compare country cty                                     // compare two variables; i
+> n this case they are the same
+
+                            count
+---------------------------------
+country=cty                   896
+                       ----------
+jointly defined               896
+                       ----------
+total                         896
+r; t=0.00 14:43:18
+
+.                                 compress cty
+  variable cty was str23 now str15
+  (7,168 bytes saved)
+r; t=0.00 14:43:18
+
+.                                 compare country cty
+
+                            count
+---------------------------------
+country=cty                   896
+                       ----------
+jointly defined               896
+                       ----------
+total                         896
+r; t=0.00 14:43:18
+
+.                                 describe cty
+
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------------------------------
+cty             str15   %15s                  Country name
+r; t=0.00 14:43:18
+
+.                                 
+.                                 drop cty                                                        // drop a given var
+> iable
+r; t=0.00 14:43:18
+
+. 
+.                 // # 3.2 generate a numeric id for each country
+.                         egen double cty_id = group(country)             // egen: extensions to generate == explore 
+> the command with 'help egen'; create the variable with double precision
+r; t=0.00 14:43:18
+
+. 
+.                 // # 3.3 alternative that can be used to produce an similar result
+.                         encode country, gen(cty_id2)
+r; t=0.00 14:43:18
+
+.                         tab cty_id2
+
+   Country name |      Freq.     Percent        Cum.
+----------------+-----------------------------------
+    afghanistan |          9        1.00        1.00
+        algeria |          9        1.00        2.01
+      argentina |          9        1.00        3.01
+      australia |          9        1.00        4.02
+        austria |          9        1.00        5.02
+        bahrain |          9        1.00        6.03
+     bangladesh |          9        1.00        7.03
+       barbados |          9        1.00        8.04
+        belgium |          9        1.00        9.04
+         belize |          3        0.33        9.38
+          benin |          9        1.00       10.38
+        bolivia |          9        1.00       11.38
+       botswana |          9        1.00       12.39
+         brazil |          9        1.00       13.39
+         brunei |          3        0.33       13.73
+       bulgaria |          9        1.00       14.73
+        burundi |          1        0.11       14.84
+       cameroon |          9        1.00       15.85
+         canada |          9        1.00       16.85
+          chile |          9        1.00       17.86
+          china |          9        1.00       18.86
+       colombia |          9        1.00       19.87
+     costa rica |          9        1.00       20.87
+        croatia |          3        0.33       21.21
+           cuba |          9        1.00       22.21
+         cyprus |          9        1.00       23.21
+        denmark |          9        1.00       24.22
+       dominica |          2        0.22       24.44
+        ecuador |          9        1.00       25.45
+          egypt |          9        1.00       26.45
+    el salvador |          9        1.00       27.46
+        estonia |          1        0.11       27.57
+       ethiopia |          1        0.11       27.68
+           fiji |          9        1.00       28.68
+        finland |          9        1.00       29.69
+         france |          9        1.00       30.69
+          ghana |          9        1.00       31.70
+         greece |          9        1.00       32.70
+      guatemala |          9        1.00       33.71
+         guyana |          9        1.00       34.71
+          haiti |          9        1.00       35.71
+       honduras |          9        1.00       36.72
+      hong kong |          9        1.00       37.72
+        hungary |          9        1.00       38.73
+        iceland |          9        1.00       39.73
+          india |          9        1.00       40.74
+      indonesia |          9        1.00       41.74
+           iraq |          9        1.00       42.75
+        ireland |          9        1.00       43.75
+         israel |          9        1.00       44.75
+          italy |          9        1.00       45.76
+        jamaica |          9        1.00       46.76
+          japan |          9        1.00       47.77
+         jordan |          9        1.00       48.77
+          kenya |          9        1.00       49.78
+         kuwait |          9        1.00       50.78
+         latvia |          1        0.11       50.89
+        lesotho |          9        1.00       51.90
+        liberia |          9        1.00       52.90
+          libya |          3        0.33       53.24
+      lithuania |          1        0.11       53.35
+         malawi |          9        1.00       54.35
+       malaysia |          9        1.00       55.36
+           mali |          9        1.00       56.36
+          malta |          9        1.00       57.37
+     mauritania |          1        0.11       57.48
+      mauritius |          9        1.00       58.48
+         mexico |          9        1.00       59.49
+        moldova |          1        0.11       59.60
+     mozambique |          9        1.00       60.60
+        namibia |          2        0.22       60.83
+          nepal |          9        1.00       61.83
+    netherlands |          9        1.00       62.83
+    new zealand |          9        1.00       63.84
+      nicaragua |          9        1.00       64.84
+          niger |          9        1.00       65.85
+         norway |          9        1.00       66.85
+       pakistan |          9        1.00       67.86
+         panama |          9        1.00       68.86
+       paraguay |          9        1.00       69.87
+           peru |          9        1.00       70.87
+    philippines |          9        1.00       71.88
+         poland |          9        1.00       72.88
+       portugal |          9        1.00       73.88
+        romania |          9        1.00       74.89
+         rwanda |          9        1.00       75.89
+        senegal |          9        1.00       76.90
+     seychelles |          3        0.33       77.23
+   sierra leone |          9        1.00       78.24
+      singapore |          9        1.00       79.24
+       slovenia |          3        0.33       79.58
+solomon islands |          1        0.11       79.69
+   south africa |          9        1.00       80.69
+          spain |          9        1.00       81.70
+      sri lanka |          9        1.00       82.70
+          sudan |          9        1.00       83.71
+      swaziland |          9        1.00       84.71
+         sweden |          9        1.00       85.71
+    switzerland |          9        1.00       86.72
+          syria |          9        1.00       87.72
+         taiwan |          9        1.00       88.73
+     tajikistan |          1        0.11       88.84
+       thailand |          9        1.00       89.84
+           togo |          9        1.00       90.85
+        tunisia |          9        1.00       91.85
+         turkey |          9        1.00       92.86
+         uganda |          9        1.00       93.86
+ united kingdom |          9        1.00       94.87
+  united states |          9        1.00       95.87
+        uruguay |          9        1.00       96.88
+        vanuatu |          1        0.11       96.99
+      venezuela |          9        1.00       97.99
+         zambia |          9        1.00       99.00
+       zimbabwe |          9        1.00      100.00
+----------------+-----------------------------------
+          Total |        896      100.00
+r; t=0.00 14:43:18
+
+.                         tab cty_id2, nolabel
+
+    Country |
+       name |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |          9        1.00        1.00
+          2 |          9        1.00        2.01
+          3 |          9        1.00        3.01
+          4 |          9        1.00        4.02
+          5 |          9        1.00        5.02
+          6 |          9        1.00        6.03
+          7 |          9        1.00        7.03
+          8 |          9        1.00        8.04
+          9 |          9        1.00        9.04
+         10 |          3        0.33        9.38
+         11 |          9        1.00       10.38
+         12 |          9        1.00       11.38
+         13 |          9        1.00       12.39
+         14 |          9        1.00       13.39
+         15 |          3        0.33       13.73
+         16 |          9        1.00       14.73
+         17 |          1        0.11       14.84
+         18 |          9        1.00       15.85
+         19 |          9        1.00       16.85
+         20 |          9        1.00       17.86
+         21 |          9        1.00       18.86
+         22 |          9        1.00       19.87
+         23 |          9        1.00       20.87
+         24 |          3        0.33       21.21
+         25 |          9        1.00       22.21
+         26 |          9        1.00       23.21
+         27 |          9        1.00       24.22
+         28 |          2        0.22       24.44
+         29 |          9        1.00       25.45
+         30 |          9        1.00       26.45
+         31 |          9        1.00       27.46
+         32 |          1        0.11       27.57
+         33 |          1        0.11       27.68
+         34 |          9        1.00       28.68
+         35 |          9        1.00       29.69
+         36 |          9        1.00       30.69
+         37 |          9        1.00       31.70
+         38 |          9        1.00       32.70
+         39 |          9        1.00       33.71
+         40 |          9        1.00       34.71
+         41 |          9        1.00       35.71
+         42 |          9        1.00       36.72
+         43 |          9        1.00       37.72
+         44 |          9        1.00       38.73
+         45 |          9        1.00       39.73
+         46 |          9        1.00       40.74
+         47 |          9        1.00       41.74
+         48 |          9        1.00       42.75
+         49 |          9        1.00       43.75
+         50 |          9        1.00       44.75
+         51 |          9        1.00       45.76
+         52 |          9        1.00       46.76
+         53 |          9        1.00       47.77
+         54 |          9        1.00       48.77
+         55 |          9        1.00       49.78
+         56 |          9        1.00       50.78
+         57 |          1        0.11       50.89
+         58 |          9        1.00       51.90
+         59 |          9        1.00       52.90
+         60 |          3        0.33       53.24
+         61 |          1        0.11       53.35
+         62 |          9        1.00       54.35
+         63 |          9        1.00       55.36
+         64 |          9        1.00       56.36
+         65 |          9        1.00       57.37
+         66 |          1        0.11       57.48
+         67 |          9        1.00       58.48
+         68 |          9        1.00       59.49
+         69 |          1        0.11       59.60
+         70 |          9        1.00       60.60
+         71 |          2        0.22       60.83
+         72 |          9        1.00       61.83
+         73 |          9        1.00       62.83
+         74 |          9        1.00       63.84
+         75 |          9        1.00       64.84
+         76 |          9        1.00       65.85
+         77 |          9        1.00       66.85
+         78 |          9        1.00       67.86
+         79 |          9        1.00       68.86
+         80 |          9        1.00       69.87
+         81 |          9        1.00       70.87
+         82 |          9        1.00       71.88
+         83 |          9        1.00       72.88
+         84 |          9        1.00       73.88
+         85 |          9        1.00       74.89
+         86 |          9        1.00       75.89
+         87 |          9        1.00       76.90
+         88 |          3        0.33       77.23
+         89 |          9        1.00       78.24
+         90 |          9        1.00       79.24
+         91 |          3        0.33       79.58
+         92 |          1        0.11       79.69
+         93 |          9        1.00       80.69
+         94 |          9        1.00       81.70
+         95 |          9        1.00       82.70
+         96 |          9        1.00       83.71
+         97 |          9        1.00       84.71
+         98 |          9        1.00       85.71
+         99 |          9        1.00       86.72
+        100 |          9        1.00       87.72
+        101 |          9        1.00       88.73
+        102 |          1        0.11       88.84
+        103 |          9        1.00       89.84
+        104 |          9        1.00       90.85
+        105 |          9        1.00       91.85
+        106 |          9        1.00       92.86
+        107 |          9        1.00       93.86
+        108 |          9        1.00       94.87
+        109 |          9        1.00       95.87
+        110 |          9        1.00       96.88
+        111 |          1        0.11       96.99
+        112 |          9        1.00       97.99
+        113 |          9        1.00       99.00
+        114 |          9        1.00      100.00
+------------+-----------------------------------
+      Total |        896      100.00
+r; t=0.00 14:43:18
+
+.                                 compare cty_id cty_id2
+
+                                        ---------- difference ----------
+                            count       minimum      average     maximum
+------------------------------------------------------------------------
+cty_id=cty_id2                896
+                       ----------
+jointly defined               896             0            0           0
+                       ----------
+total                         896
+r; t=0.00 14:43:18
+
+.                         
+.                         decode cty_id2, gen(country2)
+r; t=0.00 14:43:18
+
+.                                 tab country2
+
+   Country name |      Freq.     Percent        Cum.
+----------------+-----------------------------------
+    afghanistan |          9        1.00        1.00
+        algeria |          9        1.00        2.01
+      argentina |          9        1.00        3.01
+      australia |          9        1.00        4.02
+        austria |          9        1.00        5.02
+        bahrain |          9        1.00        6.03
+     bangladesh |          9        1.00        7.03
+       barbados |          9        1.00        8.04
+        belgium |          9        1.00        9.04
+         belize |          3        0.33        9.38
+          benin |          9        1.00       10.38
+        bolivia |          9        1.00       11.38
+       botswana |          9        1.00       12.39
+         brazil |          9        1.00       13.39
+         brunei |          3        0.33       13.73
+       bulgaria |          9        1.00       14.73
+        burundi |          1        0.11       14.84
+       cameroon |          9        1.00       15.85
+         canada |          9        1.00       16.85
+          chile |          9        1.00       17.86
+          china |          9        1.00       18.86
+       colombia |          9        1.00       19.87
+     costa rica |          9        1.00       20.87
+        croatia |          3        0.33       21.21
+           cuba |          9        1.00       22.21
+         cyprus |          9        1.00       23.21
+        denmark |          9        1.00       24.22
+       dominica |          2        0.22       24.44
+        ecuador |          9        1.00       25.45
+          egypt |          9        1.00       26.45
+    el salvador |          9        1.00       27.46
+        estonia |          1        0.11       27.57
+       ethiopia |          1        0.11       27.68
+           fiji |          9        1.00       28.68
+        finland |          9        1.00       29.69
+         france |          9        1.00       30.69
+          ghana |          9        1.00       31.70
+         greece |          9        1.00       32.70
+      guatemala |          9        1.00       33.71
+         guyana |          9        1.00       34.71
+          haiti |          9        1.00       35.71
+       honduras |          9        1.00       36.72
+      hong kong |          9        1.00       37.72
+        hungary |          9        1.00       38.73
+        iceland |          9        1.00       39.73
+          india |          9        1.00       40.74
+      indonesia |          9        1.00       41.74
+           iraq |          9        1.00       42.75
+        ireland |          9        1.00       43.75
+         israel |          9        1.00       44.75
+          italy |          9        1.00       45.76
+        jamaica |          9        1.00       46.76
+          japan |          9        1.00       47.77
+         jordan |          9        1.00       48.77
+          kenya |          9        1.00       49.78
+         kuwait |          9        1.00       50.78
+         latvia |          1        0.11       50.89
+        lesotho |          9        1.00       51.90
+        liberia |          9        1.00       52.90
+          libya |          3        0.33       53.24
+      lithuania |          1        0.11       53.35
+         malawi |          9        1.00       54.35
+       malaysia |          9        1.00       55.36
+           mali |          9        1.00       56.36
+          malta |          9        1.00       57.37
+     mauritania |          1        0.11       57.48
+      mauritius |          9        1.00       58.48
+         mexico |          9        1.00       59.49
+        moldova |          1        0.11       59.60
+     mozambique |          9        1.00       60.60
+        namibia |          2        0.22       60.83
+          nepal |          9        1.00       61.83
+    netherlands |          9        1.00       62.83
+    new zealand |          9        1.00       63.84
+      nicaragua |          9        1.00       64.84
+          niger |          9        1.00       65.85
+         norway |          9        1.00       66.85
+       pakistan |          9        1.00       67.86
+         panama |          9        1.00       68.86
+       paraguay |          9        1.00       69.87
+           peru |          9        1.00       70.87
+    philippines |          9        1.00       71.88
+         poland |          9        1.00       72.88
+       portugal |          9        1.00       73.88
+        romania |          9        1.00       74.89
+         rwanda |          9        1.00       75.89
+        senegal |          9        1.00       76.90
+     seychelles |          3        0.33       77.23
+   sierra leone |          9        1.00       78.24
+      singapore |          9        1.00       79.24
+       slovenia |          3        0.33       79.58
+solomon islands |          1        0.11       79.69
+   south africa |          9        1.00       80.69
+          spain |          9        1.00       81.70
+      sri lanka |          9        1.00       82.70
+          sudan |          9        1.00       83.71
+      swaziland |          9        1.00       84.71
+         sweden |          9        1.00       85.71
+    switzerland |          9        1.00       86.72
+          syria |          9        1.00       87.72
+         taiwan |          9        1.00       88.73
+     tajikistan |          1        0.11       88.84
+       thailand |          9        1.00       89.84
+           togo |          9        1.00       90.85
+        tunisia |          9        1.00       91.85
+         turkey |          9        1.00       92.86
+         uganda |          9        1.00       93.86
+ united kingdom |          9        1.00       94.87
+  united states |          9        1.00       95.87
+        uruguay |          9        1.00       96.88
+        vanuatu |          1        0.11       96.99
+      venezuela |          9        1.00       97.99
+         zambia |          9        1.00       99.00
+       zimbabwe |          9        1.00      100.00
+----------------+-----------------------------------
+          Total |        896      100.00
+r; t=0.00 14:43:18
+
+.                                 compare country country2
+
+                            count
+---------------------------------
+country=country2              896
+                       ----------
+jointly defined               896
+                       ----------
+total                         896
+r; t=0.00 14:43:18
+
+.                                 
+.                 //      # 3.4 type 'help functions'
+.                         
+.                         gen cty_year = cty_id*10000 + year                              // generate a unique code f
+> or country + year
+r; t=0.00 14:43:18
+
+.                         gen random = int(runiform()*23)                                 // generate a random variab
+> le
+r; t=0.00 14:43:18
+
+.                         bysort country (year): gen num = _n                             // generate sequential id n
+> umbers within country
+r; t=0.00 14:43:18
+
+.                                 egen total_num = total(num), by(country)        // compute the sum of 'num' within 
+> country
+r; t=0.00 14:43:18
+
+.                         bysort country (year): gen rollsum = sum(num)   // computing running sums
+r; t=0.00 14:43:18
+
+.                                 egen nobs = count(year),by(country)                     // count the number of obse
+> rvations within each country
+r; t=0.00 14:43:18
+
+.                         
+.                         order country year num rollsum total_num nobs   // reorder variables in dataset
+r; t=0.00 14:43:18
+
+.                         
+.                 // # 3.5 fl: fast list; useful to list big data sets
+.                         fl country year num rollsum total_num nobs in 1/20, sepby(country)
+
+     +--------------------------------------------------------------------------------------+
+     |                 country         year         num     rollsum    total_~m        nobs |
+     |--------------------------------------------------------------------------------------|
+  1. |             afghanistan         1960           1           1          45           9 |
+  2. |             afghanistan         1965           2           3          45           9 |
+  3. |             afghanistan         1970           3           6          45           9 |
+  4. |             afghanistan         1975           4          10          45           9 |
+  5. |             afghanistan         1980           5          15          45           9 |
+  6. |             afghanistan         1985           6          21          45           9 |
+  7. |             afghanistan         1990           7          28          45           9 |
+  8. |             afghanistan         1995           8          36          45           9 |
+  9. |             afghanistan         2000           9          45          45           9 |
+     |--------------------------------------------------------------------------------------|
+ 10. |                 algeria         1960           1           1          45           9 |
+ 11. |                 algeria         1965           2           3          45           9 |
+ 12. |                 algeria         1970           3           6          45           9 |
+ 13. |                 algeria         1975           4          10          45           9 |
+ 14. |                 algeria         1980           5          15          45           9 |
+ 15. |                 algeria         1985           6          21          45           9 |
+ 16. |                 algeria         1990           7          28          45           9 |
+ 17. |                 algeria         1995           8          36          45           9 |
+ 18. |                 algeria         2000           9          45          45           9 |
+     |--------------------------------------------------------------------------------------|
+ 19. |               argentina         1960           1           1          45           9 |
+ 20. |               argentina         1965           2           3          45           9 |
+     +--------------------------------------------------------------------------------------+
+r; t=0.00 14:43:18
+
+.                         list cty_id in 1/10, clean
+
+       cty_id  
+  1.        1  
+  2.        1  
+  3.        1  
+  4.        1  
+  5.        1  
+  6.        1  
+  7.        1  
+  8.        1  
+  9.        1  
+ 10.        2  
+r; t=0.00 14:43:18
+
+.                         
+.                         order nobs, after(year)
+r; t=0.00 14:43:18
+
+.                         
+.                 // # 3.6 varmanage: Manage variable labels, formats, and other properties
+. 
+.                 // # 3.7 `gsort' arranges observations to be in ascending or descending order
+.                         gsort country -year
+r; t=0.00 14:43:18
+
+.                         
+.                 // # 3.8 preserve the data in memory and build a separate data with means by country
+.                         preserve
+r; t=0.00 14:43:18
+
+.                                 collapse (mean) education rgdpwok, by(country)  // collapse the data with the mean 
+> of education & gdp within countries
+r; t=0.00 14:43:18
+
+.                                 codebook, compact
+
+Variable   Obs Unique      Mean       Min       Max  Label
+---------------------------------------------------------------------------------------------------------------------
+country    114    114         .         .         .  Country name
+education  111    110  4.799003  .4088889  10.86222  (mean) education
+rgdpwok    109    109  20827.33  823.9022  230039.1  (mean) rgdpwok
+---------------------------------------------------------------------------------------------------------------------
+r; t=0.00 14:43:18
+
+.                         restore
+r; t=0.00 14:43:18
+
+.                         
+.                         preserve
+r; t=0.00 14:43:18
+
+.                                 drop if k==.    // drop missing observations on capital == drop specific observatio
+> ns satisfying the condition
+(661 observations deleted)
+r; t=0.00 14:43:18
+
+.                                 l k in 21/25
+
+     +-----------------+
+     |               k |
+     |-----------------|
+ 21. | 62498025182.315 |
+ 22. | 41731310677.985 |
+ 23. | 81972521355.753 |
+ 24. | 53851381150.000 |
+ 25. | 58119306642.118 |
+     +-----------------+
+r; t=0.00 14:43:18
+
+.                                 format %12.0f k // change de way we see the numeric values of the variable
+r; t=0.00 14:43:18
+
+.                                 l k in 21/25
+
+     +-------------+
+     |           k |
+     |-------------|
+ 21. | 62498025182 |
+ 22. | 41731310678 |
+ 23. | 81972521356 |
+ 24. | 53851381150 |
+ 25. | 58119306642 |
+     +-------------+
+r; t=0.00 14:43:18
+
+.                         restore
+r; t=0.00 14:43:18
+
+. 
+.                 // 3.9 work with labels
+.                         label def lbl_years 1960 "Year 60" 1965 "Year 65" 1970 "Year 70" 1975 "Year 75" 1980 "Year 
+> 80" 1985 "Year 85" 1990 "Year 90" 1995 "Year 95" 2000 "Year 2000"
+r; t=0.00 14:43:18
+
+.                         label values year lbl_years
+r; t=0.00 14:43:18
+
+.                                 tab year
+
+    Year of |
+observation |      Freq.     Percent        Cum.
+------------+-----------------------------------
+    Year 60 |         99       11.05       11.05
+    Year 65 |         97       10.83       21.88
+    Year 70 |        100       11.16       33.04
+    Year 75 |         98       10.94       43.97
+    Year 80 |        100       11.16       55.13
+    Year 85 |         98       10.94       66.07
+    Year 90 |        107       11.94       78.01
+    Year 95 |         99       11.05       89.06
+  Year 2000 |         98       10.94      100.00
+------------+-----------------------------------
+      Total |        896      100.00
+r; t=0.00 14:43:18
+
+.                                 tab year, nolabel
+
+    Year of |
+observation |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1960 |         99       11.05       11.05
+       1965 |         97       10.83       21.88
+       1970 |        100       11.16       33.04
+       1975 |         98       10.94       43.97
+       1980 |        100       11.16       55.13
+       1985 |         98       10.94       66.07
+       1990 |        107       11.94       78.01
+       1995 |         99       11.05       89.06
+       2000 |         98       10.94      100.00
+------------+-----------------------------------
+      Total |        896      100.00
+r; t=0.00 14:43:18
+
+.                                 label dir
+lbl_years
+cty_id2
+r; t=0.00 14:43:18
+
+.                                 label list
+lbl_years:
+        1960 Year 60
+        1965 Year 65
+        1970 Year 70
+        1975 Year 75
+        1980 Year 80
+        1985 Year 85
+        1990 Year 90
+        1995 Year 95
+        2000 Year 2000
+cty_id2:
+           1 afghanistan
+           2 algeria
+           3 argentina
+           4 australia
+           5 austria
+           6 bahrain
+           7 bangladesh
+           8 barbados
+           9 belgium
+          10 belize
+          11 benin
+          12 bolivia
+          13 botswana
+          14 brazil
+          15 brunei
+          16 bulgaria
+          17 burundi
+          18 cameroon
+          19 canada
+          20 chile
+          21 china
+          22 colombia
+          23 costa rica
+          24 croatia
+          25 cuba
+          26 cyprus
+          27 denmark
+          28 dominica
+          29 ecuador
+          30 egypt
+          31 el salvador
+          32 estonia
+          33 ethiopia
+          34 fiji
+          35 finland
+          36 france
+          37 ghana
+          38 greece
+          39 guatemala
+          40 guyana
+          41 haiti
+          42 honduras
+          43 hong kong
+          44 hungary
+          45 iceland
+          46 india
+          47 indonesia
+          48 iraq
+          49 ireland
+          50 israel
+          51 italy
+          52 jamaica
+          53 japan
+          54 jordan
+          55 kenya
+          56 kuwait
+          57 latvia
+          58 lesotho
+          59 liberia
+          60 libya
+          61 lithuania
+          62 malawi
+          63 malaysia
+          64 mali
+          65 malta
+          66 mauritania
+          67 mauritius
+          68 mexico
+          69 moldova
+          70 mozambique
+          71 namibia
+          72 nepal
+          73 netherlands
+          74 new zealand
+          75 nicaragua
+          76 niger
+          77 norway
+          78 pakistan
+          79 panama
+          80 paraguay
+          81 peru
+          82 philippines
+          83 poland
+          84 portugal
+          85 romania
+          86 rwanda
+          87 senegal
+          88 seychelles
+          89 sierra leone
+          90 singapore
+          91 slovenia
+          92 solomon islands
+          93 south africa
+          94 spain
+          95 sri lanka
+          96 sudan
+          97 swaziland
+          98 sweden
+          99 switzerland
+         100 syria
+         101 taiwan
+         102 tajikistan
+         103 thailand
+         104 togo
+         105 tunisia
+         106 turkey
+         107 uganda
+         108 united kingdom
+         109 united states
+         110 uruguay
+         111 vanuatu
+         112 venezuela
+         113 zambia
+         114 zimbabwe
+r; t=0.00 14:43:18
+
+.                                 labelbook
+
+---------------------------------------------------------------------------------------------------------------------
+value label cty_id2 
+---------------------------------------------------------------------------------------------------------------------
+
+      values                                    labels
+       range:  [1,114]                   string length:  [4,15]
+           N:  114               unique at full length:  yes
+        gaps:  no                  unique at length 12:  yes
+  missing .*:  0                           null string:  no
+                               leading/trailing blanks:  no
+                                    numeric -> numeric:  no
+  definition
+           1   afghanistan
+           2   algeria
+           3   argentina
+           4   australia
+           5   austria
+           6   bahrain
+           7   bangladesh
+           8   barbados
+           9   belgium
+          10   belize
+          11   benin
+          12   bolivia
+          13   botswana
+          14   brazil
+          15   brunei
+          16   bulgaria
+          17   burundi
+          18   cameroon
+          19   canada
+          20   chile
+          21   china
+          22   colombia
+          23   costa rica
+          24   croatia
+          25   cuba
+          26   cyprus
+          27   denmark
+          28   dominica
+          29   ecuador
+          30   egypt
+          31   el salvador
+          32   estonia
+          33   ethiopia
+          34   fiji
+          35   finland
+          36   france
+          37   ghana
+          38   greece
+          39   guatemala
+          40   guyana
+          41   haiti
+          42   honduras
+          43   hong kong
+          44   hungary
+          45   iceland
+          46   india
+          47   indonesia
+          48   iraq
+          49   ireland
+          50   israel
+          51   italy
+          52   jamaica
+          53   japan
+          54   jordan
+          55   kenya
+          56   kuwait
+          57   latvia
+          58   lesotho
+          59   liberia
+          60   libya
+          61   lithuania
+          62   malawi
+          63   malaysia
+          64   mali
+          65   malta
+          66   mauritania
+          67   mauritius
+          68   mexico
+          69   moldova
+          70   mozambique
+          71   namibia
+          72   nepal
+          73   netherlands
+          74   new zealand
+          75   nicaragua
+          76   niger
+          77   norway
+          78   pakistan
+          79   panama
+          80   paraguay
+          81   peru
+          82   philippines
+          83   poland
+          84   portugal
+          85   romania
+          86   rwanda
+          87   senegal
+          88   seychelles
+          89   sierra leone
+          90   singapore
+          91   slovenia
+          92   solomon islands
+          93   south africa
+          94   spain
+          95   sri lanka
+          96   sudan
+          97   swaziland
+          98   sweden
+          99   switzerland
+         100   syria
+         101   taiwan
+         102   tajikistan
+         103   thailand
+         104   togo
+         105   tunisia
+         106   turkey
+         107   uganda
+         108   united kingdom
+         109   united states
+         110   uruguay
+         111   vanuatu
+         112   venezuela
+         113   zambia
+         114   zimbabwe
+
+   variables:  cty_id2
+
+
+---------------------------------------------------------------------------------------------------------------------
+value label lbl_years 
+---------------------------------------------------------------------------------------------------------------------
+
+      values                                    labels
+       range:  [1960,2000]               string length:  [7,9]
+           N:  9                 unique at full length:  yes
+        gaps:  yes                 unique at length 12:  yes
+  missing .*:  0                           null string:  no
+                               leading/trailing blanks:  no
+                                    numeric -> numeric:  no
+  definition
+        1960   Year 60
+        1965   Year 65
+        1970   Year 70
+        1975   Year 75
+        1980   Year 80
+        1985   Year 85
+        1990   Year 90
+        1995   Year 95
+        2000   Year 2000
+
+   variables:  year
+
+r; t=0.01 14:43:18
+
+.                         
+.                         numlabel lbl_years, add mask("#=")                      // label utilities == prefix numeri
+> c values to value labels
+r; t=0.00 14:43:18
+
+. 
+.                         tab year
+
+       Year of |
+   observation |      Freq.     Percent        Cum.
+---------------+-----------------------------------
+  1960=Year 60 |         99       11.05       11.05
+  1965=Year 65 |         97       10.83       21.88
+  1970=Year 70 |        100       11.16       33.04
+  1975=Year 75 |         98       10.94       43.97
+  1980=Year 80 |        100       11.16       55.13
+  1985=Year 85 |         98       10.94       66.07
+  1990=Year 90 |        107       11.94       78.01
+  1995=Year 95 |         99       11.05       89.06
+2000=Year 2000 |         98       10.94      100.00
+---------------+-----------------------------------
+         Total |        896      100.00
+r; t=0.00 14:43:18
+
+. 
+.                         numlabel cty_id2, add mask("#=")
+r; t=0.03 14:43:18
+
+.                         tab cty_id2
+
+      Country name |      Freq.     Percent        Cum.
+-------------------+-----------------------------------
+     1=afghanistan |          9        1.00        1.00
+         2=algeria |          9        1.00        2.01
+       3=argentina |          9        1.00        3.01
+       4=australia |          9        1.00        4.02
+         5=austria |          9        1.00        5.02
+         6=bahrain |          9        1.00        6.03
+      7=bangladesh |          9        1.00        7.03
+        8=barbados |          9        1.00        8.04
+         9=belgium |          9        1.00        9.04
+         10=belize |          3        0.33        9.38
+          11=benin |          9        1.00       10.38
+        12=bolivia |          9        1.00       11.38
+       13=botswana |          9        1.00       12.39
+         14=brazil |          9        1.00       13.39
+         15=brunei |          3        0.33       13.73
+       16=bulgaria |          9        1.00       14.73
+        17=burundi |          1        0.11       14.84
+       18=cameroon |          9        1.00       15.85
+         19=canada |          9        1.00       16.85
+          20=chile |          9        1.00       17.86
+          21=china |          9        1.00       18.86
+       22=colombia |          9        1.00       19.87
+     23=costa rica |          9        1.00       20.87
+        24=croatia |          3        0.33       21.21
+           25=cuba |          9        1.00       22.21
+         26=cyprus |          9        1.00       23.21
+        27=denmark |          9        1.00       24.22
+       28=dominica |          2        0.22       24.44
+        29=ecuador |          9        1.00       25.45
+          30=egypt |          9        1.00       26.45
+    31=el salvador |          9        1.00       27.46
+        32=estonia |          1        0.11       27.57
+       33=ethiopia |          1        0.11       27.68
+           34=fiji |          9        1.00       28.68
+        35=finland |          9        1.00       29.69
+         36=france |          9        1.00       30.69
+          37=ghana |          9        1.00       31.70
+         38=greece |          9        1.00       32.70
+      39=guatemala |          9        1.00       33.71
+         40=guyana |          9        1.00       34.71
+          41=haiti |          9        1.00       35.71
+       42=honduras |          9        1.00       36.72
+      43=hong kong |          9        1.00       37.72
+        44=hungary |          9        1.00       38.73
+        45=iceland |          9        1.00       39.73
+          46=india |          9        1.00       40.74
+      47=indonesia |          9        1.00       41.74
+           48=iraq |          9        1.00       42.75
+        49=ireland |          9        1.00       43.75
+         50=israel |          9        1.00       44.75
+          51=italy |          9        1.00       45.76
+        52=jamaica |          9        1.00       46.76
+          53=japan |          9        1.00       47.77
+         54=jordan |          9        1.00       48.77
+          55=kenya |          9        1.00       49.78
+         56=kuwait |          9        1.00       50.78
+         57=latvia |          1        0.11       50.89
+        58=lesotho |          9        1.00       51.90
+        59=liberia |          9        1.00       52.90
+          60=libya |          3        0.33       53.24
+      61=lithuania |          1        0.11       53.35
+         62=malawi |          9        1.00       54.35
+       63=malaysia |          9        1.00       55.36
+           64=mali |          9        1.00       56.36
+          65=malta |          9        1.00       57.37
+     66=mauritania |          1        0.11       57.48
+      67=mauritius |          9        1.00       58.48
+         68=mexico |          9        1.00       59.49
+        69=moldova |          1        0.11       59.60
+     70=mozambique |          9        1.00       60.60
+        71=namibia |          2        0.22       60.83
+          72=nepal |          9        1.00       61.83
+    73=netherlands |          9        1.00       62.83
+    74=new zealand |          9        1.00       63.84
+      75=nicaragua |          9        1.00       64.84
+          76=niger |          9        1.00       65.85
+         77=norway |          9        1.00       66.85
+       78=pakistan |          9        1.00       67.86
+         79=panama |          9        1.00       68.86
+       80=paraguay |          9        1.00       69.87
+           81=peru |          9        1.00       70.87
+    82=philippines |          9        1.00       71.88
+         83=poland |          9        1.00       72.88
+       84=portugal |          9        1.00       73.88
+        85=romania |          9        1.00       74.89
+         86=rwanda |          9        1.00       75.89
+        87=senegal |          9        1.00       76.90
+     88=seychelles |          3        0.33       77.23
+   89=sierra leone |          9        1.00       78.24
+      90=singapore |          9        1.00       79.24
+       91=slovenia |          3        0.33       79.58
+92=solomon islands |          1        0.11       79.69
+   93=south africa |          9        1.00       80.69
+          94=spain |          9        1.00       81.70
+      95=sri lanka |          9        1.00       82.70
+          96=sudan |          9        1.00       83.71
+      97=swaziland |          9        1.00       84.71
+         98=sweden |          9        1.00       85.71
+    99=switzerland |          9        1.00       86.72
+         100=syria |          9        1.00       87.72
+        101=taiwan |          9        1.00       88.73
+    102=tajikistan |          1        0.11       88.84
+      103=thailand |          9        1.00       89.84
+          104=togo |          9        1.00       90.85
+       105=tunisia |          9        1.00       91.85
+        106=turkey |          9        1.00       92.86
+        107=uganda |          9        1.00       93.86
+108=united kingdom |          9        1.00       94.87
+ 109=united states |          9        1.00       95.87
+       110=uruguay |          9        1.00       96.88
+       111=vanuatu |          1        0.11       96.99
+     112=venezuela |          9        1.00       97.99
+        113=zambia |          9        1.00       99.00
+      114=zimbabwe |          9        1.00      100.00
+-------------------+-----------------------------------
+             Total |        896      100.00
+r; t=0.00 14:43:18
+
+. 
+.                 // 3.10 recode command
+.                         rename country cty
+r; t=0.04 14:43:18
+
+.                         clonevar educ2 = education
+(16 missing values generated)
+r; t=0.00 14:43:18
+
+.                         recode educ2 min/4 = 4 4.00001/9 = 9 9.00000/max = 12           // recode categorical varia
+> bles
+(educ2: 875 changes made)
+r; t=0.00 14:43:18
+
+.                         tab educ2
+
+  education |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          4 |        398       45.23       45.23
+          9 |        399       45.34       90.57
+         12 |         83        9.43      100.00
+------------+-----------------------------------
+      Total |        880      100.00
+r; t=0.00 14:43:18
+
+.                         
+.                 // 3.11 compare variables
+.                         compare educ2 education
+
+                                        ---------- difference ----------
+                            count       minimum      average     maximum
+------------------------------------------------------------------------
+educ2<education                 2          -.25        -.215        -.18
+educ2=education                 5
+educ2>education               873           .01     2.303654        4.99
+                       ----------
+jointly defined               880          -.25     2.284841        4.99
+jointly missing                16
+                       ----------
+total                         896
+r; t=0.00 14:43:18
+
+.                         
+.                 // # 3.12 identify duplicates in the data
+.                         duplicates tag _all, ge(dup)
+
+Duplicates in terms of cty year nobs num rollsum total_num isocode pop xrat ppp rgdpl kc kg ki openk rgdpwok
+    education k lngdp lnk education2 lnpop cty_id cty_id2 country2 cty_year random educ2
+r; t=0.00 14:43:18
+
+.                         tab dup                                                 // `0' means no duplicate
+
+        dup |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |        896      100.00      100.00
+------------+-----------------------------------
+      Total |        896      100.00
+r; t=0.00 14:43:18
+
+.                                 unique cty
+Number of unique values of cty is  114
+Number of records is  896
+r; t=0.00 14:43:18
+
+.                                 tab cty
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+            afghanistan |          9        1.00        1.00
+                algeria |          9        1.00        2.01
+              argentina |          9        1.00        3.01
+              australia |          9        1.00        4.02
+                austria |          9        1.00        5.02
+                bahrain |          9        1.00        6.03
+             bangladesh |          9        1.00        7.03
+               barbados |          9        1.00        8.04
+                belgium |          9        1.00        9.04
+                 belize |          3        0.33        9.38
+                  benin |          9        1.00       10.38
+                bolivia |          9        1.00       11.38
+               botswana |          9        1.00       12.39
+                 brazil |          9        1.00       13.39
+                 brunei |          3        0.33       13.73
+               bulgaria |          9        1.00       14.73
+                burundi |          1        0.11       14.84
+               cameroon |          9        1.00       15.85
+                 canada |          9        1.00       16.85
+                  chile |          9        1.00       17.86
+                  china |          9        1.00       18.86
+               colombia |          9        1.00       19.87
+             costa rica |          9        1.00       20.87
+                croatia |          3        0.33       21.21
+                   cuba |          9        1.00       22.21
+                 cyprus |          9        1.00       23.21
+                denmark |          9        1.00       24.22
+               dominica |          2        0.22       24.44
+                ecuador |          9        1.00       25.45
+                  egypt |          9        1.00       26.45
+            el salvador |          9        1.00       27.46
+                estonia |          1        0.11       27.57
+               ethiopia |          1        0.11       27.68
+                   fiji |          9        1.00       28.68
+                finland |          9        1.00       29.69
+                 france |          9        1.00       30.69
+                  ghana |          9        1.00       31.70
+                 greece |          9        1.00       32.70
+              guatemala |          9        1.00       33.71
+                 guyana |          9        1.00       34.71
+                  haiti |          9        1.00       35.71
+               honduras |          9        1.00       36.72
+              hong kong |          9        1.00       37.72
+                hungary |          9        1.00       38.73
+                iceland |          9        1.00       39.73
+                  india |          9        1.00       40.74
+              indonesia |          9        1.00       41.74
+                   iraq |          9        1.00       42.75
+                ireland |          9        1.00       43.75
+                 israel |          9        1.00       44.75
+                  italy |          9        1.00       45.76
+                jamaica |          9        1.00       46.76
+                  japan |          9        1.00       47.77
+                 jordan |          9        1.00       48.77
+                  kenya |          9        1.00       49.78
+                 kuwait |          9        1.00       50.78
+                 latvia |          1        0.11       50.89
+                lesotho |          9        1.00       51.90
+                liberia |          9        1.00       52.90
+                  libya |          3        0.33       53.24
+              lithuania |          1        0.11       53.35
+                 malawi |          9        1.00       54.35
+               malaysia |          9        1.00       55.36
+                   mali |          9        1.00       56.36
+                  malta |          9        1.00       57.37
+             mauritania |          1        0.11       57.48
+              mauritius |          9        1.00       58.48
+                 mexico |          9        1.00       59.49
+                moldova |          1        0.11       59.60
+             mozambique |          9        1.00       60.60
+                namibia |          2        0.22       60.83
+                  nepal |          9        1.00       61.83
+            netherlands |          9        1.00       62.83
+            new zealand |          9        1.00       63.84
+              nicaragua |          9        1.00       64.84
+                  niger |          9        1.00       65.85
+                 norway |          9        1.00       66.85
+               pakistan |          9        1.00       67.86
+                 panama |          9        1.00       68.86
+               paraguay |          9        1.00       69.87
+                   peru |          9        1.00       70.87
+            philippines |          9        1.00       71.88
+                 poland |          9        1.00       72.88
+               portugal |          9        1.00       73.88
+                romania |          9        1.00       74.89
+                 rwanda |          9        1.00       75.89
+                senegal |          9        1.00       76.90
+             seychelles |          3        0.33       77.23
+           sierra leone |          9        1.00       78.24
+              singapore |          9        1.00       79.24
+               slovenia |          3        0.33       79.58
+        solomon islands |          1        0.11       79.69
+           south africa |          9        1.00       80.69
+                  spain |          9        1.00       81.70
+              sri lanka |          9        1.00       82.70
+                  sudan |          9        1.00       83.71
+              swaziland |          9        1.00       84.71
+                 sweden |          9        1.00       85.71
+            switzerland |          9        1.00       86.72
+                  syria |          9        1.00       87.72
+                 taiwan |          9        1.00       88.73
+             tajikistan |          1        0.11       88.84
+               thailand |          9        1.00       89.84
+                   togo |          9        1.00       90.85
+                tunisia |          9        1.00       91.85
+                 turkey |          9        1.00       92.86
+                 uganda |          9        1.00       93.86
+         united kingdom |          9        1.00       94.87
+          united states |          9        1.00       95.87
+                uruguay |          9        1.00       96.88
+                vanuatu |          1        0.11       96.99
+              venezuela |          9        1.00       97.99
+                 zambia |          9        1.00       99.00
+               zimbabwe |          9        1.00      100.00
+------------------------+-----------------------------------
+                  Total |        896      100.00
+r; t=0.00 14:43:18
+
+.                                 ret li                                          // = return list; identifies the nu
+> mber of observations, as well as the number of unique values
+
+scalars:
+                  r(N) =  896
+                  r(r) =  114
+r; t=0.00 14:43:18
+
+.                         
+.                 // # 3.13 codebook
+.                         codebook education
+
+---------------------------------------------------------------------------------------------------------------------
+education                                                                                                   education
+---------------------------------------------------------------------------------------------------------------------
+
+                  type:  numeric (double)
+
+                 range:  [.04,12.25]                  units:  .01
+         unique values:  588                      missing .:  16/896
+
+                  mean:   4.73675
+              std. dev:   2.89811
+
+           percentiles:        10%       25%       50%       75%       90%
+                              1.07     2.305     4.475      6.98     8.835
+r; t=0.00 14:43:18
+
+.                         inspect education
+
+education:  education                           Number of Observations
+---------------------                  ---------------------------------------
+                                             Total      Integers   Nonintegers
+|  #                         Negative            -             -             -
+|  #   #                     Zero                -             -             -
+|  #   #   #                 Positive          880             9           871
+|  #   #   #   #                       -----------   -----------   -----------
+|  #   #   #   #             Total             880             9           871
+|  #   #   #   #   .         Missing            16
++----------------------                -----------
+.04               12.25                        896
+(More than 99 unique values)
+r; t=0.00 14:43:18
+
+.                         tab education, miss                             // run a tabulation identifying the missing
+>  values of the variable
+
+  education |      Freq.     Percent        Cum.
+------------+-----------------------------------
+        .04 |          1        0.11        0.11
+        .07 |          1        0.11        0.22
+         .1 |          1        0.11        0.33
+        .14 |          1        0.11        0.45
+        .16 |          1        0.11        0.56
+        .17 |          3        0.33        0.89
+        .19 |          1        0.11        1.00
+         .2 |          1        0.11        1.12
+        .21 |          1        0.11        1.23
+        .23 |          1        0.11        1.34
+        .26 |          1        0.11        1.45
+        .29 |          2        0.22        1.67
+        .31 |          2        0.22        1.90
+        .32 |          1        0.11        2.01
+        .37 |          2        0.22        2.23
+        .38 |          1        0.11        2.34
+        .39 |          3        0.33        2.68
+         .4 |          1        0.11        2.79
+        .42 |          1        0.11        2.90
+        .45 |          1        0.11        3.01
+        .48 |          2        0.22        3.24
+        .49 |          1        0.11        3.35
+         .5 |          2        0.22        3.57
+        .52 |          1        0.11        3.68
+        .53 |          2        0.22        3.91
+        .54 |          1        0.11        4.02
+        .55 |          1        0.11        4.13
+        .56 |          1        0.11        4.24
+        .61 |          3        0.33        4.58
+        .63 |          3        0.33        4.91
+        .64 |          3        0.33        5.25
+        .65 |          2        0.22        5.47
+        .69 |          3        0.33        5.80
+         .7 |          1        0.11        5.92
+        .71 |          1        0.11        6.03
+        .73 |          1        0.11        6.14
+        .75 |          1        0.11        6.25
+        .76 |          4        0.45        6.70
+        .77 |          2        0.22        6.92
+        .79 |          2        0.22        7.14
+        .82 |          2        0.22        7.37
+        .83 |          1        0.11        7.48
+        .84 |          1        0.11        7.59
+        .85 |          1        0.11        7.70
+        .87 |          2        0.22        7.92
+        .89 |          1        0.11        8.04
+         .9 |          2        0.22        8.26
+        .91 |          3        0.33        8.59
+        .93 |          1        0.11        8.71
+        .95 |          1        0.11        8.82
+        .97 |          1        0.11        8.93
+        .98 |          1        0.11        9.04
+        .99 |          1        0.11        9.15
+       1.01 |          1        0.11        9.26
+       1.02 |          1        0.11        9.38
+       1.03 |          1        0.11        9.49
+       1.05 |          2        0.22        9.71
+       1.07 |          2        0.22        9.93
+       1.08 |          1        0.11       10.04
+        1.1 |          2        0.22       10.27
+       1.11 |          1        0.11       10.38
+       1.13 |          2        0.22       10.60
+       1.14 |          1        0.11       10.71
+       1.15 |          1        0.11       10.83
+       1.17 |          1        0.11       10.94
+       1.19 |          2        0.22       11.16
+        1.2 |          1        0.11       11.27
+       1.23 |          1        0.11       11.38
+       1.24 |          2        0.22       11.61
+       1.25 |          2        0.22       11.83
+       1.26 |          2        0.22       12.05
+       1.31 |          1        0.11       12.17
+       1.32 |          3        0.33       12.50
+       1.33 |          1        0.11       12.61
+       1.34 |          2        0.22       12.83
+       1.35 |          2        0.22       13.06
+       1.36 |          1        0.11       13.17
+       1.37 |          3        0.33       13.50
+        1.4 |          1        0.11       13.62
+       1.41 |          1        0.11       13.73
+       1.42 |          1        0.11       13.84
+       1.43 |          2        0.22       14.06
+       1.45 |          3        0.33       14.40
+       1.46 |          1        0.11       14.51
+       1.49 |          3        0.33       14.84
+       1.53 |          1        0.11       14.96
+       1.54 |          2        0.22       15.18
+       1.55 |          1        0.11       15.29
+       1.56 |          1        0.11       15.40
+       1.59 |          1        0.11       15.51
+        1.6 |          3        0.33       15.85
+       1.61 |          1        0.11       15.96
+       1.62 |          3        0.33       16.29
+       1.65 |          1        0.11       16.41
+       1.66 |          3        0.33       16.74
+       1.67 |          2        0.22       16.96
+       1.68 |          2        0.22       17.19
+       1.69 |          2        0.22       17.41
+        1.7 |          4        0.45       17.86
+       1.71 |          1        0.11       17.97
+       1.73 |          1        0.11       18.08
+       1.74 |          2        0.22       18.30
+       1.76 |          2        0.22       18.53
+       1.78 |          1        0.11       18.64
+       1.79 |          1        0.11       18.75
+       1.82 |          3        0.33       19.08
+       1.83 |          1        0.11       19.20
+       1.86 |          1        0.11       19.31
+       1.87 |          1        0.11       19.42
+        1.9 |          1        0.11       19.53
+       1.91 |          2        0.22       19.75
+       1.92 |          2        0.22       19.98
+       1.93 |          1        0.11       20.09
+       1.94 |          4        0.45       20.54
+       1.95 |          2        0.22       20.76
+       1.97 |          1        0.11       20.87
+       1.99 |          1        0.11       20.98
+          2 |          1        0.11       21.09
+       2.03 |          4        0.45       21.54
+       2.05 |          2        0.22       21.76
+       2.07 |          1        0.11       21.87
+       2.09 |          2        0.22       22.10
+        2.1 |          2        0.22       22.32
+       2.14 |          1        0.11       22.43
+       2.15 |          1        0.11       22.54
+       2.16 |          1        0.11       22.66
+       2.17 |          1        0.11       22.77
+       2.19 |          1        0.11       22.88
+       2.21 |          1        0.11       22.99
+       2.22 |          1        0.11       23.10
+       2.23 |          2        0.22       23.33
+       2.24 |          2        0.22       23.55
+       2.26 |          2        0.22       23.77
+       2.27 |          1        0.11       23.88
+       2.28 |          1        0.11       24.00
+       2.29 |          5        0.56       24.55
+       2.32 |          1        0.11       24.67
+       2.33 |          1        0.11       24.78
+       2.34 |          4        0.45       25.22
+       2.35 |          1        0.11       25.33
+       2.36 |          2        0.22       25.56
+       2.38 |          2        0.22       25.78
+       2.39 |          1        0.11       25.89
+       2.41 |          3        0.33       26.23
+       2.44 |          4        0.45       26.67
+       2.45 |          2        0.22       26.90
+       2.46 |          2        0.22       27.12
+       2.47 |          2        0.22       27.34
+       2.48 |          1        0.11       27.46
+       2.53 |          3        0.33       27.79
+       2.54 |          1        0.11       27.90
+       2.56 |          1        0.11       28.01
+       2.57 |          1        0.11       28.12
+       2.58 |          3        0.33       28.46
+       2.59 |          2        0.22       28.68
+        2.6 |          3        0.33       29.02
+       2.67 |          3        0.33       29.35
+       2.68 |          1        0.11       29.46
+        2.7 |          1        0.11       29.58
+       2.72 |          1        0.11       29.69
+       2.73 |          1        0.11       29.80
+       2.75 |          1        0.11       29.91
+       2.78 |          2        0.22       30.13
+       2.79 |          3        0.33       30.47
+        2.8 |          1        0.11       30.58
+       2.82 |          1        0.11       30.69
+       2.83 |          3        0.33       31.03
+       2.86 |          2        0.22       31.25
+       2.87 |          2        0.22       31.47
+       2.88 |          1        0.11       31.58
+       2.89 |          1        0.11       31.70
+       2.91 |          1        0.11       31.81
+       2.92 |          2        0.22       32.03
+       2.93 |          2        0.22       32.25
+       2.95 |          3        0.33       32.59
+       2.96 |          1        0.11       32.70
+       2.97 |          1        0.11       32.81
+       2.98 |          2        0.22       33.04
+          3 |          1        0.11       33.15
+       3.01 |          1        0.11       33.26
+       3.02 |          3        0.33       33.59
+       3.03 |          1        0.11       33.71
+       3.05 |          2        0.22       33.93
+       3.09 |          2        0.22       34.15
+        3.1 |          1        0.11       34.26
+       3.11 |          1        0.11       34.37
+       3.12 |          3        0.33       34.71
+       3.13 |          1        0.11       34.82
+       3.14 |          2        0.22       35.04
+       3.15 |          1        0.11       35.16
+       3.16 |          1        0.11       35.27
+       3.17 |          1        0.11       35.38
+       3.19 |          1        0.11       35.49
+        3.2 |          1        0.11       35.60
+       3.22 |          2        0.22       35.83
+       3.27 |          1        0.11       35.94
+       3.29 |          1        0.11       36.05
+        3.3 |          3        0.33       36.38
+       3.31 |          1        0.11       36.50
+       3.32 |          1        0.11       36.61
+       3.34 |          1        0.11       36.72
+       3.35 |          1        0.11       36.83
+       3.36 |          2        0.22       37.05
+       3.38 |          3        0.33       37.39
+        3.4 |          1        0.11       37.50
+       3.43 |          2        0.22       37.72
+       3.44 |          1        0.11       37.83
+       3.45 |          1        0.11       37.95
+       3.49 |          1        0.11       38.06
+        3.5 |          2        0.22       38.28
+       3.54 |          3        0.33       38.62
+       3.55 |          1        0.11       38.73
+       3.56 |          1        0.11       38.84
+       3.57 |          2        0.22       39.06
+       3.58 |          2        0.22       39.29
+        3.6 |          3        0.33       39.62
+       3.61 |          2        0.22       39.84
+       3.64 |          1        0.11       39.96
+       3.65 |          4        0.45       40.40
+       3.68 |          2        0.22       40.63
+       3.69 |          1        0.11       40.74
+        3.7 |          3        0.33       41.07
+       3.72 |          1        0.11       41.18
+       3.74 |          2        0.22       41.41
+       3.75 |          2        0.22       41.63
+       3.76 |          2        0.22       41.85
+       3.77 |          2        0.22       42.08
+       3.78 |          1        0.11       42.19
+       3.79 |          2        0.22       42.41
+        3.8 |          1        0.11       42.52
+       3.83 |          1        0.11       42.63
+       3.85 |          1        0.11       42.75
+       3.86 |          1        0.11       42.86
+       3.89 |          2        0.22       43.08
+       3.91 |          1        0.11       43.19
+       3.93 |          1        0.11       43.30
+       3.94 |          2        0.22       43.53
+       3.95 |          1        0.11       43.64
+       3.98 |          1        0.11       43.75
+       3.99 |          2        0.22       43.97
+          4 |          4        0.45       44.42
+       4.01 |          4        0.45       44.87
+       4.03 |          2        0.22       45.09
+       4.05 |          1        0.11       45.20
+       4.08 |          3        0.33       45.54
+       4.09 |          3        0.33       45.87
+       4.12 |          1        0.11       45.98
+       4.13 |          2        0.22       46.21
+       4.15 |          3        0.33       46.54
+       4.16 |          1        0.11       46.65
+       4.17 |          1        0.11       46.76
+       4.19 |          1        0.11       46.88
+        4.2 |          2        0.22       47.10
+       4.22 |          1        0.11       47.21
+       4.24 |          1        0.11       47.32
+       4.25 |          1        0.11       47.43
+       4.26 |          1        0.11       47.54
+       4.29 |          2        0.22       47.77
+       4.33 |          1        0.11       47.88
+       4.34 |          2        0.22       48.10
+       4.35 |          1        0.11       48.21
+       4.37 |          1        0.11       48.33
+       4.39 |          2        0.22       48.55
+       4.41 |          1        0.11       48.66
+       4.42 |          1        0.11       48.77
+       4.43 |          1        0.11       48.88
+       4.47 |          2        0.22       49.11
+       4.48 |          2        0.22       49.33
+       4.49 |          3        0.33       49.67
+        4.5 |          3        0.33       50.00
+       4.53 |          1        0.11       50.11
+       4.54 |          2        0.22       50.33
+       4.55 |          1        0.11       50.45
+       4.56 |          3        0.33       50.78
+       4.57 |          1        0.11       50.89
+       4.64 |          2        0.22       51.12
+       4.67 |          1        0.11       51.23
+       4.68 |          1        0.11       51.34
+       4.69 |          1        0.11       51.45
+        4.7 |          2        0.22       51.67
+       4.71 |          2        0.22       51.90
+       4.72 |          1        0.11       52.01
+       4.73 |          1        0.11       52.12
+       4.74 |          3        0.33       52.46
+       4.77 |          3        0.33       52.79
+       4.78 |          2        0.22       53.01
+        4.8 |          1        0.11       53.13
+       4.81 |          1        0.11       53.24
+       4.82 |          1        0.11       53.35
+       4.83 |          1        0.11       53.46
+       4.84 |          1        0.11       53.57
+       4.85 |          1        0.11       53.68
+       4.86 |          1        0.11       53.79
+       4.87 |          1        0.11       53.91
+       4.88 |          3        0.33       54.24
+       4.89 |          1        0.11       54.35
+        4.9 |          1        0.11       54.46
+       4.91 |          1        0.11       54.58
+       4.92 |          1        0.11       54.69
+       4.93 |          1        0.11       54.80
+       4.95 |          1        0.11       54.91
+       4.99 |          2        0.22       55.13
+       5.01 |          2        0.22       55.36
+       5.03 |          1        0.11       55.47
+       5.04 |          1        0.11       55.58
+       5.05 |          1        0.11       55.69
+       5.08 |          1        0.11       55.80
+       5.09 |          1        0.11       55.92
+       5.11 |          1        0.11       56.03
+       5.12 |          1        0.11       56.14
+       5.13 |          1        0.11       56.25
+       5.14 |          1        0.11       56.36
+       5.15 |          2        0.22       56.58
+       5.18 |          2        0.22       56.81
+       5.19 |          1        0.11       56.92
+        5.2 |          1        0.11       57.03
+       5.21 |          2        0.22       57.25
+       5.22 |          4        0.45       57.70
+       5.23 |          3        0.33       58.04
+       5.26 |          1        0.11       58.15
+       5.27 |          1        0.11       58.26
+       5.28 |          2        0.22       58.48
+        5.3 |          1        0.11       58.59
+       5.32 |          2        0.22       58.82
+       5.33 |          1        0.11       58.93
+       5.34 |          2        0.22       59.15
+       5.35 |          4        0.45       59.60
+       5.37 |          1        0.11       59.71
+       5.38 |          1        0.11       59.82
+       5.39 |          1        0.11       59.93
+        5.4 |          1        0.11       60.04
+       5.43 |          2        0.22       60.27
+       5.44 |          1        0.11       60.38
+       5.46 |          1        0.11       60.49
+       5.48 |          2        0.22       60.71
+        5.5 |          1        0.11       60.83
+       5.52 |          2        0.22       61.05
+       5.54 |          2        0.22       61.27
+       5.55 |          2        0.22       61.50
+       5.56 |          1        0.11       61.61
+       5.57 |          2        0.22       61.83
+       5.58 |          1        0.11       61.94
+        5.6 |          1        0.11       62.05
+       5.61 |          2        0.22       62.28
+       5.63 |          2        0.22       62.50
+       5.64 |          1        0.11       62.61
+       5.66 |          2        0.22       62.83
+       5.67 |          1        0.11       62.95
+       5.69 |          1        0.11       63.06
+       5.73 |          3        0.33       63.39
+       5.74 |          3        0.33       63.73
+       5.75 |          1        0.11       63.84
+       5.76 |          1        0.11       63.95
+       5.78 |          3        0.33       64.29
+       5.79 |          1        0.11       64.40
+       5.81 |          2        0.22       64.62
+       5.82 |          1        0.11       64.73
+       5.84 |          1        0.11       64.84
+       5.85 |          1        0.11       64.96
+       5.86 |          2        0.22       65.18
+       5.87 |          1        0.11       65.29
+       5.88 |          1        0.11       65.40
+       5.89 |          1        0.11       65.51
+       5.91 |          1        0.11       65.63
+       5.92 |          1        0.11       65.74
+       5.94 |          1        0.11       65.85
+       5.96 |          1        0.11       65.96
+       5.99 |          2        0.22       66.18
+       6.01 |          2        0.22       66.41
+       6.04 |          1        0.11       66.52
+       6.05 |          1        0.11       66.63
+       6.06 |          1        0.11       66.74
+       6.08 |          2        0.22       66.96
+       6.09 |          3        0.33       67.30
+        6.1 |          1        0.11       67.41
+       6.11 |          1        0.11       67.52
+       6.15 |          1        0.11       67.63
+       6.16 |          1        0.11       67.75
+       6.18 |          1        0.11       67.86
+       6.22 |          2        0.22       68.08
+       6.25 |          2        0.22       68.30
+       6.28 |          1        0.11       68.42
+       6.37 |          2        0.22       68.64
+       6.42 |          2        0.22       68.86
+       6.45 |          3        0.33       69.20
+       6.46 |          1        0.11       69.31
+       6.49 |          1        0.11       69.42
+        6.5 |          1        0.11       69.53
+       6.52 |          3        0.33       69.87
+       6.53 |          2        0.22       70.09
+       6.54 |          1        0.11       70.20
+       6.56 |          1        0.11       70.31
+        6.6 |          1        0.11       70.42
+       6.62 |          2        0.22       70.65
+       6.65 |          2        0.22       70.87
+       6.67 |          1        0.11       70.98
+       6.69 |          1        0.11       71.09
+        6.7 |          1        0.11       71.21
+       6.71 |          1        0.11       71.32
+       6.73 |          2        0.22       71.54
+       6.74 |          2        0.22       71.76
+       6.76 |          2        0.22       71.99
+       6.77 |          2        0.22       72.21
+        6.8 |          1        0.11       72.32
+       6.83 |          1        0.11       72.43
+       6.84 |          1        0.11       72.54
+       6.87 |          2        0.22       72.77
+       6.88 |          2        0.22       72.99
+        6.9 |          1        0.11       73.10
+       6.92 |          1        0.11       73.21
+       6.94 |          1        0.11       73.33
+       6.95 |          2        0.22       73.55
+       6.97 |          1        0.11       73.66
+       6.99 |          2        0.22       73.88
+          7 |          1        0.11       74.00
+       7.01 |          1        0.11       74.11
+       7.05 |          1        0.11       74.22
+       7.07 |          1        0.11       74.33
+       7.11 |          1        0.11       74.44
+       7.12 |          1        0.11       74.55
+       7.14 |          1        0.11       74.67
+       7.17 |          2        0.22       74.89
+        7.2 |          1        0.11       75.00
+       7.22 |          1        0.11       75.11
+       7.23 |          1        0.11       75.22
+       7.25 |          2        0.22       75.45
+       7.26 |          1        0.11       75.56
+        7.3 |          1        0.11       75.67
+       7.31 |          2        0.22       75.89
+       7.32 |          1        0.11       76.00
+       7.33 |          2        0.22       76.23
+       7.35 |          1        0.11       76.34
+       7.36 |          2        0.22       76.56
+       7.37 |          1        0.11       76.67
+       7.41 |          1        0.11       76.79
+       7.42 |          1        0.11       76.90
+       7.43 |          1        0.11       77.01
+       7.44 |          1        0.11       77.12
+       7.45 |          1        0.11       77.23
+       7.46 |          1        0.11       77.34
+       7.47 |          1        0.11       77.46
+       7.49 |          1        0.11       77.57
+       7.51 |          1        0.11       77.68
+       7.53 |          1        0.11       77.79
+       7.55 |          1        0.11       77.90
+       7.56 |          2        0.22       78.13
+       7.57 |          1        0.11       78.24
+       7.58 |          1        0.11       78.35
+        7.6 |          1        0.11       78.46
+       7.62 |          1        0.11       78.57
+       7.65 |          3        0.33       78.91
+       7.66 |          3        0.33       79.24
+       7.67 |          2        0.22       79.46
+       7.68 |          1        0.11       79.58
+        7.7 |          1        0.11       79.69
+       7.71 |          1        0.11       79.80
+       7.75 |          1        0.11       79.91
+       7.77 |          1        0.11       80.02
+       7.78 |          1        0.11       80.13
+       7.82 |          1        0.11       80.25
+       7.85 |          1        0.11       80.36
+       7.86 |          1        0.11       80.47
+       7.87 |          2        0.22       80.69
+       7.88 |          2        0.22       80.92
+       7.89 |          1        0.11       81.03
+        7.9 |          3        0.33       81.36
+       7.91 |          1        0.11       81.47
+       7.94 |          1        0.11       81.58
+       7.95 |          2        0.22       81.81
+       7.96 |          2        0.22       82.03
+       7.99 |          1        0.11       82.14
+       8.01 |          1        0.11       82.25
+       8.02 |          1        0.11       82.37
+       8.03 |          1        0.11       82.48
+       8.05 |          1        0.11       82.59
+       8.07 |          2        0.22       82.81
+       8.12 |          2        0.22       83.04
+       8.16 |          1        0.11       83.15
+       8.17 |          1        0.11       83.26
+       8.19 |          1        0.11       83.37
+        8.2 |          1        0.11       83.48
+       8.22 |          1        0.11       83.59
+       8.23 |          1        0.11       83.71
+       8.26 |          1        0.11       83.82
+       8.27 |          1        0.11       83.93
+       8.28 |          2        0.22       84.15
+       8.32 |          1        0.11       84.26
+       8.33 |          1        0.11       84.38
+       8.35 |          1        0.11       84.49
+       8.37 |          3        0.33       84.82
+        8.4 |          2        0.22       85.04
+       8.41 |          1        0.11       85.16
+       8.42 |          1        0.11       85.27
+       8.43 |          1        0.11       85.38
+       8.44 |          3        0.33       85.71
+       8.49 |          1        0.11       85.83
+        8.5 |          1        0.11       85.94
+       8.51 |          2        0.22       86.16
+       8.52 |          1        0.11       86.27
+       8.53 |          1        0.11       86.38
+       8.55 |          1        0.11       86.50
+        8.6 |          1        0.11       86.61
+       8.61 |          1        0.11       86.72
+       8.65 |          1        0.11       86.83
+       8.66 |          1        0.11       86.94
+       8.71 |          1        0.11       87.05
+       8.72 |          1        0.11       87.17
+       8.73 |          1        0.11       87.28
+       8.74 |          1        0.11       87.39
+       8.75 |          1        0.11       87.50
+       8.77 |          1        0.11       87.61
+       8.78 |          1        0.11       87.72
+       8.79 |          1        0.11       87.83
+        8.8 |          3        0.33       88.17
+       8.81 |          2        0.22       88.39
+       8.86 |          1        0.11       88.50
+       8.91 |          1        0.11       88.62
+       8.95 |          2        0.22       88.84
+       8.96 |          1        0.11       88.95
+       9.01 |          1        0.11       89.06
+       9.02 |          1        0.11       89.17
+       9.03 |          2        0.22       89.40
+       9.06 |          1        0.11       89.51
+       9.07 |          1        0.11       89.62
+       9.09 |          1        0.11       89.73
+       9.11 |          2        0.22       89.96
+       9.16 |          1        0.11       90.07
+       9.17 |          1        0.11       90.18
+       9.22 |          2        0.22       90.40
+       9.23 |          1        0.11       90.51
+       9.24 |          2        0.22       90.74
+       9.25 |          1        0.11       90.85
+       9.26 |          1        0.11       90.96
+        9.3 |          2        0.22       91.18
+       9.33 |          1        0.11       91.29
+       9.34 |          1        0.11       91.41
+       9.35 |          1        0.11       91.52
+       9.36 |          1        0.11       91.63
+       9.42 |          2        0.22       91.85
+       9.43 |          1        0.11       91.96
+       9.44 |          1        0.11       92.08
+       9.47 |          2        0.22       92.30
+       9.48 |          1        0.11       92.41
+       9.51 |          2        0.22       92.63
+       9.54 |          2        0.22       92.86
+       9.56 |          1        0.11       92.97
+       9.57 |          1        0.11       93.08
+        9.6 |          1        0.11       93.19
+       9.62 |          1        0.11       93.30
+       9.72 |          1        0.11       93.42
+       9.73 |          1        0.11       93.53
+       9.74 |          1        0.11       93.64
+       9.79 |          1        0.11       93.75
+       9.81 |          1        0.11       93.86
+       9.82 |          1        0.11       93.97
+       9.86 |          1        0.11       94.08
+        9.9 |          2        0.22       94.31
+       9.92 |          1        0.11       94.42
+      10.01 |          1        0.11       94.53
+      10.02 |          1        0.11       94.64
+      10.06 |          1        0.11       94.75
+      10.07 |          1        0.11       94.87
+      10.09 |          2        0.22       95.09
+      10.12 |          1        0.11       95.20
+      10.13 |          1        0.11       95.31
+      10.14 |          1        0.11       95.42
+      10.18 |          1        0.11       95.54
+      10.23 |          1        0.11       95.65
+      10.31 |          1        0.11       95.76
+      10.39 |          1        0.11       95.87
+       10.4 |          1        0.11       95.98
+       10.5 |          1        0.11       96.09
+      10.57 |          1        0.11       96.21
+      10.85 |          1        0.11       96.32
+         11 |          1        0.11       96.43
+      11.18 |          2        0.22       96.65
+      11.23 |          1        0.11       96.76
+      11.31 |          1        0.11       96.87
+      11.36 |          1        0.11       96.99
+      11.43 |          3        0.33       97.32
+      11.52 |          1        0.11       97.43
+      11.71 |          1        0.11       97.54
+      11.82 |          1        0.11       97.66
+      11.86 |          1        0.11       97.77
+      11.91 |          1        0.11       97.88
+         12 |          1        0.11       97.99
+      12.18 |          1        0.11       98.10
+      12.25 |          1        0.11       98.21
+          . |         16        1.79      100.00
+------------+-----------------------------------
+      Total |        896      100.00
+r; t=0.00 14:43:18
+
+. 
+.                 // # 3.14 create variable containing quantile categories
+.                         xtile gdp_dec = rgdpwok, nq(10)
+r; t=0.00 14:43:18
+
+. 
+.                         tab gdp_dec
+
+         10 |
+  quantiles |
+ of rgdpwok |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |         86       10.06       10.06
+          2 |         85        9.94       20.00
+          3 |         86       10.06       30.06
+          4 |         85        9.94       40.00
+          5 |         86       10.06       50.06
+          6 |         85        9.94       60.00
+          7 |         86       10.06       70.06
+          8 |         85        9.94       80.00
+          9 |         86       10.06       90.06
+         10 |         85        9.94      100.00
+------------+-----------------------------------
+      Total |        855      100.00
+r; t=0.00 14:43:18
+
+.                         fl rgdpwok gdp_dec if rgdpwok ~= .
+
+     +-----------------------+
+     |    rgdpwok    gdp_dec |
+     |-----------------------|
+  1. |  1226.7943          1 |
+  2. |   1427.161          1 |
+  3. |  2210.5964          2 |
+  4. |  3040.1785          3 |
+  5. |  2454.8032          2 |
+     |-----------------------|
+  6. |  2575.9639          2 |
+  7. |  2573.7576          2 |
+ 10. |  13552.824          6 |
+ 11. |  14240.691          6 |
+ 12. |  17842.389          7 |
+     |-----------------------|
+ 13. |  20911.127          7 |
+ 14. |  19946.875          7 |
+ 15. |  16876.494          7 |
+ 16. |  16808.059          6 |
+ 17. |  12840.543          5 |
+     |-----------------------|
+ 18. |  14236.529          6 |
+ 19. |  20818.557          7 |
+ 20. |  20734.383          7 |
+ 21. |  16373.625          6 |
+ 22. |  17697.205          7 |
+     |-----------------------|
+ 23. |  21218.018          7 |
+ 24. |  19812.871          7 |
+ 25. |  18726.533          7 |
+ 26. |  16398.965          6 |
+ 27. |  14828.358          6 |
+     |-----------------------|
+ 28. |  65968.031         10 |
+ 29. |  57516.578         10 |
+ 30. |  51626.563         10 |
+ 31. |  51939.512         10 |
+ 32. |  48005.605          9 |
+     |-----------------------|
+ 33. |  44237.633          9 |
+ 34. |   40877.93          9 |
+ 35. |  36449.758          8 |
+ 36. |  31973.059          8 |
+ 37. |  69750.805         10 |
+     |-----------------------|
+ 38. |   60857.91         10 |
+ 39. |  60863.871         10 |
+ 40. |  54635.219         10 |
+ 41. |  53790.066         10 |
+ 42. |  47995.172          9 |
+     |-----------------------|
+ 43. |  39281.523          9 |
+ 44. |  28497.492          8 |
+ 45. |  22885.031          7 |
+ 46. |   44687.66          9 |
+ 47. |  42806.184          9 |
+     |-----------------------|
+ 48. |   41861.41          9 |
+ 49. |   42819.84          9 |
+ 50. |  77172.367         10 |
+ 51. |  72142.414         10 |
+ 52. |  82931.188         10 |
+     |-----------------------|
+ 55. |  2213.8357          2 |
+ 56. |  1990.5491          2 |
+ 57. |  1889.2628          2 |
+ 58. |  1854.0448          1 |
+ 59. |  1784.0099          1 |
+     |-----------------------|
+ 60. |  1688.7826          1 |
+ 61. |  1966.2476          2 |
+ 62. |   1866.299          1 |
+ 63. |  1853.4802          1 |
+ 64. |  41952.492          9 |
+     |-----------------------|
+ 65. |  37961.586          9 |
+ 66. |  41649.703          9 |
+ 67. |  41364.598          9 |
+ 68. |  46789.383          9 |
+ 69. |  38194.637          9 |
+     |-----------------------|
+ 70. |  36965.996          8 |
+ 71. |   23790.07          8 |
+ 72. |  19425.604          7 |
+ 73. |  72665.289         10 |
+ 74. |  64995.387         10 |
+     |-----------------------|
+ 75. |  62563.051         10 |
+ 76. |  53284.605         10 |
+ 77. |  52785.047         10 |
+ 78. |  46449.418          9 |
+ 79. |  40721.809          9 |
+     |-----------------------|
+ 80. |  32020.908          8 |
+ 81. |  25506.564          8 |
+ 82. |  18644.836          7 |
+ 83. |  17868.391          7 |
+ 84. |  14318.317          6 |
+     |-----------------------|
+ 85. |   2870.856          2 |
+ 86. |  2714.6873          2 |
+ 87. |  2712.1602          2 |
+ 88. |  2844.7954          2 |
+ 89. |  2402.2146          2 |
+     |-----------------------|
+ 90. |   2242.741          2 |
+ 91. |  2065.0305          2 |
+ 92. |   1775.389          1 |
+ 93. |  1697.9198          1 |
+ 94. |   7548.021          4 |
+     |-----------------------|
+ 95. |  7288.5825          4 |
+ 96. |  6773.3735          4 |
+ 97. |  6862.9634          4 |
+ 98. |   8476.459          4 |
+ 99. |  8314.7861          4 |
+     |-----------------------|
+100. |   7062.416          4 |
+101. |  7583.0464          4 |
+102. |  6531.1274          4 |
+103. |  18491.766          7 |
+104. |   12953.73          6 |
+     |-----------------------|
+105. |  14505.503          6 |
+106. |   9760.792          5 |
+107. |  7679.6909          4 |
+108. |  5331.0239          3 |
+109. |  2807.2737          2 |
+     |-----------------------|
+110. |     1471.5          1 |
+111. |  1276.8579          1 |
+112. |  16273.994          6 |
+113. |  16500.008          6 |
+114. |  17149.602          7 |
+     |-----------------------|
+115. |  17895.512          7 |
+116. |  21132.047          7 |
+117. |  17670.309          7 |
+118. |  13019.455          6 |
+119. |  10521.242          5 |
+     |-----------------------|
+120. |  8631.8955          4 |
+121. |  271192.13         10 |
+122. |  188885.98         10 |
+124. |  14531.516          6 |
+125. |  14123.359          6 |
+     |-----------------------|
+126. |  13954.927          6 |
+127. |  11860.512          5 |
+128. |  10075.968          5 |
+129. |  7589.4331          4 |
+130. |  5352.4951          3 |
+     |-----------------------|
+133. |  905.37091          1 |
+134. |  4468.6563          3 |
+135. |  4219.7417          3 |
+136. |  5329.8433          3 |
+137. |  7114.5474          4 |
+     |-----------------------|
+138. |  5413.8564          3 |
+139. |  4213.2007          3 |
+140. |  3276.9998          3 |
+141. |  3231.4453          3 |
+142. |  2929.4761          3 |
+     |-----------------------|
+143. |  64557.207         10 |
+144. |  56474.621         10 |
+145. |  53435.109         10 |
+146. |   50448.27         10 |
+147. |  48652.871          9 |
+     |-----------------------|
+148. |  48528.488          9 |
+149. |  45140.891          9 |
+150. |  42199.813          9 |
+151. |  35621.422          8 |
+152. |  23955.512          8 |
+     |-----------------------|
+153. |  20651.658          7 |
+154. |  14859.818          6 |
+155. |  12125.044          5 |
+156. |  15140.494          6 |
+157. |  11722.816          5 |
+     |-----------------------|
+158. |  14824.104          6 |
+159. |  12398.671          5 |
+160. |  11442.192          5 |
+161. |  5671.8018          4 |
+162. |   4816.083          3 |
+     |-----------------------|
+163. |  3186.3059          3 |
+164. |  2928.7664          2 |
+165. |  2308.6455          2 |
+166. |  1969.6403          2 |
+167. |  1795.5649          1 |
+     |-----------------------|
+168. |  1628.7568          1 |
+169. |  1722.7388          1 |
+170. |  15301.845          6 |
+171. |  14815.216          6 |
+172. |   13744.81          6 |
+     |-----------------------|
+173. |  13180.479          6 |
+174. |   14454.13          6 |
+175. |  12578.146          5 |
+176. |  11388.176          5 |
+177. |  9538.3916          5 |
+     |-----------------------|
+178. |  8733.4766          4 |
+179. |  21972.277          7 |
+180. |  20828.643          7 |
+181. |  19728.113          7 |
+182. |  20312.943          7 |
+     |-----------------------|
+183. |  24264.645          8 |
+184. |  22681.391          7 |
+185. |   21118.34          7 |
+186. |  18240.818          7 |
+187. |  16338.216          6 |
+     |-----------------------|
+188. |  21766.842          7 |
+189. |  17576.559          7 |
+190. |  23792.449          8 |
+191. |  19472.574          7 |
+192. |  17088.455          7 |
+     |-----------------------|
+193. |  24361.322          8 |
+194. |  26804.123          8 |
+195. |   21259.75          7 |
+196. |  20229.861          7 |
+197. |  18260.248          7 |
+     |-----------------------|
+200. |  37467.297          9 |
+201. |  35044.801          8 |
+202. |  34198.852          8 |
+203. |  25435.273          8 |
+204. |  20930.447          7 |
+     |-----------------------|
+205. |  11449.509          5 |
+206. |  15339.641          6 |
+207. |  11575.687          5 |
+208. |  8842.0098          4 |
+209. |  61985.023         10 |
+     |-----------------------|
+210. |  54372.547         10 |
+211. |  46429.852          9 |
+212. |  45575.977          9 |
+213. |  40696.641          9 |
+214. |  38371.594          9 |
+     |-----------------------|
+215. |  36841.777          8 |
+216. |   32015.17          8 |
+217. |  26521.639          8 |
+218. |  5836.8608          4 |
+220. |   12285.79          5 |
+     |-----------------------|
+221. |  14031.032          6 |
+222. |  13908.211          6 |
+223. |  15329.165          6 |
+224. |  17277.068          7 |
+225. |   14241.45          6 |
+     |-----------------------|
+226. |   9527.958          5 |
+227. |  8597.7432          4 |
+228. |  8120.5146          4 |
+229. |  12405.422          5 |
+230. |  11399.729          5 |
+     |-----------------------|
+231. |  9087.2021          5 |
+232. |  8162.0811          4 |
+233. |  5956.2026          4 |
+234. |  4267.1289          3 |
+235. |  4465.0083          3 |
+     |-----------------------|
+236. |  4144.0635          3 |
+237. |  3416.1292          3 |
+238. |  14212.576          6 |
+239. |  13365.223          6 |
+240. |  11157.278          5 |
+     |-----------------------|
+241. |  11647.601          5 |
+242. |  12918.221          6 |
+243. |   14153.09          6 |
+244. |  12840.049          5 |
+245. |  12305.405          5 |
+     |-----------------------|
+246. |  10755.157          5 |
+247. |  18049.406          7 |
+248. |  871.37872          1 |
+249. |  10736.899          5 |
+250. |   10432.68          5 |
+     |-----------------------|
+251. |  10568.699          5 |
+252. |  9952.0215          5 |
+253. |  10985.638          5 |
+254. |   9686.959          5 |
+255. |  8246.5254          4 |
+     |-----------------------|
+256. |  6712.0244          4 |
+257. |   7001.125          4 |
+258. |  56069.082         10 |
+259. |  45940.148          9 |
+260. |  46726.566          9 |
+     |-----------------------|
+261. |  40126.488          9 |
+262. |  36765.891          8 |
+263. |  34000.926          8 |
+264. |  29158.568          8 |
+265. |  23217.119          8 |
+     |-----------------------|
+266. |  18691.371          7 |
+267. |  63748.926         10 |
+268. |  58479.867         10 |
+269. |  56661.781         10 |
+270. |  51211.309         10 |
+     |-----------------------|
+271. |  48734.504          9 |
+272. |  43097.996          9 |
+273. |  37247.582          8 |
+274. |  29996.338          8 |
+275. |  23183.779          7 |
+     |-----------------------|
+276. |  2024.9329          2 |
+277. |  2034.3394          2 |
+278. |  2118.1687          2 |
+279. |  2052.0283          2 |
+280. |  2097.9763          2 |
+     |-----------------------|
+281. |  2251.0212          2 |
+282. |  2441.2644          2 |
+283. |  1444.7192          1 |
+284. |  1515.0333          1 |
+285. |  50927.195         10 |
+     |-----------------------|
+286. |  45977.926          9 |
+287. |  44960.684          9 |
+288. |  43699.234          9 |
+289. |  48867.992          9 |
+290. |  42147.609          9 |
+     |-----------------------|
+291. |  33063.152          8 |
+292. |   22370.85          7 |
+293. |  14274.433          6 |
+294. |  15468.625          6 |
+295. |  14531.767          6 |
+     |-----------------------|
+296. |  13695.082          6 |
+297. |  14231.157          6 |
+298. |  16453.941          6 |
+299. |  13801.013          6 |
+300. |  11494.666          5 |
+     |-----------------------|
+301. |  9373.7695          5 |
+302. |  8592.6895          4 |
+303. |  7754.4585          4 |
+304. |  5379.5503          3 |
+305. |   3897.052          3 |
+     |-----------------------|
+306. |  4063.1047          3 |
+307. |  6886.1113          4 |
+308. |  8402.9258          4 |
+309. |  6997.8335          4 |
+312. |  3708.3987          3 |
+     |-----------------------|
+313. |   3959.125          3 |
+314. |  4610.4971          3 |
+315. |  5258.9063          3 |
+316. |  5895.9756          4 |
+317. |  4130.3975          3 |
+     |-----------------------|
+318. |  3651.4932          3 |
+319. |  3755.8179          3 |
+320. |  3855.2012          3 |
+321. |  7932.0566          4 |
+322. |  8127.3145          4 |
+     |-----------------------|
+323. |  8877.8398          4 |
+324. |  9258.5674          5 |
+325. |  9623.0156          5 |
+326. |  8510.3926          4 |
+327. |  7048.4722          4 |
+     |-----------------------|
+328. |  6751.6606          4 |
+329. |  6431.9717          4 |
+330. |  56336.082         10 |
+331. |  54641.117         10 |
+332. |      45231          9 |
+     |-----------------------|
+333. |  32702.902          8 |
+334. |  28905.627          8 |
+335. |    19866.4          7 |
+336. |  17295.168          7 |
+337. |  15089.366          6 |
+     |-----------------------|
+338. |  8876.1602          4 |
+339. |  32892.836          8 |
+340. |  27394.799          8 |
+341. |  27052.273          8 |
+342. |  25195.516          8 |
+     |-----------------------|
+343. |  22731.342          7 |
+344. |  18969.633          7 |
+345. |   14067.26          6 |
+348. |  58815.879         10 |
+349. |  48431.277          9 |
+     |-----------------------|
+350. |  55578.309         10 |
+351. |  49805.848          9 |
+352. |  51157.605         10 |
+353. |  43890.934          9 |
+354. |  35027.016          8 |
+     |-----------------------|
+355. |   34864.27          8 |
+356. |  27081.387          8 |
+357. |  4899.5186          3 |
+358. |   4145.374          3 |
+359. |  3763.1465          3 |
+     |-----------------------|
+360. |  3174.7061          3 |
+361. |  2767.6775          2 |
+362. |  2508.4661          2 |
+363. |  2400.5693          2 |
+364. |  2059.1863          2 |
+     |-----------------------|
+365. |  1854.5587          1 |
+366. |  6181.8667          4 |
+367. |  7134.5688          4 |
+368. |  5550.0127          3 |
+369. |  4849.0371          3 |
+     |-----------------------|
+370. |  4237.7036          3 |
+371. |  3362.2732          3 |
+372. |  2394.0583          2 |
+373. |  1858.0923          1 |
+374. |  1882.7906          2 |
+     |-----------------------|
+375. |  17946.529          7 |
+376. |   14139.56          6 |
+377. |  31733.461          8 |
+378. |  30059.775          8 |
+379. |  47614.434          9 |
+     |-----------------------|
+380. |  31230.475          8 |
+381. |  23402.492          8 |
+384. |  66180.172         10 |
+385. |  51294.047         10 |
+386. |  45764.418          9 |
+     |-----------------------|
+387. |  37877.055          9 |
+388. |  38135.613          9 |
+389. |  31506.668          8 |
+390. |  26955.381          8 |
+391. |  21509.066          7 |
+     |-----------------------|
+392. |  17669.705          7 |
+393. |  58068.387         10 |
+394. |  54541.238         10 |
+395. |  49612.871          9 |
+396. |  46088.301          9 |
+     |-----------------------|
+397. |   43777.68          9 |
+398. |  45535.902          9 |
+399. |  36409.426          8 |
+400. |  28066.484          8 |
+401. |  21317.381          7 |
+     |-----------------------|
+402. |  69633.641         10 |
+403. |  65817.344         10 |
+404. |  57743.332         10 |
+405. |  51269.254         10 |
+406. |  48701.094          9 |
+     |-----------------------|
+407. |   41465.98          9 |
+408. |  36311.039          8 |
+409. |  26608.621          8 |
+410. |  19676.451          7 |
+411. |  19103.795          7 |
+     |-----------------------|
+412. |  16912.133          7 |
+413. |  15765.738          6 |
+414. |  12725.138          5 |
+415. |  13916.453          6 |
+416. |  18643.695          7 |
+     |-----------------------|
+417. |  19709.037          7 |
+418. |   16571.18          6 |
+419. |  13845.771          6 |
+420. |  58066.813         10 |
+421. |  56456.566         10 |
+     |-----------------------|
+422. |  55183.375         10 |
+423. |  46714.129          9 |
+424. |  42463.063          9 |
+425. |  36172.902          8 |
+426. |    29783.6          8 |
+     |-----------------------|
+427. |  18565.297          7 |
+428. |  12619.309          5 |
+429. |  12312.289          5 |
+430. |  13776.089          6 |
+431. |  16100.365          6 |
+     |-----------------------|
+432. |  18797.418          7 |
+433. |  22702.406          7 |
+434. |  11755.951          5 |
+435. |  11041.458          5 |
+436. |  14191.229          6 |
+     |-----------------------|
+437. |  10497.511          5 |
+438. |  2486.5217          2 |
+439. |  2570.5403          2 |
+440. |  2827.4341          2 |
+441. |  2480.5801          2 |
+     |-----------------------|
+442. |  2797.9246          2 |
+443. |  2504.0015          2 |
+444. |  2440.7693          2 |
+445. |  2464.4473          2 |
+446. |  2308.0979          2 |
+     |-----------------------|
+447. |  74395.805         10 |
+448. |   96111.57         10 |
+449. |  59182.949         10 |
+457. |  2573.7312          2 |
+458. |  2408.0667          2 |
+     |-----------------------|
+459. |  2222.8494          2 |
+460. |  1838.8353          1 |
+461. |  1904.7161          2 |
+462. |  1507.7041          1 |
+463. |  1278.1313          1 |
+     |-----------------------|
+464. |  1181.9454          1 |
+465. |  905.10822          1 |
+466. |  1320.9222          1 |
+467. |  396.76126          1 |
+468. |   1331.593          1 |
+     |-----------------------|
+469. |  3680.1702          3 |
+470. |  4496.9126          3 |
+471. |  4410.8115          3 |
+472. |  4631.7554          3 |
+479. |  1370.3688          1 |
+     |-----------------------|
+480. |  1320.8179          1 |
+481. |  1434.3082          1 |
+482. |   1623.316          1 |
+483. |  1967.0461          2 |
+484. |  1839.2235          1 |
+     |-----------------------|
+485. |  1486.2678          1 |
+486. |  896.48438          1 |
+487. |  701.71234          1 |
+488. |  23229.531          8 |
+489. |  21925.553          7 |
+     |-----------------------|
+490. |  15669.009          6 |
+491. |  13136.138          6 |
+492. |  11690.911          5 |
+493. |  8960.0918          4 |
+494. |  6477.5449          4 |
+     |-----------------------|
+495. |  5459.3965          3 |
+496. |  4524.1279          3 |
+497. |  2660.5752          2 |
+498. |   2497.074          2 |
+499. |   2389.679          2 |
+     |-----------------------|
+500. |  1974.5679          2 |
+501. |  1869.2467          1 |
+502. |  1579.2939          1 |
+503. |  1530.4188          1 |
+504. |  1400.5901          1 |
+     |-----------------------|
+505. |  1708.2101          1 |
+506. |  50214.602         10 |
+507. |  44811.656          9 |
+508. |   37055.75          8 |
+509. |   28444.67          8 |
+     |-----------------------|
+510. |  24764.877          8 |
+511. |  15478.928          6 |
+512. |   12909.53          6 |
+515. |  3417.2366          3 |
+516. |  16889.582          7 |
+     |-----------------------|
+517. |  13690.943          6 |
+518. |  11899.686          5 |
+519. |   9032.249          5 |
+520. |  8066.5898          4 |
+521. |  7911.8428          4 |
+     |-----------------------|
+522. |  6262.6763          4 |
+523. |  7541.4893          4 |
+524. |  7135.0034          4 |
+525. |  26970.576          8 |
+526. |  22889.035          7 |
+     |-----------------------|
+527. |  30669.895          8 |
+528. |  33225.391          8 |
+529. |  29667.824          8 |
+530. |  25399.135          8 |
+531. |  25155.113          8 |
+     |-----------------------|
+532. |  21574.516          7 |
+533. |  17900.475          7 |
+535. |  896.17035          1 |
+536. |  739.44586          1 |
+537. |  877.79761          1 |
+     |-----------------------|
+538. |  737.40063          1 |
+539. |   958.1167          1 |
+540. |  947.92731          1 |
+541. |  820.09705          1 |
+542. |  749.84827          1 |
+     |-----------------------|
+543. |  688.31647          1 |
+544. |  12199.538          5 |
+545. |  8980.5781          5 |
+546. |  2586.8938          2 |
+547. |     2391.3          2 |
+     |-----------------------|
+548. |  2196.1287          2 |
+549. |  2050.2417          2 |
+550. |  1820.7961          1 |
+551. |  1779.6194          1 |
+552. |  1712.8468          1 |
+     |-----------------------|
+553. |  1585.7295          1 |
+554. |  1483.3358          1 |
+555. |  71305.531         10 |
+556. |  63768.223         10 |
+557. |  61182.496         10 |
+     |-----------------------|
+558. |   61457.32         10 |
+559. |  63675.031         10 |
+560. |  59357.563         10 |
+561. |  51363.613         10 |
+562. |  41429.781          9 |
+     |-----------------------|
+563. |  35137.039          8 |
+564. |  47336.051          9 |
+565. |  43300.664          9 |
+566. |  39226.441          9 |
+567. |  44540.754          9 |
+     |-----------------------|
+568. |  41949.746          9 |
+569. |  45621.586          9 |
+570. |  42206.785          9 |
+571. |  42332.344          9 |
+572. |  37453.078          9 |
+     |-----------------------|
+573. |  5712.0928          4 |
+574. |  5561.2759          4 |
+575. |  6546.7534          4 |
+576. |  10563.187          5 |
+577. |   9895.332          5 |
+     |-----------------------|
+578. |  13300.464          6 |
+579. |  12476.387          5 |
+580. |  12144.562          5 |
+581. |  8642.4111          4 |
+582. |  1477.9963          1 |
+     |-----------------------|
+583. |  1561.9865          1 |
+584. |  1730.6685          1 |
+585. |  1821.5149          1 |
+586. |  2331.5542          2 |
+587. |  2076.1411          2 |
+     |-----------------------|
+588. |  2583.6113          2 |
+589. |  2856.0334          2 |
+590. |  2377.2954          2 |
+591. |  85669.109         10 |
+592. |  75950.297         10 |
+     |-----------------------|
+593. |  63991.809         10 |
+594. |  60096.008         10 |
+595. |   54637.27         10 |
+596. |  49028.059          9 |
+597. |  43849.156          9 |
+     |-----------------------|
+598. |  37372.508          8 |
+599. |  30222.094          8 |
+600. |   6169.377          4 |
+601. |  7322.8247          4 |
+602. |   6732.313          4 |
+     |-----------------------|
+603. |  5896.7334          4 |
+604. |   4996.436          3 |
+605. |  4239.4575          3 |
+606. |  3908.5525          3 |
+607. |  3245.2104          3 |
+     |-----------------------|
+608. |  2384.7764          2 |
+609. |  16076.861          6 |
+610. |  15182.604          6 |
+611. |  14614.055          6 |
+612. |  15890.499          6 |
+     |-----------------------|
+613. |  15994.498          6 |
+614. |  12049.844          5 |
+615. |  10841.548          5 |
+616. |  8760.7773          4 |
+617. |   6888.687          4 |
+     |-----------------------|
+618. |    7973.25          4 |
+619. |  8765.0996          4 |
+620. |  9588.6455          5 |
+621. |   9342.001          5 |
+622. |  10032.464          5 |
+     |-----------------------|
+623. |  6962.4766          4 |
+624. |  5876.8867          4 |
+625. |  5489.2603          3 |
+626. |  5210.4551          3 |
+627. |  11692.583          5 |
+     |-----------------------|
+628. |  11880.908          5 |
+629. |  10495.628          5 |
+630. |  12856.702          6 |
+631. |  16041.785          6 |
+632. |  17109.277          7 |
+     |-----------------------|
+633. |  15327.215          6 |
+634. |   13336.18          6 |
+635. |   10536.74          5 |
+636. |  5950.4648          4 |
+637. |  5165.7676          3 |
+     |-----------------------|
+638. |  5355.7349          3 |
+639. |  4890.0776          3 |
+640. |  5833.7124          4 |
+641. |  5119.7163          3 |
+642. |   4362.333          3 |
+     |-----------------------|
+643. |  4103.0132          3 |
+644. |  3626.2207          3 |
+645. |  25246.869          8 |
+646. |  19693.908          7 |
+647. |  16754.699          6 |
+     |-----------------------|
+648. |  17552.295          7 |
+649. |  17947.914          7 |
+650. |  15823.979          6 |
+651. |  12990.714          6 |
+654. |  37660.887          9 |
+     |-----------------------|
+655. |  33692.242          8 |
+656. |  30048.674          8 |
+657. |  23972.377          8 |
+658. |  24397.156          8 |
+659. |  19605.811          7 |
+     |-----------------------|
+660. |   18013.59          7 |
+661. |  13863.048          6 |
+662. |  10356.414          5 |
+663. |  11600.752          5 |
+664. |  11686.175          5 |
+     |-----------------------|
+665. |  13627.875          6 |
+666. |  14886.645          6 |
+667. |  14982.061          6 |
+668. |  9909.0791          5 |
+669. |  5783.8511          4 |
+     |-----------------------|
+670. |  4062.7197          3 |
+671. |  2621.7998          2 |
+672. |  1419.1249          1 |
+673. |  1470.3937          1 |
+674. |  1733.9642          1 |
+     |-----------------------|
+675. |  1659.8093          1 |
+676. |  1689.4501          1 |
+677. |  1499.8618          1 |
+678. |  1634.9543          1 |
+679. |  1478.0702          1 |
+     |-----------------------|
+680. |  1691.8743          1 |
+681. |  3204.1445          3 |
+682. |  2874.8779          2 |
+683. |  2790.9333          2 |
+684. |  2802.8088          2 |
+     |-----------------------|
+685. |  2774.8516          2 |
+686. |  2971.6499          3 |
+687. |  3016.8289          3 |
+688. |  3155.3127          3 |
+689. |  3288.3577          3 |
+     |-----------------------|
+690. |  22196.107          7 |
+691. |  10615.317          5 |
+692. |  7376.0259          4 |
+693. |   1346.113          1 |
+694. |  2247.7705          2 |
+     |-----------------------|
+695. |  2712.6514          2 |
+696. |  2589.4368          2 |
+697. |  2583.6067          2 |
+698. |  2402.1145          2 |
+699. |  2370.9775          2 |
+     |-----------------------|
+700. |  1987.2813          2 |
+702. |  74706.383         10 |
+703. |  62745.059         10 |
+704. |  45016.547          9 |
+705. |  36440.234          8 |
+     |-----------------------|
+706. |  31027.813          8 |
+707. |  25122.447          8 |
+708. |   19457.58          7 |
+709. |  13802.797          6 |
+710. |  13010.261          6 |
+     |-----------------------|
+711. |  39500.789          9 |
+712. |    31960.4          8 |
+713. |   37143.25          8 |
+714. |  6648.5195          4 |
+715. |  16971.613          7 |
+     |-----------------------|
+716. |  16616.148          6 |
+717. |   18229.77          7 |
+718. |  19670.266          7 |
+719. |  22492.861          7 |
+720. |  20677.186          7 |
+     |-----------------------|
+721. |  19613.258          7 |
+722. |  16930.531          7 |
+723. |  13886.159          6 |
+724. |   57053.27         10 |
+725. |  51023.719         10 |
+     |-----------------------|
+726. |  49443.074          9 |
+727. |  43163.352          9 |
+728. |  42338.402          9 |
+729. |   38716.18          9 |
+730. |  30989.617          8 |
+     |-----------------------|
+731. |   23939.84          8 |
+732. |  15757.735          6 |
+733. |  6870.8286          4 |
+734. |  5884.6792          4 |
+735. |  4795.9521          3 |
+     |-----------------------|
+736. |  4404.1768          3 |
+737. |  3649.9072          3 |
+738. |  3055.7036          3 |
+739. |  2931.9553          3 |
+740. |  2263.6973          2 |
+     |-----------------------|
+741. |  1988.0403          2 |
+742. |  5899.5132          4 |
+743. |  4462.5103          3 |
+744. |  3970.4771          3 |
+745. |  3385.4675          3 |
+     |-----------------------|
+746. |  4529.5215          3 |
+747. |  4587.2124          3 |
+748. |  4440.7256          3 |
+751. |  9182.5059          5 |
+752. |   9545.293          5 |
+     |-----------------------|
+753. |  9778.0508          5 |
+754. |  7847.6987          4 |
+755. |  7009.5308          4 |
+756. |  6744.3643          4 |
+757. |  3640.0715          3 |
+     |-----------------------|
+760. |   61541.32         10 |
+761. |  53292.047         10 |
+762. |   49808.75          9 |
+763. |  45383.852          9 |
+764. |  43042.656          9 |
+     |-----------------------|
+765. |  42295.148          9 |
+766. |  39348.008          9 |
+767. |  33905.148          8 |
+768. |   27213.98          8 |
+769. |  62475.984         10 |
+     |-----------------------|
+770. |  57790.852         10 |
+771. |  61118.082         10 |
+772. |   59703.16         10 |
+773. |  59320.516         10 |
+774. |  53197.121         10 |
+     |-----------------------|
+775. |  51064.152         10 |
+776. |  42717.684          9 |
+777. |  37151.824          8 |
+778. |   11668.64          5 |
+779. |  11269.284          5 |
+     |-----------------------|
+780. |   10048.26          5 |
+781. |  12742.229          5 |
+782. |  13174.736          6 |
+783. |  11597.382          5 |
+784. |  7674.4956          4 |
+     |-----------------------|
+785. |  7927.1172          4 |
+786. |  6020.2153          4 |
+787. |  52657.789         10 |
+788. |  42579.105          9 |
+789. |  32804.023          8 |
+     |-----------------------|
+790. |  23306.887          8 |
+791. |  19605.814          7 |
+792. |  13369.085          6 |
+793. |  9934.8506          5 |
+794. |  7094.6973          4 |
+     |-----------------------|
+795. |  5333.0972          3 |
+797. |  10471.683          5 |
+798. |  11358.084          5 |
+799. |  7856.6616          4 |
+800. |  5660.5752          4 |
+     |-----------------------|
+801. |  4966.7437          3 |
+802. |  3915.1157          3 |
+803. |  3413.9514          3 |
+804. |  2509.2737          2 |
+805. |  2025.7717          2 |
+     |-----------------------|
+806. |  2016.1843          2 |
+807. |  2209.0574          2 |
+808. |  2720.1917          2 |
+809. |    2538.73          2 |
+810. |  3513.6187          3 |
+     |-----------------------|
+811. |  3447.1497          3 |
+812. |   3158.425          3 |
+813. |  2657.4504          2 |
+814. |  1900.7847          2 |
+815. |  13743.076          6 |
+     |-----------------------|
+816. |   11586.26          5 |
+817. |  11263.854          5 |
+818. |  11461.586          5 |
+819. |  10941.493          5 |
+820. |  10007.843          5 |
+     |-----------------------|
+821. |  8223.6582          4 |
+822. |  7358.1494          4 |
+824. |  22884.955          7 |
+825. |  19293.678          7 |
+826. |  18399.023          7 |
+     |-----------------------|
+827. |  16146.124          6 |
+828. |  13611.766          6 |
+829. |  12581.608          5 |
+830. |  10831.617          5 |
+831. |  8015.5498          4 |
+     |-----------------------|
+832. |  6615.9409          4 |
+833. |  1909.3098          2 |
+834. |  1583.9047          1 |
+835. |  1237.3864          1 |
+836. |  1137.9764          1 |
+     |-----------------------|
+837. |  1198.4194          1 |
+838. |  1640.0811          1 |
+839. |  1755.0109          1 |
+840. |  1547.9083          1 |
+841. |   1366.658          1 |
+     |-----------------------|
+842. |  61944.781         10 |
+843. |  54115.074         10 |
+844. |  48386.777          9 |
+845. |   43100.82          9 |
+846. |  40108.031          9 |
+     |-----------------------|
+847. |  38328.242          9 |
+848. |  34796.395          8 |
+849. |  30603.416          8 |
+850. |  27446.799          8 |
+851. |  76867.453         10 |
+     |-----------------------|
+852. |  67118.883         10 |
+853. |  61949.039         10 |
+854. |  57678.727         10 |
+855. |  52523.465         10 |
+856. |  50273.438         10 |
+     |-----------------------|
+857. |   49469.02          9 |
+858. |  46669.359          9 |
+859. |  39015.043          9 |
+860. |  18234.443          7 |
+861. |  17108.359          7 |
+     |-----------------------|
+862. |  13402.994          6 |
+863. |  11461.332          5 |
+864. |  15087.448          6 |
+865. |  11861.348          5 |
+866. |  11082.996          5 |
+     |-----------------------|
+867. |  10092.896          5 |
+868. |   10560.16          5 |
+869. |  8381.0889          4 |
+870. |  19946.518          7 |
+871. |  22159.809          7 |
+     |-----------------------|
+872. |  21539.936          7 |
+873. |  23283.377          8 |
+874. |  30046.385          8 |
+875. |  34400.313          8 |
+876. |   31794.15          8 |
+     |-----------------------|
+877. |  27840.963          8 |
+878. |  22605.287          7 |
+879. |  2155.9026          2 |
+880. |  2334.3772          2 |
+881. |  3196.0676          3 |
+     |-----------------------|
+882. |  3516.6746          3 |
+883. |  4598.0029          3 |
+884. |  5781.7979          4 |
+885. |  6075.5181          4 |
+886. |  5304.1646          3 |
+     |-----------------------|
+887. |  4596.6274          3 |
+888. |  900.22845          1 |
+889. |  873.31006          1 |
+890. |   926.2334          1 |
+891. |  854.63519          1 |
+     |-----------------------|
+892. |  956.44012          1 |
+893. |  1076.7208          1 |
+894. |  886.50696          1 |
+895. |  680.41852          1 |
+896. |  689.62561          1 |
+     +-----------------------+
+r; t=0.00 14:43:18
+
+.                         
+.                         pctile tmp = rgdpwok, nq(10)    // create variable containing percentiles
+r; t=0.00 14:43:18
+
+. 
+.                         tab tmp
+
+percentiles |
+ of rgdpwok |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   1869.247 |          1       11.11       11.11
+   2929.121 |          1       11.11       22.22
+   5550.013 |          1       11.11       33.33
+   8970.335 |          1       11.11       44.44
+   12840.54 |          1       11.11       55.56
+   16842.28 |          1       11.11       66.67
+   23183.78 |          1       11.11       77.78
+   37412.79 |          1       11.11       88.89
+   49808.75 |          1       11.11      100.00
+------------+-----------------------------------
+      Total |          9      100.00
+r; t=0.00 14:43:18
+
+.                         fl tmp in 1/15
+
+     +-----------+
+     |       tmp |
+     |-----------|
+  1. |  1869.247 |
+  2. |  2929.121 |
+  3. |  5550.013 |
+  4. |  8970.335 |
+  5. |  12840.54 |
+     |-----------|
+  6. |  16842.28 |
+  7. |  23183.78 |
+  8. |  37412.79 |
+  9. |  49808.75 |
+ 10. |         . |
+     |-----------|
+ 11. |         . |
+ 12. |         . |
+ 13. |         . |
+ 14. |         . |
+ 15. |         . |
+     +-----------+
+r; t=0.00 14:43:18
+
+.                                 drop tmp
+r; t=0.00 14:43:18
+
+.                         
+.                         set seed 444555666
+r; t=0.00 14:43:18
+
+.                         preserve
+r; t=0.00 14:43:18
+
+.                                 sample 10
+(806 observations deleted)
+r; t=0.00 14:43:18
+
+.                                 sum education, detail
+
+                          education
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           .1             .1
+ 5%          .55            .29
+10%          .76            .48       Obs                  88
+25%        2.005            .53       Sum of Wgt.          88
+
+50%        4.535                      Mean           4.754318
+                        Largest       Std. Dev.      3.004558
+75%         7.09          10.31
+90%         8.78          10.39       Variance        9.02737
+95%        10.14          10.85       Skewness       .3305368
+99%        11.91          11.91       Kurtosis       2.154812
+r; t=0.00 14:43:18
+
+.                         restore
+r; t=0.00 14:43:18
+
+.                         
+.                 //      # 3.15 findit sample2: install the command 'sample2'
+.                         net install dm46.pkg, from(http://www.stata.com/stb/stb37) replace
+checking dm46 consistency and verifying not already installed...
+all files already exist and are up to date.
+r; t=1.94 14:43:20
+
+. 
+.                 // # 3.16 produce a 10% random sample
+.                         preserve
+r; t=0.00 14:43:20
+
+.                                 sample2 10, cluster(cty_id)
+(819 observations deleted)
+r; t=0.00 14:43:20
+
+.                                                                                         // keeping the panel struct
+> ure
+.                                 sum education, detail
+
+                          education
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           .5             .5
+ 5%          .64            .52
+10%         1.32            .53       Obs                  73
+25%         2.21            .64       Sum of Wgt.          73
+
+50%         4.09                      Mean           4.704658
+                        Largest       Std. Dev.      2.945189
+75%         6.49           10.4
+90%         9.44           10.5       Variance       8.674136
+95%         10.4          11.18       Skewness       .6014459
+99%        11.43          11.43       Kurtosis       2.403282
+r; t=0.00 14:43:20
+
+.                         restore
+r; t=0.00 14:43:20
+
+.                         
+.                         preserve
+r; t=0.00 14:43:20
+
+.                                 replace education = . if education > 12         // replace contents of existing var
+> iable
+(2 real changes made, 2 to missing)
+r; t=0.00 14:43:20
+
+.                         restore
+r; t=0.00 14:43:20
+
+.                         
+.                 // # 3.17 check for unique identifiers
+.                         drop if year == .
+(0 observations deleted)
+r; t=0.00 14:43:20
+
+.                         isid cty_id     year
+r; t=0.00 14:43:20
+
+. 
+.                 // # 3.18 reduce data size on the harddrive
+.                         compress
+  variable nobs was float now byte
+  variable num was float now byte
+  variable rollsum was float now byte
+  variable total_num was float now byte
+  variable cty_id2 was long now int
+  variable random was float now byte
+  variable cty_id was double now int
+  variable educ2 was double now byte
+  variable cty was str23 now str15
+  (34,048 bytes saved)
+r; t=0.00 14:43:20
+
+. 
+.                 // # 3.19 verify truth of claim
+.                         assert inlist(year,1960,1965,1970,1975,1980,1985,1990,1995,2000)
+r; t=0.00 14:43:20
+
+.                                 capture noisily assert inlist(year,1990,1995,2000)
+592 contradictions in 896 observations
+assertion is false
+r; t=0.00 14:43:20
+
+.                                 capture noisily assert education<=12
+18 contradictions in 896 observations
+assertion is false
+r; t=0.00 14:43:20
+
+. 
+.                 //      # 3.20 COMPARE TWO FILES
+.                         use growth/growth_data if year == 2000, clear
+r; t=0.00 14:43:20
+
+.                                 
+.                                 // capture: capture return code == in case of error the program continues
+.                                 // noisily: perform command and ensure terminal output
+.                                 capture noisily cf _all using growth/growth_data                
+master has 98 obs., using 896
+r; t=0.00 14:43:20
+
+.                                 ssc install cf2, replace
+checking cf2 consistency and verifying not already installed...
+all files already exist and are up to date.
+r; t=1.83 14:43:22
+
+.                                 capture noisily cf2 _all using growth/growth_data, verbose id(country)
+master has 98 obs., using 896
+r; t=0.00 14:43:22
+
+.                 
+.                 // # 4. loops
+.                 
+.                 // # 4.1 foreach + local
+.                         use growth/growth_data, clear
+r; t=0.00 14:43:22
+
+.                         
+.                         tab country
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+            afghanistan |          9        1.00        1.00
+                algeria |          9        1.00        2.01
+              argentina |          9        1.00        3.01
+              australia |          9        1.00        4.02
+                austria |          9        1.00        5.02
+                bahrain |          9        1.00        6.03
+             bangladesh |          9        1.00        7.03
+               barbados |          9        1.00        8.04
+                belgium |          9        1.00        9.04
+                 belize |          3        0.33        9.38
+                  benin |          9        1.00       10.38
+                bolivia |          9        1.00       11.38
+               botswana |          9        1.00       12.39
+                 brazil |          9        1.00       13.39
+                 brunei |          3        0.33       13.73
+               bulgaria |          9        1.00       14.73
+                burundi |          1        0.11       14.84
+               cameroon |          9        1.00       15.85
+                 canada |          9        1.00       16.85
+                  chile |          9        1.00       17.86
+                  china |          9        1.00       18.86
+               colombia |          9        1.00       19.87
+             costa rica |          9        1.00       20.87
+                croatia |          3        0.33       21.21
+                   cuba |          9        1.00       22.21
+                 cyprus |          9        1.00       23.21
+                denmark |          9        1.00       24.22
+               dominica |          2        0.22       24.44
+                ecuador |          9        1.00       25.45
+                  egypt |          9        1.00       26.45
+            el salvador |          9        1.00       27.46
+                estonia |          1        0.11       27.57
+               ethiopia |          1        0.11       27.68
+                   fiji |          9        1.00       28.68
+                finland |          9        1.00       29.69
+                 france |          9        1.00       30.69
+                  ghana |          9        1.00       31.70
+                 greece |          9        1.00       32.70
+              guatemala |          9        1.00       33.71
+                 guyana |          9        1.00       34.71
+                  haiti |          9        1.00       35.71
+               honduras |          9        1.00       36.72
+              hong kong |          9        1.00       37.72
+                hungary |          9        1.00       38.73
+                iceland |          9        1.00       39.73
+                  india |          9        1.00       40.74
+              indonesia |          9        1.00       41.74
+                   iraq |          9        1.00       42.75
+                ireland |          9        1.00       43.75
+                 israel |          9        1.00       44.75
+                  italy |          9        1.00       45.76
+                jamaica |          9        1.00       46.76
+                  japan |          9        1.00       47.77
+                 jordan |          9        1.00       48.77
+                  kenya |          9        1.00       49.78
+                 kuwait |          9        1.00       50.78
+                 latvia |          1        0.11       50.89
+                lesotho |          9        1.00       51.90
+                liberia |          9        1.00       52.90
+                  libya |          3        0.33       53.24
+              lithuania |          1        0.11       53.35
+                 malawi |          9        1.00       54.35
+               malaysia |          9        1.00       55.36
+                   mali |          9        1.00       56.36
+                  malta |          9        1.00       57.37
+             mauritania |          1        0.11       57.48
+              mauritius |          9        1.00       58.48
+                 mexico |          9        1.00       59.49
+                moldova |          1        0.11       59.60
+             mozambique |          9        1.00       60.60
+                namibia |          2        0.22       60.83
+                  nepal |          9        1.00       61.83
+            netherlands |          9        1.00       62.83
+            new zealand |          9        1.00       63.84
+              nicaragua |          9        1.00       64.84
+                  niger |          9        1.00       65.85
+                 norway |          9        1.00       66.85
+               pakistan |          9        1.00       67.86
+                 panama |          9        1.00       68.86
+               paraguay |          9        1.00       69.87
+                   peru |          9        1.00       70.87
+            philippines |          9        1.00       71.88
+                 poland |          9        1.00       72.88
+               portugal |          9        1.00       73.88
+                romania |          9        1.00       74.89
+                 rwanda |          9        1.00       75.89
+                senegal |          9        1.00       76.90
+             seychelles |          3        0.33       77.23
+           sierra leone |          9        1.00       78.24
+              singapore |          9        1.00       79.24
+               slovenia |          3        0.33       79.58
+        solomon islands |          1        0.11       79.69
+           south africa |          9        1.00       80.69
+                  spain |          9        1.00       81.70
+              sri lanka |          9        1.00       82.70
+                  sudan |          9        1.00       83.71
+              swaziland |          9        1.00       84.71
+                 sweden |          9        1.00       85.71
+            switzerland |          9        1.00       86.72
+                  syria |          9        1.00       87.72
+                 taiwan |          9        1.00       88.73
+             tajikistan |          1        0.11       88.84
+               thailand |          9        1.00       89.84
+                   togo |          9        1.00       90.85
+                tunisia |          9        1.00       91.85
+                 turkey |          9        1.00       92.86
+                 uganda |          9        1.00       93.86
+         united kingdom |          9        1.00       94.87
+          united states |          9        1.00       95.87
+                uruguay |          9        1.00       96.88
+                vanuatu |          1        0.11       96.99
+              venezuela |          9        1.00       97.99
+                 zambia |          9        1.00       99.00
+               zimbabwe |          9        1.00      100.00
+------------------------+-----------------------------------
+                  Total |        896      100.00
+r; t=0.00 14:43:22
+
+.                         
+.                         local llist = "portugal spain france"
+r; t=0.00 14:43:22
+
+.                         
+.                         foreach cc of local llist {
+  2.                                 display _new _new "COUNTRY:     `cc'"
+  3.                                 preserve
+  4.                                         keep if country == "`cc'"
+  5.                                         tab country
+  6.                                         kdensity lngdp
+  7.                                         reg lngdp education
+  8.                                 restore
+  9.                         }
+
+
+COUNTRY:     portugal
+(887 observations deleted)
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+               portugal |          9      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          9      100.00
+(n() set to 9)
+
+      Source |       SS           df       MS      Number of obs   =         9
+-------------+----------------------------------   F(1, 7)         =     87.66
+       Model |  1.31465317         1  1.31465317   Prob > F        =    0.0000
+    Residual |  .104982921         7   .01499756   R-squared       =    0.9260
+-------------+----------------------------------   Adj R-squared   =    0.9155
+       Total |  1.41963609         8  .177454511   Root MSE        =    .12246
+
+------------------------------------------------------------------------------
+       lngdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   education |   .3775006   .0403202     9.36   0.000     .2821586    .4728427
+       _cons |   8.731924   .1405918    62.11   0.000     8.399477    9.064371
+------------------------------------------------------------------------------
+
+
+COUNTRY:     spain
+(887 observations deleted)
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+                  spain |          9      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          9      100.00
+(n() set to 9)
+
+      Source |       SS           df       MS      Number of obs   =         9
+-------------+----------------------------------   F(1, 7)         =     25.54
+       Model |  1.07332659         1  1.07332659   Prob > F        =    0.0015
+    Residual |  .294233096         7  .042033299   R-squared       =    0.7848
+-------------+----------------------------------   Adj R-squared   =    0.7541
+       Total |  1.36755969         8  .170944961   Root MSE        =    .20502
+
+------------------------------------------------------------------------------
+       lngdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   education |   .2951171   .0584017     5.05   0.001     .1570191    .4332151
+       _cons |   8.967762   .3125494    28.69   0.000     8.228701    9.706824
+------------------------------------------------------------------------------
+
+
+COUNTRY:     france
+(887 observations deleted)
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+                 france |          9      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          9      100.00
+(n() set to 9)
+
+      Source |       SS           df       MS      Number of obs   =         9
+-------------+----------------------------------   F(1, 7)         =     24.92
+       Model |  .703477816         1  .703477816   Prob > F        =    0.0016
+    Residual |   .19760399         7  .028229141   R-squared       =    0.7807
+-------------+----------------------------------   Adj R-squared   =    0.7494
+       Total |  .901081807         8  .112635226   Root MSE        =    .16802
+
+------------------------------------------------------------------------------
+       lngdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   education |   .2980883   .0597129     4.99   0.002     .1568896     .439287
+       _cons |   8.648567   .4120612    20.99   0.000     7.674197    9.622937
+------------------------------------------------------------------------------
+r; t=1.16 14:43:23
+
+.                         
+.                 // # 4.2.1 foreach + numlist
+.                         foreach n of numlist 100(50)1000 {
+  2.                                 di _new _new "N:        `n'" _new
+  3.                                 clear
+  4.                                 set obs `n'
+  5.                                 set seed 234345456
+  6.                                 gen x = uniform()
+  7.                                 sum x
+  8.                         }
+
+
+N:        100
+
+number of observations (_N) was 0, now 100
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        100    .5279238    .2929908   .0005852   .9974375
+
+
+N:        150
+
+number of observations (_N) was 0, now 150
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        150    .5066648    .2829665   .0005852   .9974375
+
+
+N:        200
+
+number of observations (_N) was 0, now 200
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        200    .5087299    .2867695   .0005852   .9974375
+
+
+N:        250
+
+number of observations (_N) was 0, now 250
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        250     .507995    .2907679   .0005852   .9974375
+
+
+N:        300
+
+number of observations (_N) was 0, now 300
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        300    .5046094    .2919578   .0005852   .9974375
+
+
+N:        350
+
+number of observations (_N) was 0, now 350
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        350    .5016092    .2913168   .0005852   .9978923
+
+
+N:        400
+
+number of observations (_N) was 0, now 400
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        400    .4975422    .2881818   .0005852   .9978923
+
+
+N:        450
+
+number of observations (_N) was 0, now 450
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        450    .4942495    .2892185   .0005852   .9978923
+
+
+N:        500
+
+number of observations (_N) was 0, now 500
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        500    .5009936    .2879253   .0005852   .9978923
+
+
+N:        550
+
+number of observations (_N) was 0, now 550
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        550    .5001521    .2883431   .0005852   .9978923
+
+
+N:        600
+
+number of observations (_N) was 0, now 600
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        600    .5025128    .2886331   .0005852   .9978923
+
+
+N:        650
+
+number of observations (_N) was 0, now 650
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        650    .5022261    .2898809   .0004316   .9978923
+
+
+N:        700
+
+number of observations (_N) was 0, now 700
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        700    .5000793    .2895381   .0004316   .9978923
+
+
+N:        750
+
+number of observations (_N) was 0, now 750
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        750    .4997953    .2874408   .0004316   .9978923
+
+
+N:        800
+
+number of observations (_N) was 0, now 800
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        800     .500539     .287741   .0004316   .9978923
+
+
+N:        850
+
+number of observations (_N) was 0, now 850
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        850    .4995413    .2857619   .0004316   .9990201
+
+
+N:        900
+
+number of observations (_N) was 0, now 900
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        900      .50206    .2864544   .0004316   .9990201
+
+
+N:        950
+
+number of observations (_N) was 0, now 950
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        950    .5013171    .2843479   .0004316   .9990201
+
+
+N:        1000
+
+number of observations (_N) was 0, now 1,000
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |      1,000    .5039323    .2842246   .0004316   .9990201
+r; t=0.00 14:43:23
+
+.                         
+.                 // # 4.2.2 foreach + numlist
+.                         foreach n of numlist 100/110 {
+  2.                                 di _new _new "N:        `n'" _new
+  3.                                 clear
+  4.                                 set obs `n'
+  5.                                 set seed 234345456
+  6.                                 gen x = uniform()
+  7.                                 sum x
+  8.                         }
+
+
+N:        100
+
+number of observations (_N) was 0, now 100
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        100    .5279238    .2929908   .0005852   .9974375
+
+
+N:        101
+
+number of observations (_N) was 0, now 101
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        101     .531422    .2936344   .0005852   .9974375
+
+
+N:        102
+
+number of observations (_N) was 0, now 102
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        102    .5316675    .2921877   .0005852   .9974375
+
+
+N:        103
+
+number of observations (_N) was 0, now 103
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        103    .5277011    .2935253   .0005852   .9974375
+
+
+N:        104
+
+number of observations (_N) was 0, now 104
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        104    .5273551    .2921182   .0005852   .9974375
+
+
+N:        105
+
+number of observations (_N) was 0, now 105
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        105    .5278705    .2907584   .0005852   .9974375
+
+
+N:        106
+
+number of observations (_N) was 0, now 106
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        106    .5304934    .2906278   .0005852   .9974375
+
+
+N:        107
+
+number of observations (_N) was 0, now 107
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        107    .5297634    .2893522   .0005852   .9974375
+
+
+N:        108
+
+number of observations (_N) was 0, now 108
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        108    .5271722    .2892532   .0005852   .9974375
+
+
+N:        109
+
+number of observations (_N) was 0, now 109
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        109    .5223973    .2921949   .0005852   .9974375
+
+
+N:        110
+
+number of observations (_N) was 0, now 110
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+           x |        110    .5183765    .2938927   .0005852   .9974375
+r; t=0.00 14:43:23
+
+.                         
+.                 // # 4.3 while
+.                         use growth/growth_data, clear
+r; t=0.00 14:43:23
+
+.                         local i = 23
+r; t=0.00 14:43:23
+
+.                 
+.                         while `i' <= 500 {
+  2.                                 di _new _new "n:        `i'" _new
+  3.                                 tab country if _n == `i'
+  4.                                 local i = `i' + 50
+  5.                         }
+
+
+n:        23
+
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+              argentina |          1      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          1      100.00
+
+
+n:        73
+
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+                belgium |          1      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          1      100.00
+
+
+n:        123
+
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+                 brunei |          1      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          1      100.00
+
+
+n:        173
+
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+               colombia |          1      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          1      100.00
+
+
+n:        223
+
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+                ecuador |          1      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          1      100.00
+
+
+n:        273
+
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+                 france |          1      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          1      100.00
+
+
+n:        323
+
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+               honduras |          1      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          1      100.00
+
+
+n:        373
+
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+              indonesia |          1      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          1      100.00
+
+
+n:        423
+
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+                  japan |          1      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          1      100.00
+
+
+n:        473
+
+
+           Country name |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+                liberia |          1      100.00      100.00
+------------------------+-----------------------------------
+                  Total |          1      100.00
+r; t=0.00 14:43:23
+
+.                         
+.                 // # 5. Build your own program: simple example
+.                 
+.                         capture prog drop analyse
+r; t=0.00 14:43:23
+
+.                         program define analyse
+  1.                         
+.                                 codebook `1' if country == "`2'" & year < `3', compact
+  2.                                 inspect `1' if country == "`2'" & year < `3'
+  3.                                 sum `1' if country == "`2'" & year < `3', detail
+  4.                                 kdensity `1' if country == "`2'" & year < `3'
+  5.                                 
+.                         end
+r; t=0.00 14:43:23
+
+.                         
+.                         analyse lngdp spain 1980
+
+Variable   Obs Unique      Mean       Min       Max  Label
+---------------------------------------------------------------------------------------------------------------------
+lngdp        4      4  10.16345  9.665087  10.56401  Log Real GDP per Worker
+---------------------------------------------------------------------------------------------------------------------
+
+lngdp:  Log Real GDP per Worker                 Number of Observations
+-------------------------------        ---------------------------------------
+                                             Total      Integers   Nonintegers
+|              #             Negative            -             -             -
+|              #             Zero                -             -             -
+|              #             Positive            4             -             4
+|  #   #       #                       -----------   -----------   -----------
+|  #   #       #             Total               4             -             4
+|  #   #   .   #             Missing             -
++----------------------                -----------
+9.665087       10.56401                          4
+   (4 unique values)
+
+                   Log Real GDP per Worker
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     9.665087       9.665087
+ 5%     9.665087        10.0833
+10%     9.665087       10.34141       Obs                   4
+25%     9.874193       10.56401       Sum of Wgt.           4
+
+50%     10.21235                      Mean           10.16345
+                        Largest       Std. Dev.       .385966
+75%     10.45271       9.665087
+90%     10.56401        10.0833       Variance       .1489698
+95%     10.56401       10.34141       Skewness      -.3640823
+99%     10.56401       10.56401       Kurtosis         1.7719
+r; t=0.25 14:43:23
+
+. 
+. timer off 1
+r; t=0.00 14:43:23
+
+. timer list 1
+   1:      5.37 /        1 =       5.3690
+r; t=0.00 14:43:23
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/logs/handlingdata_further_commands
+> .txt
+  log type:  text
+ closed on:  19 May 2021, 14:43:23
+---------------------------------------------------------------------------------------------------------------------

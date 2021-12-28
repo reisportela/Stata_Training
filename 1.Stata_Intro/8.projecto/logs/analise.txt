@@ -1,0 +1,375 @@
+-------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/8.projecto/logs/analise
+> .txt
+  log type:  text
+ opened on:  21 May 2021, 20:57:11
+r; t=0.00 20:57:11
+
+. 
+. sysuse nlsw88.dta
+(NLSW, 1988 extract)
+r; t=0.00 20:57:11
+
+. describe
+
+Contains data from /Applications/Stata/ado/base/n/nlsw88.dta
+  obs:         2,246                          NLSW, 1988 extract
+ vars:            17                          1 May 2018 22:52
+                                              (_dta has notes)
+-------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+-------------------------------------------------------------------------------------------
+idcode          int     %8.0g                 NLS id
+age             byte    %8.0g                 age in current year
+race            byte    %8.0g      racelbl    race
+married         byte    %8.0g      marlbl     married
+never_married   byte    %8.0g                 never married
+grade           byte    %8.0g                 current grade completed
+collgrad        byte    %16.0g     gradlbl    college graduate
+south           byte    %8.0g                 lives in south
+smsa            byte    %9.0g      smsalbl    lives in SMSA
+c_city          byte    %8.0g                 lives in central city
+industry        byte    %23.0g     indlbl     industry
+occupation      byte    %22.0g     occlbl     occupation
+union           byte    %8.0g      unionlbl   union worker
+wage            float   %9.0g                 hourly wage
+hours           byte    %8.0g                 usual hours worked
+ttl_exp         float   %9.0g                 total work experience
+tenure          float   %9.0g                 job tenure (years)
+-------------------------------------------------------------------------------------------
+Sorted by: idcode
+r; t=0.00 20:57:11
+
+. codebook
+
+-------------------------------------------------------------------------------------------
+idcode                                                                               NLS id
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (int)
+
+                 range:  [1,5159]                     units:  1
+         unique values:  2,246                    missing .:  0/2,246
+
+                  mean:   2612.65
+              std. dev:   1480.86
+
+           percentiles:        10%       25%       50%       75%       90%
+                               521      1366      2614      3903      4651
+
+-------------------------------------------------------------------------------------------
+age                                                                     age in current year
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+
+                 range:  [34,46]                      units:  1
+         unique values:  13                       missing .:  0/2,246
+
+                  mean:   39.1532
+              std. dev:      3.06
+
+           percentiles:        10%       25%       50%       75%       90%
+                                35        36        39        42        44
+
+-------------------------------------------------------------------------------------------
+race                                                                                   race
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+                 label:  racelbl
+
+                 range:  [1,3]                        units:  1
+         unique values:  3                        missing .:  0/2,246
+
+            tabulation:  Freq.   Numeric  Label
+                         1,637         1  white
+                           583         2  black
+                            26         3  other
+
+-------------------------------------------------------------------------------------------
+married                                                                             married
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+                 label:  marlbl
+
+                 range:  [0,1]                        units:  1
+         unique values:  2                        missing .:  0/2,246
+
+            tabulation:  Freq.   Numeric  Label
+                           804         0  single
+                         1,442         1  married
+
+-------------------------------------------------------------------------------------------
+never_married                                                                 never married
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+
+                 range:  [0,1]                        units:  1
+         unique values:  2                        missing .:  0/2,246
+
+            tabulation:  Freq.  Value
+                         2,012  0
+                           234  1
+
+-------------------------------------------------------------------------------------------
+grade                                                               current grade completed
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+
+                 range:  [0,18]                       units:  1
+         unique values:  16                       missing .:  2/2,246
+
+                  mean:   13.0989
+              std. dev:   2.52125
+
+           percentiles:        10%       25%       50%       75%       90%
+                                11        12        12        15        17
+
+-------------------------------------------------------------------------------------------
+collgrad                                                                   college graduate
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+                 label:  gradlbl
+
+                 range:  [0,1]                        units:  1
+         unique values:  2                        missing .:  0/2,246
+
+            tabulation:  Freq.   Numeric  Label
+                         1,714         0  not college grad
+                           532         1  college grad
+
+-------------------------------------------------------------------------------------------
+south                                                                        lives in south
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+
+                 range:  [0,1]                        units:  1
+         unique values:  2                        missing .:  0/2,246
+
+            tabulation:  Freq.  Value
+                         1,304  0
+                           942  1
+
+-------------------------------------------------------------------------------------------
+smsa                                                                          lives in SMSA
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+                 label:  smsalbl
+
+                 range:  [0,1]                        units:  1
+         unique values:  2                        missing .:  0/2,246
+
+            tabulation:  Freq.   Numeric  Label
+                           665         0  nonSMSA
+                         1,581         1  SMSA
+
+-------------------------------------------------------------------------------------------
+c_city                                                                lives in central city
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+
+                 range:  [0,1]                        units:  1
+         unique values:  2                        missing .:  0/2,246
+
+            tabulation:  Freq.  Value
+                         1,591  0
+                           655  1
+
+-------------------------------------------------------------------------------------------
+industry                                                                           industry
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+                 label:  indlbl
+
+                 range:  [1,12]                       units:  1
+         unique values:  12                       missing .:  14/2,246
+
+              examples:  5     Transport/Comm/Utility
+                         7     Finance/Ins/Real Estate
+                         11    Professional Services
+                         11    Professional Services
+
+-------------------------------------------------------------------------------------------
+occupation                                                                       occupation
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+                 label:  occlbl
+
+                 range:  [1,13]                       units:  1
+         unique values:  13                       missing .:  9/2,246
+
+              examples:  2     Managers/admin
+                         3     Sales
+                         4     Clerical/unskilled
+                         8     Laborers
+
+-------------------------------------------------------------------------------------------
+union                                                                          union worker
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+                 label:  unionlbl
+
+                 range:  [0,1]                        units:  1
+         unique values:  2                        missing .:  368/2,246
+
+            tabulation:  Freq.   Numeric  Label
+                         1,417         0  nonunion
+                           461         1  union
+                           368         .  
+
+-------------------------------------------------------------------------------------------
+wage                                                                            hourly wage
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (float)
+
+                 range:  [1.0049518,40.74659]         units:  1.000e-07
+         unique values:  967                      missing .:  0/2,246
+
+                  mean:   7.76695
+              std. dev:   5.75552
+
+           percentiles:        10%       25%       50%       75%       90%
+                           3.22061   4.25926   6.27227   9.59742   12.7778
+
+-------------------------------------------------------------------------------------------
+hours                                                                    usual hours worked
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+
+                 range:  [1,80]                       units:  1
+         unique values:  62                       missing .:  4/2,246
+
+                  mean:   37.2181
+              std. dev:   10.5091
+
+           percentiles:        10%       25%       50%       75%       90%
+                                20        35        40        40        48
+
+-------------------------------------------------------------------------------------------
+ttl_exp                                                               total work experience
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (float)
+
+                 range:  [.11538462,28.884615]        units:  1.000e-09
+         unique values:  1,546                    missing .:  0/2,246
+
+                  mean:    12.535
+              std. dev:   4.61021
+
+           percentiles:        10%       25%       50%       75%       90%
+                           6.01282   9.21154    13.125   15.9808   18.1538
+
+-------------------------------------------------------------------------------------------
+tenure                                                                   job tenure (years)
+-------------------------------------------------------------------------------------------
+
+                  type:  numeric (float)
+
+                 range:  [0,25.916666]                units:  1.000e-09
+         unique values:  259                      missing .:  15/2,246
+
+                  mean:   5.97785
+              std. dev:   5.51033
+
+           percentiles:        10%       25%       50%       75%       90%
+                           .583333   1.58333   3.83333   9.33333     14.75
+r; t=0.05 20:57:11
+
+. 
+. label list racelbl
+racelbl:
+           1 white
+           2 black
+           3 other
+r; t=0.00 20:57:11
+
+. count if race == 2
+  583
+r; t=0.00 20:57:11
+
+. 
+. tabulate race
+
+       race |      Freq.     Percent        Cum.
+------------+-----------------------------------
+      white |      1,637       72.89       72.89
+      black |        583       25.96       98.84
+      other |         26        1.16      100.00
+------------+-----------------------------------
+      Total |      2,246      100.00
+r; t=0.00 20:57:11
+
+. 
+end of do-file
+
+r; t=0.11 20:57:11
+. tabstat wage, statistics( mean sd p5 p50 p95 ) by(race)
+
+Summary for variables: wage
+     by categories of: race (race)
+
+  race |      mean        sd        p5       p50       p95
+-------+--------------------------------------------------
+ white |  8.082999  5.955069  2.875546  6.545891  17.34411
+ black |  6.844558  5.076187  2.697261  5.434783  14.49275
+ other |  8.550781   5.20943  2.697261  7.560383  17.52817
+-------+--------------------------------------------------
+ Total |  7.766949  5.755523  2.801002   6.27227  16.52979
+----------------------------------------------------------
+r; t=0.01 20:58:25
+
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD69436.000000"
+
+. //////////////////////////////////////////////
+> // EEGS - Introduction to Stata                         //
+. // April, 2021                                                          //
+. // EEG / Universidade do Minho, Portugal        //
+. // Miguel Portela                                                       //
+. //////////////////////////////////////////////
+> 
+.         clear all                                                                        
+>                        // CLEAR STATA'S MEMORY; START A NEW SESSION
+r; t=0.04 21:04:55
+
+.         set more off                                                                     
+>                // ALLOW SCREENS TO PASS BY
+r; t=0.00 21:04:55
+
+.         set rmsg on                                                                      
+>                        // CONTROL THE TIME NEEDED TO RUN EACH COMMAND
+r; t=0.00 21:04:55
+
+.         
+.         timer on 1
+r; t=0.00 21:04:55
+
+.         
+.                 capture cd "C:\Users\reisportela_win\Dropbox\Stata/stata_training\day1\3.
+> dataanalysis\graphs"
+r; t=0.00 21:04:55
+
+.                 capture cd "D:\miguel\Dropbox\Stata/stata_training\day1\3.dataanalysis\gr
+> aphs"
+r; t=0.00 21:04:55
+
+.                 capture cd "/Users/miguelportela/Dropbox/Stata/stata_training/day1/3.data
+> analysis/graphs"
+r; t=0.00 21:04:55
+
+. capture log close

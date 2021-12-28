@@ -1,0 +1,744 @@
+-------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/3.dataanalysis/logs/dat
+> aanalysis.txt
+  log type:  text
+ opened on:  21 May 2021, 20:37:39
+r; t=0.00 20:37:39
+
+. 
+. 
+. // ########################################################################### //
+. 
+. 
+. // # 0. INTERNET: useful commands for the following analysis
+. 
+. 
+.                 /*
+>                                 // packages:    ascii charlist unique outreg2 est2tex aba
+> r listtab listtex elapse sample2 cf2 cf3
+>                                 //                              outtable latab tabout sut
+> ex xtabond2 ivreg2 ranktest
+>                                 
+>                                 help whatsnew
+>                                 ado
+>                                 update query
+>                                 set timeout1 10000
+>                                 set timeout2 10000
+>                                 update all
+>                                 adoupdate, all update
+>                                 
+>                                 net search panel data
+>                                 findit xtabond2
+>                                 ssc install xtabond2                                     
+>                // Boston College Statistical Software Components  (SSC)
+>                                 net install xtabond2.pkg
+>                                 adoupdate xtabond2, update
+>                                 
+>                 */
+. 
+. 
+. // ########################################################################### //
+. 
+. 
+. // # 1. MATRICES
+. 
+. use ../2.handlingdata/growth/growth_data, clear
+r; t=0.00 20:37:39
+
+.                 
+.         // matrices manipulation
+. 
+.                 preserve                        // preserve the data in its current state
+r; t=0.00 20:37:39
+
+.                 
+.                 // NOTE: for regressions we use `ereturn list'; for other computations we
+>  use 'return list'
+.                         reg lngdp education i.year                      // estimate a sim
+> ple OLS regression
+
+      Source |       SS           df       MS      Number of obs   =       839
+-------------+----------------------------------   F(9, 829)       =    139.99
+       Model |  738.793241         9  82.0881379   Prob > F        =    0.0000
+    Residual |  486.125229       829  .586399552   R-squared       =    0.6031
+-------------+----------------------------------   Adj R-squared   =    0.5988
+       Total |  1224.91847       838  1.46171655   Root MSE        =    .76577
+
+------------------------------------------------------------------------------
+       lngdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   education |   .3375028   .0096936    34.82   0.000     .3184758    .3565298
+             |
+        year |
+       1965  |     .14932   .1222323     1.22   0.222    -.0906012    .3892413
+       1970  |   .2175604   .1170306     1.86   0.063    -.0121506    .4472715
+       1975  |   .1874116   .1168351     1.60   0.109    -.0419157    .4167389
+       1980  |   .1506035   .1169117     1.29   0.198    -.0788743    .3800813
+       1985  |   .0041407   .1175006     0.04   0.972     -.226493    .2347745
+       1990  |  -.1345145   .1168647    -1.15   0.250       -.3639    .0948711
+       1995  |  -.2638546   .1181087    -2.23   0.026     -.495682   -.0320273
+       2000  |  -.2751561   .1190577    -2.31   0.021    -.5088462   -.0414661
+             |
+       _cons |    7.69156   .0935206    82.24   0.000     7.507995    7.875125
+------------------------------------------------------------------------------
+r; t=0.04 20:37:39
+
+.                                 ereturn list                                    // identi
+> fy where the regression computations are stored
+
+scalars:
+                  e(N) =  839
+               e(df_m) =  9
+               e(df_r) =  829
+                  e(F) =  139.9866994292429
+                 e(r2) =  .6031366651125901
+               e(rmse) =  .7657672963533709
+                e(mss) =  738.7932406884631
+                e(rss) =  486.1252287442473
+               e(r2_a) =  .5988281367483119
+                 e(ll) =  -961.5496353334358
+               e(ll_0) =  -1349.236140596613
+               e(rank) =  10
+
+macros:
+            e(cmdline) : "regress lngdp education i.year"
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "ols"
+             e(depvar) : "lngdp"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+
+matrices:
+                  e(b) :  1 x 11
+                  e(V) :  11 x 11
+
+functions:
+             e(sample)   
+r; t=0.00 20:37:39
+
+. 
+.                                 matrix list e(b)
+
+e(b)[1,11]
+                     1960b.       1965.       1970.       1975.       1980.       1985.
+     education        year        year        year        year        year        year
+y1   .33750282           0   .14932004   .21756043    .1874116   .15060351   .00414073
+
+          1990.       1995.       2000.            
+          year        year        year       _cons
+y1  -.13451445  -.26385465  -.27515613   7.6915597
+r; t=0.00 20:37:39
+
+.                                 mat li e(V)
+
+symmetric e(V)[11,11]
+                             1960b.       1965.       1970.       1975.       1980.
+             education        year        year        year        year        year
+ education   .00009397
+1960b.year           0           0
+ 1965.year   1.350e-06           0   .01494074
+ 1970.year   -.0000229           0   .00751761   .01369615
+ 1975.year  -.00004764           0   .00751726   .00752955   .01365043
+ 1980.year  -.00009935           0   .00751652   .00754215   .00756832   .01366835
+ 1985.year   -.0001301           0   .00751607   .00754965   .00758391    .0076555
+ 1990.year  -.00017702           0    .0075154   .00756108    .0076077   .00770511
+ 1995.year  -.00021859           0    .0075148   .00757121   .00762878   .00774906
+ 2000.year   -.0002515           0   .00751433   .00757923   .00764546   .00778386
+     _cons  -.00033971           0  -.00752282  -.00743516   -.0073457  -.00715876
+
+                  1985.       1990.       1995.       2000.            
+                  year        year        year        year       _cons
+ 1985.year    .0138064
+ 1990.year   .00776303   .01365736
+ 1995.year   .00782059   .00792974   .01394967
+ 2000.year   .00786615   .00799173     .008103   .01417475
+     _cons   -.0070476  -.00687797  -.00672768  -.00660871    .0087461
+r; t=0.00 20:37:39
+
+.                                 mat vars = e(V)
+r; t=0.00 20:37:39
+
+.                                         scalar s = vars[2,2]
+r; t=0.00 20:37:39
+
+.                                         di s
+0
+r; t=0.00 20:37:39
+
+.                                         
+.                                         mat example = (1,2\3,4)
+r; t=0.00 20:37:39
+
+.                                         matrix list example
+
+example[2,2]
+    c1  c2
+r1   1   2
+r2   3   4
+r; t=0.00 20:37:39
+
+.                 
+.                                 
+.                                 tab year if e(sample)                   // tabulate the v
+> ariable 'year' but just for the sample used in the regression
+
+    Year of |
+observation |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1960 |         78        9.30        9.30
+       1965 |         79        9.42       18.71
+       1970 |         95       11.32       30.04
+       1975 |         96       11.44       41.48
+       1980 |         97       11.56       53.04
+       1985 |         96       11.44       64.48
+       1990 |        101       12.04       76.52
+       1995 |         99       11.80       88.32
+       2000 |         98       11.68      100.00
+------------+-----------------------------------
+      Total |        839      100.00
+r; t=0.00 20:37:39
+
+.                                         return list                                     /
+> / identify the number of periods
+
+scalars:
+                  r(N) =  839
+                  r(r) =  9
+r; t=0.00 20:37:39
+
+.                         
+.                                 mat betas = e(b)'                               // build 
+> a matrix with the estimated betas
+r; t=0.00 20:37:39
+
+.                                         matrix list betas
+
+betas[11,1]
+                    y1
+ education   .33750282
+1960b.year           0
+ 1965.year   .14932004
+ 1970.year   .21756043
+ 1975.year    .1874116
+ 1980.year   .15060351
+ 1985.year   .00414073
+ 1990.year  -.13451445
+ 1995.year  -.26385465
+ 2000.year  -.27515613
+     _cons   7.6915597
+r; t=0.00 20:37:39
+
+.                                 mat dummies = betas[3..10,1]    // build a matrix with th
+> e dummies
+r; t=0.00 20:37:39
+
+.                                         mat l dummies
+
+dummies[8,1]
+                   y1
+1965.year   .14932004
+1970.year   .21756043
+1975.year    .1874116
+1980.year   .15060351
+1985.year   .00414073
+1990.year  -.13451445
+1995.year  -.26385465
+2000.year  -.27515613
+r; t=0.00 20:37:39
+
+.                                 svmat dummies, n(dummies)               // transform the 
+> matrix in data
+r; t=0.00 20:37:39
+
+.                                         gen yyyy = _n if _n <= 8        // build a time v
+> ariable
+(888 missing values generated)
+r; t=0.00 20:37:39
+
+.                                 
+.                                 keep dummies yyyy
+r; t=0.00 20:37:39
+
+.                                 drop if dummies == .
+(888 observations deleted)
+r; t=0.00 20:37:39
+
+.                                 
+.                                 // graph the dummies over time
+.                                         twoway (scatter dummies yyyy) || (line dummies yy
+> yy)
+r; t=0.42 20:37:39
+
+.                 
+.                 restore
+r; t=0.00 20:37:39
+
+. 
+. 
+.         // OLS coefficients estimation step by step using matrices
+. 
+.                 preserve
+r; t=0.00 20:37:39
+
+.                         
+.                         egen nmiss = rmiss(lngdp education)
+r; t=0.00 20:37:39
+
+.                         drop if nmiss ~= 0
+(57 observations deleted)
+r; t=0.00 20:37:39
+
+. 
+.                         keep in 1/25
+(814 observations deleted)
+r; t=0.00 20:37:39
+
+. 
+.                         mat drop _all
+r; t=0.00 20:37:39
+
+.                         mkmat lngdp, mat(y)
+r; t=0.00 20:37:39
+
+.                         mkmat education, mat(x)
+r; t=0.00 20:37:39
+
+.                         matrix dir
+            x[25,1]
+            y[25,1]
+r; t=0.00 20:37:39
+
+. 
+.                         gen one=1
+r; t=0.00 20:37:39
+
+.                         mkmat one, mat(one)
+r; t=0.00 20:37:39
+
+.                         mat x=one,x
+r; t=0.00 20:37:39
+
+.                         mat l x
+
+x[25,2]
+           one  education
+ r1          1        .77
+ r2          1        .73
+ r3          1        .79
+ r4          1        .87
+ r5          1        .91
+ r6          1       1.13
+ r7          1       1.14
+ r8          1        .97
+ r9          1        .65
+r10          1        .82
+r11          1       1.08
+r12          1       1.55
+r13          1       2.14
+r14          1       3.01
+r15          1       3.91
+r16          1       4.72
+r17          1       4.99
+r18          1       5.21
+r19          1       5.88
+r20          1       5.85
+r21          1       6.62
+r22          1       6.74
+r23          1       7.77
+r24          1       8.12
+r25          1       8.49
+r; t=0.00 20:37:39
+
+. 
+.                         mat def beta=((inv((x')*x)))*((x')*y)
+r; t=0.00 20:37:39
+
+.                         mat l beta
+
+beta[2,1]
+               lngdp
+      one  8.4400888
+education  .21425875
+r; t=0.00 20:37:39
+
+. 
+.                         reg lngdp education                     // compare with the resul
+> ts above
+
+      Source |       SS           df       MS      Number of obs   =        25
+-------------+----------------------------------   F(1, 23)        =     13.02
+       Model |   8.4080167         1   8.4080167   Prob > F        =    0.0015
+    Residual |  14.8584668        23  .646020296   R-squared       =    0.3614
+-------------+----------------------------------   Adj R-squared   =    0.3336
+       Total |  23.2664835        24  .969436813   Root MSE        =    .80375
+
+------------------------------------------------------------------------------
+       lngdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   education |   .2142587   .0593902     3.61   0.001     .0914007    .3371168
+       _cons |   8.440089   .2578391    32.73   0.000     7.906708     8.97347
+------------------------------------------------------------------------------
+r; t=0.00 20:37:39
+
+. 
+.                 restore
+r; t=0.00 20:37:39
+
+. 
+. 
+. 
+. // ########################################################################### //
+. 
+. 
+. // # 2. VARIABLES & DESCRIPTIVE STATISTICSS
+. 
+.         use ../2.handlingdata/growth/growth_data, clear // load the data from the harddri
+> ve
+r; t=0.00 20:37:39
+
+. 
+.                 describe
+
+Contains data from ../2.handlingdata/growth/growth_data.dta
+  obs:           896                          
+ vars:            16                          19 May 2021 14:40
+                                              (_dta has notes)
+-------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+-------------------------------------------------------------------------------------------
+country         str23   %23s                  Country name
+year            int     %10.0g                Year of observation
+isocode         str3    %9s                   Country code
+pop             double  %10.0g                Population (in thousands)
+xrat            double  %10.0g                Exchange Rate to US$; national currency units
+                                                per US dollar
+ppp             double  %10.0g                Purchasing Power Parity over GDP (in national
+                                                currency units per US$)
+rgdpl           double  %10.0g                PPP Converted GDP Per Capita (Laspeyres),
+                                                derived from growth rates of c, g, i,
+kc              double  %10.0g                Consumption Share of PPP Converted GDP Per
+                                                Capita at 2005 constant prices [rgdpl
+kg              double  %10.0g                Government Consumption Share of PPP Converted
+                                                GDP Per Capita at 2005 constant pr
+ki              double  %10.0g                Investment Share of PPP Converted GDP Per
+                                                Capita at 2005 constant prices [rgdpl]
+openk           double  %10.0g                Openness at 2005 constant prices (%)
+rgdpwok         double  %10.0g                PPP Converted GDP Chain per worker at 2005
+                                                constant prices
+education       double  %10.0g                education
+k               double  %16.3f                Capital
+lngdp           float   %9.0g                 Log Real GDP per Worker
+lnk             float   %9.0g                 Log Capital
+-------------------------------------------------------------------------------------------
+Sorted by: country  year
+r; t=0.00 20:37:39
+
+.                 codebook, compact
+
+Variable   Obs Unique      Mean       Min       Max  Label
+-------------------------------------------------------------------------------------------
+country    896    114         .         .         .  Country name
+year       896      9  1980.089      1960      2000  Year of observation
+isocode    896    114         .         .         .  Country code
+pop        896    896  36524.41    41.662   1263638  Population (in thousands)
+xrat       890    628  77.96626  6.80e-14  8421.775  Exchange Rate to US$; national curr...
+ppp        858    850  37.42437  6.51e-14  2420.972  Purchasing Power Parity over GDP (i...
+rgdpl      856    856  8332.913   156.134  99462.73  PPP Converted GDP Per Capita (Laspe...
+kc         856    856  71.74116  5.099385  189.4834  Consumption Share of PPP Converted ...
+kg         856    856  10.04281  .2877948  43.33043  Government Consumption Share of PPP...
+ki         856    856   23.1607  1.446131  111.2905  Investment Share of PPP Converted G...
+openk      856    856  63.34099  2.319838  395.9767  Openness at 2005 constant prices (%)
+rgdpwok    855    855  19846.39  396.7613  271192.1  PPP Converted GDP Chain per worker ...
+education  880    588   4.73675       .04     12.25  education
+k          235    235  5.48e+11  1.19e+09  1.12e+13  Capital
+lngdp      855    854  9.290201  5.983335  12.51058  Log Real GDP per Worker
+lnk        235    235  25.20918   20.9011  30.04742  Log Capital
+-------------------------------------------------------------------------------------------
+r; t=0.03 20:37:39
+
+.                 
+.                 mean education
+
+Mean estimation                   Number of obs   =        880
+
+--------------------------------------------------------------
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+   education |    4.73675   .0976954      4.545007    4.928493
+--------------------------------------------------------------
+r; t=0.02 20:37:39
+
+.                 proportion year
+
+Proportion estimation             Number of obs   =        896
+
+--------------------------------------------------------------
+             |                                   Logit
+             | Proportion   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+        year |
+       1960  |   .1104911   .0104733      .0915481    .1327808
+       1965  |   .1082589     .01038      .0895067    .1303773
+       1970  |   .1116071   .0105195      .0925698    .1339816
+       1975  |    .109375   .0104268       .090527    .1315794
+       1980  |   .1116071   .0105195      .0925698    .1339816
+       1985  |    .109375   .0104268       .090527    .1315794
+       1990  |   .1194196   .0108335      .0997391    .1423695
+       1995  |   .1104911   .0104733      .0915481    .1327808
+       2000  |    .109375   .0104268       .090527    .1315794
+--------------------------------------------------------------
+r; t=0.01 20:37:39
+
+.                 
+.                 // local & global macros
+.                 
+.                 local vars = "education k"
+r; t=0.00 20:37:39
+
+.                         sum `vars'
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |        880     4.73675    2.898113        .04      12.25
+           k |        235    5.48e+11    1.58e+12   1.19e+09   1.12e+13
+r; t=0.00 20:37:39
+
+. 
+.                 global vars = "education k"
+r; t=0.00 20:37:39
+
+.                         sum $vars
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |        880     4.73675    2.898113        .04      12.25
+           k |        235    5.48e+11    1.58e+12   1.19e+09   1.12e+13
+r; t=0.00 20:37:39
+
+. 
+.                 // evaluate if mean education is the same across high and low income coun
+> tries
+.                 
+. 
+end of do-file
+
+r; t=0.58 20:37:39
+. tab ano
+variable ano not found
+r(111); t=0.00 20:38:04
+
+. tab year
+
+    Year of |
+observation |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1960 |         99       11.05       11.05
+       1965 |         97       10.83       21.88
+       1970 |        100       11.16       33.04
+       1975 |         98       10.94       43.97
+       1980 |        100       11.16       55.13
+       1985 |         98       10.94       66.07
+       1990 |        107       11.94       78.01
+       1995 |         99       11.05       89.06
+       2000 |         98       10.94      100.00
+------------+-----------------------------------
+      Total |        896      100.00
+r; t=0.00 20:38:08
+
+. sum educ if year == 2000
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |         98    6.291735    2.843706        .76      12.25
+r; t=0.00 20:38:52
+
+. summarize educ
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |        880     4.73675    2.898113        .04      12.25
+r; t=0.00 20:40:14
+
+. summarize education if year == 2000
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |         98    6.291735    2.843706        .76      12.25
+r; t=0.00 20:41:44
+
+. summarize education if year == 1995
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |         99    5.941515    2.876322        .69      12.18
+r; t=0.00 20:45:18
+
+. tabstat education,by(year) stat(N mean sd min max)
+
+Summary for variables: education
+     by categories of: year (Year of observation)
+
+    year |         N      mean        sd       min       max
+---------+--------------------------------------------------
+    1960 |        94  3.463936  2.476678       .07      9.56
+    1965 |        93  3.502473  2.504317        .1      9.42
+    1970 |        97  3.850309  2.647564       .04     10.09
+    1975 |        98  4.082857  2.706676       .14        11
+    1980 |        98  4.668673  2.809812       .37     11.91
+    1985 |        98  4.980918  2.749377       .42     11.71
+    1990 |       105  5.647048  2.894783       .55        12
+    1995 |        99  5.941515  2.876322       .69     12.18
+    2000 |        98  6.291735  2.843706       .76     12.25
+---------+--------------------------------------------------
+   Total |       880   4.73675  2.898113       .04     12.25
+------------------------------------------------------------
+r; t=0.02 20:46:00
+
+. tabstat education,by(year) stat(N mean sd min max p90)
+
+Summary for variables: education
+     by categories of: year (Year of observation)
+
+    year |         N      mean        sd       min       max       p90
+---------+------------------------------------------------------------
+    1960 |        94  3.463936  2.476678       .07      9.56      6.99
+    1965 |        93  3.502473  2.504317        .1      9.42      7.17
+    1970 |        97  3.850309  2.647564       .04     10.09      7.66
+    1975 |        98  4.082857  2.706676       .14        11      8.01
+    1980 |        98  4.668673  2.809812       .37     11.91      8.65
+    1985 |        98  4.980918  2.749377       .42     11.71      8.51
+    1990 |       105  5.647048  2.894783       .55        12      9.54
+    1995 |        99  5.941515  2.876322       .69     12.18      9.73
+    2000 |        98  6.291735  2.843706       .76     12.25       9.9
+---------+------------------------------------------------------------
+   Total |       880   4.73675  2.898113       .04     12.25     8.835
+----------------------------------------------------------------------
+r; t=0.02 20:47:09
+
+. help tabstat
+r; t=0.14 20:47:25
+
+. by year, sort : tabstat education
+
+-------------------------------------------------------------------------------------------
+-> year = 1960
+
+    variable |      mean
+-------------+----------
+   education |  3.463936
+------------------------
+
+-------------------------------------------------------------------------------------------
+-> year = 1965
+
+    variable |      mean
+-------------+----------
+   education |  3.502473
+------------------------
+
+-------------------------------------------------------------------------------------------
+-> year = 1970
+
+    variable |      mean
+-------------+----------
+   education |  3.850309
+------------------------
+
+-------------------------------------------------------------------------------------------
+-> year = 1975
+
+    variable |      mean
+-------------+----------
+   education |  4.082857
+------------------------
+
+-------------------------------------------------------------------------------------------
+-> year = 1980
+
+    variable |      mean
+-------------+----------
+   education |  4.668673
+------------------------
+
+-------------------------------------------------------------------------------------------
+-> year = 1985
+
+    variable |      mean
+-------------+----------
+   education |  4.980918
+------------------------
+
+-------------------------------------------------------------------------------------------
+-> year = 1990
+
+    variable |      mean
+-------------+----------
+   education |  5.647048
+------------------------
+
+-------------------------------------------------------------------------------------------
+-> year = 1995
+
+    variable |      mean
+-------------+----------
+   education |  5.941515
+------------------------
+
+-------------------------------------------------------------------------------------------
+-> year = 2000
+
+    variable |      mean
+-------------+----------
+   education |  6.291735
+------------------------
+r; t=0.01 20:49:55
+
+. table year education, contents(mean education )
+rowvar variable(s) may not be used in contents()
+r(111); t=0.00 20:52:53
+
+. tabstat education, statistics( mean sd p90 ) by(year)
+
+Summary for variables: education
+     by categories of: year (Year of observation)
+
+    year |      mean        sd       p90
+---------+------------------------------
+    1960 |  3.463936  2.476678      6.99
+    1965 |  3.502473  2.504317      7.17
+    1970 |  3.850309  2.647564      7.66
+    1975 |  4.082857  2.706676      8.01
+    1980 |  4.668673  2.809812      8.65
+    1985 |  4.980918  2.749377      8.51
+    1990 |  5.647048  2.894783      9.54
+    1995 |  5.941515  2.876322      9.73
+    2000 |  6.291735  2.843706       9.9
+---------+------------------------------
+   Total |   4.73675  2.898113     8.835
+----------------------------------------
+r; t=0.00 20:56:18
+
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD69436.000000"
+
+. // M Portela, May 21st, 2021
+. // EEG/U Minho
+. 
+. clear all
+r; t=0.04 20:57:11
+
+. set more off
+r; t=0.00 20:57:11
+
+. 
+. cd "/Users/miguelportela/Dropbox/Stata/stata_training/day1/8.projecto/logs"
+/Users/miguelportela/Dropbox/Stata/stata_training/day1/8.projecto/logs
+r; t=0.00 20:57:11
+
+. 
+. capture log close

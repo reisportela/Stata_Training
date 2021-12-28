@@ -1,0 +1,104 @@
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+ssc install tabout
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+ssc install estpost
+search estpost
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+h esttab
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+edit
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+ssc install markstat
+whereis pandoc /usr/local/bin/pandoc
+ssc install whereis
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+whereis pandoc /usr/local/bin/pandoc
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+whereis pdflatex /Library/TeX/texbin/pdflatex
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+whereis R /opt/homebrew/bin/R
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+edit
+ssc install wbopendata
+h wbopendata
+view dialog import_fred_dlg
+
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+rename (E-AW) (k#), addnumber(1948)
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+br
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+count
+reshape long k, i(country) j(year)
+help reshape
+view dialog import_excel_dlg
+
+view dialog import_excel_dlg
+
+import excel "/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/growth/pwt70/pwt70.xls", sheet("Sheet1") firstrow clear
+view dialog import_excel_dlg
+
+import excel "/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/growth/pwt70/pwt70.xls", sheet("Sheet1") firstrow clear
+view dialog import_excel_dlg
+
+import excel "/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/growth/pwt70/pwt70.xls", sheet("Sheet1") firstrow case(lower) clear
+mean pop
+mean pop  if country == "afghanistan"
+mean pop  if country == "portugal"
+tab country
+mean pop  if country == "Afghanistan"
+h mean
+h mean
+search mean
+db wbopendata
+wbopendata, language(en - English) country(AGO;ARB;) topics(4 - Education) indicator(1.0.PSev.2.5usd - Poverty Severity ($2.50 a day)) clear long
+wbopendata, language(en - English) country(AGO;ARB;) topics(4 - Education) indicator(1.0.PSev.2.5usd - Poverty Severity ($2.50 a day)) clear long
+webuse nlswork, clear
+br
+reg ln_wage ba
+reg ln_wage union 
+xtreg ln_wage union, fe
+import excel "/Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/growth/pwt70/pwt70.xls", sheet("Sheet1") firstrow case(lower) clear
+br
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+drop if year == .
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD33884.000000"
+destring education,replace force
+br
+generate primeiro = word(country,1)
+ge tmp = substr(country,1,strpos(country,",")-1)
+br
+tab country
+sysuse nlswork, clear
+webuse nlswork, clear
+tab race

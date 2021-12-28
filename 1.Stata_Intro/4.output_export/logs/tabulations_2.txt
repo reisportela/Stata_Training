@@ -1,0 +1,241 @@
+
+                      |                             Year_of_observation
+         Country_name |      1960       1965       1970       1975       1980       1985       1990 |     Total
+----------------------+-----------------------------------------------------------------------------+----------
+          afghanistan |         1          1          1          1          1          1          1 |         9 
+              algeria |         1          1          1          1          1          1          1 |         9 
+            argentina |         1          1          1          1          1          1          1 |         9 
+            australia |         1          1          1          1          1          1          1 |         9 
+              austria |         1          1          1          1          1          1          1 |         9 
+              bahrain |         1          1          1          1          1          1          1 |         9 
+           bangladesh |         1          1          1          1          1          1          1 |         9 
+             barbados |         1          1          1          1          1          1          1 |         9 
+              belgium |         1          1          1          1          1          1          1 |         9 
+               belize |         0          0          1          0          1          0          1 |         3 
+                benin |         1          1          1          1          1          1          1 |         9 
+              bolivia |         1          1          1          1          1          1          1 |         9 
+             botswana |         1          1          1          1          1          1          1 |         9 
+               brazil |         1          1          1          1          1          1          1 |         9 
+               brunei |         1          0          1          0          1          0          0 |         3 
+             bulgaria |         1          1          1          1          1          1          1 |         9 
+              burundi |         0          0          0          0          0          0          1 |         1 
+             cameroon |         1          1          1          1          1          1          1 |         9 
+               canada |         1          1          1          1          1          1          1 |         9 
+                chile |         1          1          1          1          1          1          1 |         9 
+                china |         1          1          1          1          1          1          1 |         9 
+             colombia |         1          1          1          1          1          1          1 |         9 
+           costa rica |         1          1          1          1          1          1          1 |         9 
+              croatia |         0          0          0          0          0          0          1 |         3 
+                 cuba |         1          1          1          1          1          1          1 |         9 
+               cyprus |         1          1          1          1          1          1          1 |         9 
+              denmark |         1          1          1          1          1          1          1 |         9 
+             dominica |         0          0          1          0          1          0          0 |         2 
+              ecuador |         1          1          1          1          1          1          1 |         9 
+                egypt |         1          1          1          1          1          1          1 |         9 
+          el salvador |         1          1          1          1          1          1          1 |         9 
+              estonia |         0          0          0          0          0          0          1 |         1 
+             ethiopia |         0          0          0          0          0          0          0 |         1 
+                 fiji |         1          1          1          1          1          1          1 |         9 
+              finland |         1          1          1          1          1          1          1 |         9 
+               france |         1          1          1          1          1          1          1 |         9 
+                ghana |         1          1          1          1          1          1          1 |         9 
+               greece |         1          1          1          1          1          1          1 |         9 
+            guatemala |         1          1          1          1          1          1          1 |         9 
+               guyana |         1          1          1          1          1          1          1 |         9 
+                haiti |         1          1          1          1          1          1          1 |         9 
+             honduras |         1          1          1          1          1          1          1 |         9 
+            hong kong |         1          1          1          1          1          1          1 |         9 
+              hungary |         1          1          1          1          1          1          1 |         9 
+              iceland |         1          1          1          1          1          1          1 |         9 
+                india |         1          1          1          1          1          1          1 |         9 
+            indonesia |         1          1          1          1          1          1          1 |         9 
+                 iraq |         1          1          1          1          1          1          1 |         9 
+              ireland |         1          1          1          1          1          1          1 |         9 
+               israel |         1          1          1          1          1          1          1 |         9 
+                italy |         1          1          1          1          1          1          1 |         9 
+              jamaica |         1          1          1          1          1          1          1 |         9 
+                japan |         1          1          1          1          1          1          1 |         9 
+               jordan |         1          1          1          1          1          1          1 |         9 
+                kenya |         1          1          1          1          1          1          1 |         9 
+               kuwait |         1          1          1          1          1          1          1 |         9 
+               latvia |         0          0          0          0          0          0          1 |         1 
+              lesotho |         1          1          1          1          1          1          1 |         9 
+              liberia |         1          1          1          1          1          1          1 |         9 
+                libya |         0          1          0          1          0          1          0 |         3 
+            lithuania |         0          0          0          0          0          0          1 |         1 
+               malawi |         1          1          1          1          1          1          1 |         9 
+             malaysia |         1          1          1          1          1          1          1 |         9 
+                 mali |         1          1          1          1          1          1          1 |         9 
+                malta |         1          1          1          1          1          1          1 |         9 
+           mauritania |         0          0          0          0          0          0          1 |         1 
+            mauritius |         1          1          1          1          1          1          1 |         9 
+               mexico |         1          1          1          1          1          1          1 |         9 
+              moldova |         0          0          0          0          0          0          1 |         1 
+           mozambique |         1          1          1          1          1          1          1 |         9 
+              namibia |         1          0          0          0          0          0          1 |         2 
+                nepal |         1          1          1          1          1          1          1 |         9 
+          netherlands |         1          1          1          1          1          1          1 |         9 
+          new zealand |         1          1          1          1          1          1          1 |         9 
+            nicaragua |         1          1          1          1          1          1          1 |         9 
+                niger |         1          1          1          1          1          1          1 |         9 
+               norway |         1          1          1          1          1          1          1 |         9 
+             pakistan |         1          1          1          1          1          1          1 |         9 
+               panama |         1          1          1          1          1          1          1 |         9 
+             paraguay |         1          1          1          1          1          1          1 |         9 
+                 peru |         1          1          1          1          1          1          1 |         9 
+          philippines |         1          1          1          1          1          1          1 |         9 
+               poland |         1          1          1          1          1          1          1 |         9 
+             portugal |         1          1          1          1          1          1          1 |         9 
+              romania |         1          1          1          1          1          1          1 |         9 
+               rwanda |         1          1          1          1          1          1          1 |         9 
+              senegal |         1          1          1          1          1          1          1 |         9 
+           seychelles |         1          0          1          0          0          1          0 |         3 
+         sierra leone |         1          1          1          1          1          1          1 |         9 
+            singapore |         1          1          1          1          1          1          1 |         9 
+             slovenia |         0          0          0          0          0          0          1 |         3 
+      solomon islands |         0          0          0          1          0          0          0 |         1 
+         south africa |         1          1          1          1          1          1          1 |         9 
+                spain |         1          1          1          1          1          1          1 |         9 
+            sri lanka |         1          1          1          1          1          1          1 |         9 
+                sudan |         1          1          1          1          1          1          1 |         9 
+            swaziland |         1          1          1          1          1          1          1 |         9 
+               sweden |         1          1          1          1          1          1          1 |         9 
+          switzerland |         1          1          1          1          1          1          1 |         9 
+                syria |         1          1          1          1          1          1          1 |         9 
+               taiwan |         1          1          1          1          1          1          1 |         9 
+           tajikistan |         0          0          0          0          0          0          1 |         1 
+             thailand |         1          1          1          1          1          1          1 |         9 
+                 togo |         1          1          1          1          1          1          1 |         9 
+              tunisia |         1          1          1          1          1          1          1 |         9 
+               turkey |         1          1          1          1          1          1          1 |         9 
+               uganda |         1          1          1          1          1          1          1 |         9 
+       united kingdom |         1          1          1          1          1          1          1 |         9 
+        united states |         1          1          1          1          1          1          1 |         9 
+              uruguay |         1          1          1          1          1          1          1 |         9 
+              vanuatu |         0          0          0          0          1          0          0 |         1 
+            venezuela |         1          1          1          1          1          1          1 |         9 
+               zambia |         1          1          1          1          1          1          1 |         9 
+             zimbabwe |         1          1          1          1          1          1          1 |         9 
+----------------------+-----------------------------------------------------------------------------+----------
+                Total |        99         97        100         98        100         98        107 |       896 
+
+
+                      |  Year_of_observation
+         Country_name |      1995       2000 |     Total
+----------------------+----------------------+----------
+          afghanistan |         1          1 |         9 
+              algeria |         1          1 |         9 
+            argentina |         1          1 |         9 
+            australia |         1          1 |         9 
+              austria |         1          1 |         9 
+              bahrain |         1          1 |         9 
+           bangladesh |         1          1 |         9 
+             barbados |         1          1 |         9 
+              belgium |         1          1 |         9 
+               belize |         0          0 |         3 
+                benin |         1          1 |         9 
+              bolivia |         1          1 |         9 
+             botswana |         1          1 |         9 
+               brazil |         1          1 |         9 
+               brunei |         0          0 |         3 
+             bulgaria |         1          1 |         9 
+              burundi |         0          0 |         1 
+             cameroon |         1          1 |         9 
+               canada |         1          1 |         9 
+                chile |         1          1 |         9 
+                china |         1          1 |         9 
+             colombia |         1          1 |         9 
+           costa rica |         1          1 |         9 
+              croatia |         1          1 |         3 
+                 cuba |         1          1 |         9 
+               cyprus |         1          1 |         9 
+              denmark |         1          1 |         9 
+             dominica |         0          0 |         2 
+              ecuador |         1          1 |         9 
+                egypt |         1          1 |         9 
+          el salvador |         1          1 |         9 
+              estonia |         0          0 |         1 
+             ethiopia |         1          0 |         1 
+                 fiji |         1          1 |         9 
+              finland |         1          1 |         9 
+               france |         1          1 |         9 
+                ghana |         1          1 |         9 
+               greece |         1          1 |         9 
+            guatemala |         1          1 |         9 
+               guyana |         1          1 |         9 
+                haiti |         1          1 |         9 
+             honduras |         1          1 |         9 
+            hong kong |         1          1 |         9 
+              hungary |         1          1 |         9 
+              iceland |         1          1 |         9 
+                india |         1          1 |         9 
+            indonesia |         1          1 |         9 
+                 iraq |         1          1 |         9 
+              ireland |         1          1 |         9 
+               israel |         1          1 |         9 
+                italy |         1          1 |         9 
+              jamaica |         1          1 |         9 
+                japan |         1          1 |         9 
+               jordan |         1          1 |         9 
+                kenya |         1          1 |         9 
+               kuwait |         1          1 |         9 
+               latvia |         0          0 |         1 
+              lesotho |         1          1 |         9 
+              liberia |         1          1 |         9 
+                libya |         0          0 |         3 
+            lithuania |         0          0 |         1 
+               malawi |         1          1 |         9 
+             malaysia |         1          1 |         9 
+                 mali |         1          1 |         9 
+                malta |         1          1 |         9 
+           mauritania |         0          0 |         1 
+            mauritius |         1          1 |         9 
+               mexico |         1          1 |         9 
+              moldova |         0          0 |         1 
+           mozambique |         1          1 |         9 
+              namibia |         0          0 |         2 
+                nepal |         1          1 |         9 
+          netherlands |         1          1 |         9 
+          new zealand |         1          1 |         9 
+            nicaragua |         1          1 |         9 
+                niger |         1          1 |         9 
+               norway |         1          1 |         9 
+             pakistan |         1          1 |         9 
+               panama |         1          1 |         9 
+             paraguay |         1          1 |         9 
+                 peru |         1          1 |         9 
+          philippines |         1          1 |         9 
+               poland |         1          1 |         9 
+             portugal |         1          1 |         9 
+              romania |         1          1 |         9 
+               rwanda |         1          1 |         9 
+              senegal |         1          1 |         9 
+           seychelles |         0          0 |         3 
+         sierra leone |         1          1 |         9 
+            singapore |         1          1 |         9 
+             slovenia |         1          1 |         3 
+      solomon islands |         0          0 |         1 
+         south africa |         1          1 |         9 
+                spain |         1          1 |         9 
+            sri lanka |         1          1 |         9 
+                sudan |         1          1 |         9 
+            swaziland |         1          1 |         9 
+               sweden |         1          1 |         9 
+          switzerland |         1          1 |         9 
+                syria |         1          1 |         9 
+               taiwan |         1          1 |         9 
+           tajikistan |         0          0 |         1 
+             thailand |         1          1 |         9 
+                 togo |         1          1 |         9 
+              tunisia |         1          1 |         9 
+               turkey |         1          1 |         9 
+               uganda |         1          1 |         9 
+       united kingdom |         1          1 |         9 
+        united states |         1          1 |         9 
+              uruguay |         1          1 |         9 
+              vanuatu |         0          0 |         1 
+            venezuela |         1          1 |         9 
+               zambia |         1          1 |         9 
+             zimbabwe |         1          1 |         9 
+----------------------+----------------------+----------
+                Total |        99         98 |       896 

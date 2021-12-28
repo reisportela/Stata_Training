@@ -1,0 +1,777 @@
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/4.output_export/logs/output_export.txt
+  log type:  text
+ opened on:  19 May 2021, 16:51:24
+r; t=0.00 16:51:24
+
+. 
+. // # 1. produce word and latex tables after tab and list
+. 
+.         use data/growth_data, clear
+r; t=0.00 16:51:24
+
+. 
+.         preserve
+r; t=0.00 16:51:24
+
+.                 keep rgdpwok pop openk ki /*lnk education*/
+r; t=0.00 16:51:24
+
+.                 format %12.3f rgdpwok pop openk ki /*lnk education*/
+r; t=0.00 16:51:24
+
+. 
+.                         outreg2 using logs/sum.doc, sum(detail) word eqkeep(N mean p50 sd min max) replace
+
+                  Population (in thousands)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%      127.554         41.662
+ 5%      364.001         54.106
+10%          805         67.175       Obs                 896
+25%     3113.671         69.785       Sum of Wgt.         896
+
+50%     8099.022                      Mean           36524.41
+                        Largest       Std. Dev.        124848
+75%     20652.76        1058008
+90%        57784        1148365       Variance       1.56e+10
+95%     122291.8        1215788       Skewness       6.807138
+99%     838158.8        1263638       Kurtosis       53.40407
+
+      Investment Share of PPP Converted GDP Per Capita
+               at 2005 constant prices [rgdpl]
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     3.623163       1.446131
+ 5%     7.916571       1.547431
+10%     10.86709        1.66466       Obs                 856
+25%     16.16851       2.054982       Sum of Wgt.         856
+
+50%     21.38498                      Mean            23.1607
+                        Largest       Std. Dev.      11.73793
+75%     27.61269       78.66671
+90%     37.75682       79.89515       Variance        137.779
+95%     44.77809       107.7541       Skewness       1.856472
+99%     62.32471       111.2905       Kurtosis       11.12643
+
+            Openness at 2005 constant prices (%)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%      7.78552       2.319838
+ 5%     13.13677       2.330925
+10%     18.81702       2.514998       Obs                 856
+25%     30.25072       5.807106       Sum of Wgt.         856
+
+50%     50.05203                      Mean           63.34099
+                        Largest       Std. Dev.      52.06298
+75%     78.40037        335.939
+90%      124.411       346.3693       Variance       2710.554
+95%     159.1463       393.9669       Skewness       2.479568
+99%     290.2023       395.9767       Kurtosis       12.00654
+
+         PPP Converted GDP Chain per worker at 2005
+                       constant prices
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%      820.097       396.7613
+ 5%     1470.394       680.4185
+10%     1869.247       688.3165       Obs                 855
+25%     4144.063       689.6256       Sum of Wgt.         855
+
+50%     12840.54                      Mean           19846.39
+                        Largest       Std. Dev.      21521.75
+75%     30059.78       85669.11
+90%     49808.75       96111.57       Variance       4.63e+08
+95%     58815.88         188886       Skewness       3.166442
+99%     74706.38       271192.1       Kurtosis       28.26493
+
+
+logs/sum.doc
+dir : seeout
+r; t=0.19 16:51:24
+
+.         restore
+r; t=0.00 16:51:24
+
+.         
+.         recode education min/2 = 2 2.0001/4 = 4 4.0001/6 = 6 6.0001/9=9 9.0001/12=12 12.0001/max=16
+(education: 874 changes made)
+r; t=0.00 16:51:24
+
+.         format %2.0f education
+r; t=0.00 16:51:24
+
+.         
+.         drop if education < 10
+(797 observations deleted)
+r; t=0.00 16:51:24
+
+.         
+.         replace country = proper(country)
+(99 real changes made)
+r; t=0.00 16:51:24
+
+. 
+.         tabout country educ using logs/country_educ.txt, cells(freq col cum) format(0 1) clab(No. Col_% Cum_%) repl
+> ace
+
+Table output written to: logs/country_educ.txt
+
+        education                                                               
+Country name    12      12      12      16      16      16      Total   Total   Total
+        No.     Col %   Cum %   No.     Col %   Cum %   No.     Col %   Cum %
+Australia       9       11.1    11.1    0       0.0     0.0     9       10.8    10.8
+Barbados        2       2.5     13.6    0       0.0     0.0     2       2.4     13.3
+Bulgaria        3       3.7     17.3    0       0.0     0.0     3       3.6     16.9
+Canada  6       7.4     24.7    0       0.0     0.0     6       7.2     24.1
+Denmark 5       6.2     30.9    0       0.0     0.0     5       6.0     30.1
+Estonia 1       1.2     32.1    0       0.0     0.0     1       1.2     31.3
+Finland 3       3.7     35.8    0       0.0     0.0     3       3.6     34.9
+Hong Kong       2       2.5     38.3    0       0.0     0.0     2       2.4     37.3
+Ireland 1       1.2     39.5    0       0.0     0.0     1       1.2     38.6
+Israel  5       6.2     45.7    0       0.0     0.0     5       6.0     44.6
+Japan   3       3.7     49.4    0       0.0     0.0     3       3.6     48.2
+Latvia  1       1.2     50.6    0       0.0     0.0     1       1.2     49.4
+Lithuania       1       1.2     51.9    0       0.0     0.0     1       1.2     50.6
+Moldova 1       1.2     53.1    0       0.0     0.0     1       1.2     51.8
+Netherlands     1       1.2     54.3    0       0.0     0.0     1       1.2     53.0
+New Zealand     9       11.1    65.4    0       0.0     0.0     9       10.8    63.9
+Norway  3       3.7     69.1    0       0.0     0.0     3       3.6     67.5
+Poland  3       3.7     72.8    0       0.0     0.0     3       3.6     71.1
+Romania 3       3.7     76.5    0       0.0     0.0     3       3.6     74.7
+Sweden  5       6.2     82.7    0       0.0     0.0     5       6.0     80.7
+Switzerland     5       6.2     88.9    0       0.0     0.0     5       6.0     86.7
+Tajikistan      1       1.2     90.1    0       0.0     0.0     1       1.2     88.0
+United Kingdom  2       2.5     92.6    0       0.0     0.0     2       2.4     90.4
+United States   6       7.4     100.0   2       100.0   100.0   8       9.6     100.0
+Total   81      100.0           2       100.0           83      100.0   
+r; t=0.11 16:51:24
+
+.         
+. // # 2. GRAPH EXPORT & LABEL
+. 
+. use data/growth_data, clear
+r; t=0.00 16:51:24
+
+.         gen lnrgdpwok = ln(rgdpwok)
+(41 missing values generated)
+r; t=0.00 16:51:24
+
+.         gen lnrgdpl = ln(rgdpl)
+(40 missing values generated)
+r; t=0.00 16:51:24
+
+. 
+.         label var lnrgdpwok "Ln Real GDP per Worker"
+r; t=0.00 16:51:24
+
+.         label var lnrgdpwok "Ln Real GDP per Capita"
+r; t=0.00 16:51:24
+
+.         label var education "Average Years of Education"
+r; t=0.00 16:51:24
+
+.         
+.         scatter lnrgdpwok educ if year == 2000, scheme(mono)
+(note: scheme mono not found, using s2color)
+r; t=0.59 16:51:25
+
+.         scatter lnrgdpwok educ if year == 2000, scheme(economist)
+r; t=0.47 16:51:25
+
+.         scatter lnrgdpwok educ if year == 2000, scheme(sj)
+r; t=0.48 16:51:26
+
+.         
+.         gen cty = substr(country,1,3)
+r; t=0.00 16:51:26
+
+.         scatter lnrgdpwok educ if year == 2000, scheme(mono) mlabel(cty)
+(note: scheme mono not found, using s2color)
+r; t=0.42 16:51:26
+
+. 
+.         egen cty_id = group(country)
+r; t=0.04 16:51:26
+
+.         scatter lnrgdpwok educ if year == 2000, scheme(mono) mlabel(cty_id)
+(note: scheme mono not found, using s2color)
+r; t=0.44 16:51:27
+
+.         
+.         twoway kdensity lnrgdpl,legend(on label(1 "Ln GDP per capita")) || /*
+>         */ kdensity lnrgdpwok,legend(on label(2 "Ln GDP per worker"))
+r; t=0.45 16:51:27
+
+. 
+.         twoway scatter lnrgdpwok education || lfit lnrgdpwok education, title("GDP Data")
+r; t=0.39 16:51:28
+
+.                 graph export graphs/gdp_education.png, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/4.output_export/graphs/gdp_education.png written in PNG 
+> format)
+r; t=0.17 16:51:28
+
+.         
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/4.output_export/logs/output_export.txt
+  log type:  text
+ closed on:  19 May 2021, 16:51:28
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/4.output_export/logs/output_export.txt
+  log type:  text
+ opened on:  19 May 2021, 16:51:29
+r; t=0.00 16:51:29
+
+. 
+. 
+. // # 1. example A
+. 
+. use data/growth_data, clear
+r; t=0.00 16:51:29
+
+. 
+.         reg lngdp education
+
+      Source |       SS           df       MS      Number of obs   =       839
+-------------+----------------------------------   F(1, 837)       =   1166.30
+       Model |  713.134483         1  713.134483   Prob > F        =    0.0000
+    Residual |  511.783987       837  .611450403   R-squared       =    0.5822
+-------------+----------------------------------   Adj R-squared   =    0.5817
+       Total |  1224.91847       838  1.46171655   Root MSE        =    .78195
+
+------------------------------------------------------------------------------
+       lngdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   education |   .3193264   .0093504    34.15   0.000     .3009735    .3376794
+       _cons |   7.777255   .0523278   148.63   0.000     7.674546    7.879965
+------------------------------------------------------------------------------
+r; t=0.07 16:51:29
+
+.                 estimates store r1
+r; t=0.00 16:51:29
+
+.         
+.         reg lngdp education lnk
+
+      Source |       SS           df       MS      Number of obs   =       234
+-------------+----------------------------------   F(2, 231)       =    133.37
+       Model |  131.889595         2  65.9447974   Prob > F        =    0.0000
+    Residual |  114.220901       231  .494462776   R-squared       =    0.5359
+-------------+----------------------------------   Adj R-squared   =    0.5319
+       Total |  246.110496       233  1.05626822   Root MSE        =    .70318
+
+------------------------------------------------------------------------------
+       lngdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   education |   .2116552   .0201276    10.52   0.000     .1719981    .2513123
+         lnk |   .1246923   .0290613     4.29   0.000     .0674333    .1819514
+       _cons |   5.408527   .6765897     7.99   0.000     4.075451    6.741602
+------------------------------------------------------------------------------
+r; t=0.00 16:51:29
+
+.                 est store r2
+r; t=0.00 16:51:29
+
+.                 
+.         reg lngdp education lnk openk i.year
+
+      Source |       SS           df       MS      Number of obs   =       234
+-------------+----------------------------------   F(7, 226)       =     46.99
+       Model |  145.879746         7  20.8399637   Prob > F        =    0.0000
+    Residual |   100.23075       226  .443498894   R-squared       =    0.5927
+-------------+----------------------------------   Adj R-squared   =    0.5801
+       Total |  246.110496       233  1.05626822   Root MSE        =    .66596
+
+------------------------------------------------------------------------------
+       lngdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   education |   .2136664   .0193553    11.04   0.000     .1755265    .2518063
+         lnk |   .1978085   .0308039     6.42   0.000     .1371089    .2585082
+       openk |   .0062439   .0011852     5.27   0.000     .0039085    .0085794
+             |
+        year |
+       1975  |  -.0694608   .1387178    -0.50   0.617    -.3428064    .2038849
+       1980  |   -.177992   .1401702    -1.27   0.205    -.4541996    .0982156
+       1985  |  -.2226975   .1400607    -1.59   0.113    -.4986894    .0532943
+       1990  |    -.34965   .1425169    -2.45   0.015    -.6304819   -.0688182
+             |
+       _cons |    3.38917   .7508785     4.51   0.000     1.909552    4.868789
+------------------------------------------------------------------------------
+r; t=0.00 16:51:29
+
+.                 est store r3
+r; t=0.00 16:51:29
+
+. 
+. outreg, clear
+r; t=0.10 16:51:29
+
+.         estimates restore r1
+(results r1 are active now)
+r; t=0.00 16:51:29
+
+.                 outreg using logs/growth_analysis, replace rtitles("Education" \ "" \ "Capital" \ "" \ "Openness de
+> gree" \ "")  /*
+>                                 */ drop(_cons) /*
+>                                 */ ctitle("","Simple model") /*
+>                                 */ nodisplay varlabels bdec(3) se starlevels(10 5 1) starloc(1) summstat(r2\rmse \ 
+> N) summtitle("R2"\"RMSE" \ "N")
+r; t=0.01 16:51:29
+
+.         
+.         estimates restore r2
+(results r2 are active now)
+r; t=0.00 16:51:29
+
+.                 outreg using logs/growth_analysis, merge rtitles("Education" \ "" \ "Capital" \ "" \ "Openness degr
+> ee" \ "")  /*
+>                                 */ drop(_cons) /*
+>                                 */ ctitle("","Include capital") /*
+>                                 */ varlabels bdec(3) se starlevels(10 5 1) starloc(1) summstat(r2\rmse \ N) summtit
+> le("R2"\"RMSE" \ "N")
+
+                                 --------------------------------------------------
+                                                    Simple model  Include capital 
+                                 --------------------------------------------------
+                                  Education           0.319***       0.212***     
+                                                      (0.009)         (0.020)     
+                                  Capital                            0.125***     
+                                                                      (0.029)     
+                                  Openness degree                                 
+                                  R2                    0.58           0.54       
+                                  RMSE                  0.78           0.70       
+                                  N                     839             234       
+                                 --------------------------------------------------
+                                           * p<0.1; ** p<0.05; *** p<0.01
+
+r; t=0.00 16:51:29
+
+.                 
+.         estimates restore r3
+(results r3 are active now)
+r; t=0.00 16:51:29
+
+.                 outreg using logs/growth_analysis, merge rtitles("Education" \ "" \ "Capital" \ "" \ "Openness degr
+> ee" \ "")  /*
+>                                 */ drop(_cons 1975.year 1980.year 1985.year 1990.year) /*
+>                                 */ ctitle("","Full model") /*
+>                                 */ nodisplay varlabels bdec(3) se starlevels(10 5 1) starloc(1) summstat(r2\rmse \ 
+> N) summtitle("R2"\"RMSE" \ "N")
+r; t=0.00 16:51:29
+
+.                                 
+. 
+. // # 1. example B, 'margins'
+. 
+. sysuse auto, clear
+(1978 Automobile Data)
+r; t=0.00 16:51:29
+
+.         codebook, compact
+
+Variable      Obs Unique      Mean   Min    Max  Label
+---------------------------------------------------------------------------------------------------------------------
+make           74     74         .     .      .  Make and Model
+price          74     74  6165.257  3291  15906  Price
+mpg            74     21   21.2973    12     41  Mileage (mpg)
+rep78          69      5  3.405797     1      5  Repair Record 1978
+headroom       74      8  2.993243   1.5      5  Headroom (in.)
+trunk          74     18  13.75676     5     23  Trunk space (cu. ft.)
+weight         74     64  3019.459  1760   4840  Weight (lbs.)
+length         74     47  187.9324   142    233  Length (in.)
+turn           74     18  39.64865    31     51  Turn Circle (ft.)
+displacement   74     31  197.2973    79    425  Displacement (cu. in.)
+gear_ratio     74     36  3.014865  2.19   3.89  Gear Ratio
+foreign        74      2  .2972973     0      1  Car type
+---------------------------------------------------------------------------------------------------------------------
+r; t=0.01 16:51:29
+
+.         sum price
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |         74    6165.257    2949.496       3291      15906
+r; t=0.00 16:51:29
+
+. 
+. logit foreign mpg
+
+Iteration 0:   log likelihood =  -45.03321  
+Iteration 1:   log likelihood = -39.380959  
+Iteration 2:   log likelihood = -39.288802  
+Iteration 3:   log likelihood =  -39.28864  
+Iteration 4:   log likelihood =  -39.28864  
+
+Logistic regression                             Number of obs     =         74
+                                                LR chi2(1)        =      11.49
+                                                Prob > chi2       =     0.0007
+Log likelihood =  -39.28864                     Pseudo R2         =     0.1276
+
+------------------------------------------------------------------------------
+     foreign |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         mpg |   .1597621   .0525876     3.04   0.002     .0566922     .262832
+       _cons |  -4.378866   1.211295    -3.62   0.000    -6.752961   -2.004771
+------------------------------------------------------------------------------
+r; t=0.32 16:51:29
+
+.         margins, dydx(*)
+
+Average marginal effects                        Number of obs     =         74
+Model VCE    : OIM
+
+Expression   : Pr(foreign), predict()
+dy/dx w.r.t. : mpg
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         mpg |   .0281154   .0071019     3.96   0.000     .0141959    .0420349
+------------------------------------------------------------------------------
+r; t=0.04 16:51:29
+
+. 
+. outreg using logs/margins_example, nodisplay replace marginal ctitle("","Model 1") bdec(4) se starlevels(10 5 1) st
+> arloc(1) rtitles("Miles p.g." \ "" \ "Car's weight" \ "")
+r; t=0.00 16:51:29
+
+. 
+. logit foreign mpg weight
+
+Iteration 0:   log likelihood =  -45.03321  
+Iteration 1:   log likelihood = -29.238536  
+Iteration 2:   log likelihood = -27.244139  
+Iteration 3:   log likelihood = -27.175277  
+Iteration 4:   log likelihood = -27.175156  
+Iteration 5:   log likelihood = -27.175156  
+
+Logistic regression                             Number of obs     =         74
+                                                LR chi2(2)        =      35.72
+                                                Prob > chi2       =     0.0000
+Log likelihood = -27.175156                     Pseudo R2         =     0.3966
+
+------------------------------------------------------------------------------
+     foreign |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         mpg |  -.1685869   .0919175    -1.83   0.067    -.3487418     .011568
+      weight |  -.0039067   .0010116    -3.86   0.000    -.0058894    -.001924
+       _cons |   13.70837   4.518709     3.03   0.002     4.851859    22.56487
+------------------------------------------------------------------------------
+r; t=0.01 16:51:29
+
+.         margins, dydx(*)
+
+Average marginal effects                        Number of obs     =         74
+Model VCE    : OIM
+
+Expression   : Pr(foreign), predict()
+dy/dx w.r.t. : mpg weight
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         mpg |  -.0197187   .0096987    -2.03   0.042    -.0387277   -.0007096
+      weight |  -.0004569   .0000571    -8.01   0.000    -.0005688   -.0003451
+------------------------------------------------------------------------------
+r; t=0.02 16:51:29
+
+. 
+. outreg using logs/margins_example, nodisplay merge marginal ctitle("","Model 2") bdec(4) se starlevels(10 5 1) star
+> loc(1) rtitles("Miles p.g." \ "" \ "Car's weight" \ "")
+r; t=0.00 16:51:29
+
+. 
+. // -- ESTTAB
+. 
+. // # 1. Data
+. webuse nlswork, clear
+(National Longitudinal Survey.  Young Women 14-26 years of age in 1968)
+r; t=1.90 16:51:31
+
+.         gen wage = exp(ln_wage)
+r; t=0.00 16:51:31
+
+.         compress
+  (0 bytes saved)
+r; t=0.00 16:51:31
+
+.         sort idcode year
+r; t=0.00 16:51:31
+
+.         xtset idcode year
+       panel variable:  idcode (unbalanced)
+        time variable:  year, 68 to 88, but with gaps
+                delta:  1 unit
+r; t=0.03 16:51:31
+
+.         save data/nlswork_local, replace
+file data/nlswork_local.dta saved
+r; t=0.00 16:51:31
+
+. 
+.         codebook, compact
+
+Variable     Obs Unique      Mean  Min       Max  Label
+---------------------------------------------------------------------------------------------------------------------
+idcode     28534   4711  2601.284    1      5159  NLS ID
+year       28534     15  77.95865   68        88  interview year
+birth_yr   28534     14  48.08509   41        54  birth year
+age        28510     33  29.04511   14        46  age in current year
+race       28534      3  1.303392    1         3  race
+msp        28518      2  .6029175    0         1  1 if married, spouse present
+nev_mar    28518      2  .2296795    0         1  1 if never married
+grade      28532     19  12.53259    0        18  current grade completed
+collgrad   28534      2  .1680451    0         1  1 if college graduate
+not_smsa   28526      2  .2824441    0         1  1 if not SMSA
+c_city     28526      2   .357218    0         1  1 if central city
+south      28526      2  .4095562    0         1  1 if south
+ind_code   28193     12  7.692973    1        12  industry of employment
+occ_code   28413     13  4.777672    1        13  occupation
+union      19238      2  .2344319    0         1  1 if union
+wks_ue     22830     61  2.548095    0        76  weeks unemployed last year
+ttl_exp    28534   4744  6.215316    0  28.88461  total work experience
+tenure     28101    270  3.123836    0  25.91667  job tenure, in years
+hours      28467     85  36.55956    1       168  usual hours worked
+wks_work   27831    105  53.98933    0       104  weeks worked last year
+ln_wage    28534   8173  1.674907    0  5.263916  ln(wage/GNP deflator)
+wage       28534   8172  6.048016    1  193.2367  
+---------------------------------------------------------------------------------------------------------------------
+r; t=0.26 16:51:31
+
+. 
+. // 2. Statistics
+. 
+. label var age "Age (years)"
+r; t=0.00 16:51:31
+
+. label var collgrad "Graduate"
+r; t=0.00 16:51:31
+
+. label var union "Union"
+r; t=0.00 16:51:31
+
+. label var ttl_exp "Experience (years)"
+r; t=0.00 16:51:31
+
+. label var tenure "Tenure (years)"
+r; t=0.00 16:51:31
+
+. label var hours "Working hours"
+r; t=0.00 16:51:31
+
+. label var ln_wage "Wage (log)"
+r; t=0.00 16:51:31
+
+. 
+. estpost sum age collgrad union ttl_exp tenure hours ln_wage if year == 88, listwise
+
+             |  e(count)   e(sum_w)    e(mean)     e(Var)      e(sd)     e(min)     e(max)     e(sum) 
+-------------+----------------------------------------------------------------------------------------
+         age |      1870       1870   39.22193   9.226806   3.037566         34         46      73345 
+    collgrad |      1870       1870   .2481283   .1866605   .4320422          0          1        464 
+       union |      1870       1870   .2465241   .1858493   .4311025          0          1        461 
+     ttl_exp |      1870       1870   12.84127   21.12986   4.596723   .1153846   28.88461   24013.17 
+      tenure |      1870       1870   6.570989   31.79628   5.638819          0   25.91667   12287.75 
+       hours |      1870       1870   37.63316   101.2854   10.06406          1        100      70374 
+     ln_wage |      1870       1870   1.896219    .273281   .5227628   .2961001   5.263916    3545.93 
+r; t=0.01 16:51:31
+
+.         
+.         esttab, cells("mean(fmt(4)) sd(fmt(3)) min(fmt(2)) max(fmt(1))") nomtitle nonumber label
+
+------------------------------------------------------------------------
+                             mean           sd          min          max
+------------------------------------------------------------------------
+Age (years)               39.2219        3.038        34.00         46.0
+Graduate                   0.2481        0.432         0.00          1.0
+Union                      0.2465        0.431         0.00          1.0
+Experience (years)        12.8413        4.597         0.12         28.9
+Tenure (years)             6.5710        5.639         0.00         25.9
+Working hours             37.6332       10.064         1.00        100.0
+Wage (log)                 1.8962        0.523         0.30          5.3
+------------------------------------------------------------------------
+Observations                 1870                                       
+------------------------------------------------------------------------
+r; t=0.03 16:51:31
+
+. 
+.         esttab using _text/tables/descriptives_table1.tex, replace cells("mean(fmt(4)) sd(fmt(3)) min(fmt(2)) max(f
+> mt(1))") nomtitle nonumber label
+(output written to _text/tables/descriptives_table1.tex)
+r; t=0.03 16:51:31
+
+.         
+.         twoway (kdensity ln_wage if union == 0) (kdensity ln_wage if union == 1),scheme(sj) graphregion(color(white
+> )) legend(region(color(white))) legend(order(1 "Non-Union" 2 "Union")) ytitle("Density") xtitle("Wage (log)")
+r; t=0.79 16:51:32
+
+.         
+.         graph export _text/figures/fig_wage_density_union.eps, replace
+(file _text/figures/fig_wage_density_union.eps written in EPS format)
+r; t=0.00 16:51:32
+
+. 
+. // 3. Regression analysis
+. 
+. reg ln_wage ttl_exp union i.year
+
+      Source |       SS           df       MS      Number of obs   =    19,238
+-------------+----------------------------------   F(13, 19224)    =    358.32
+       Model |  821.128092        13  63.1636994   Prob > F        =    0.0000
+    Residual |  3388.78398    19,224  .176278817   R-squared       =    0.1950
+-------------+----------------------------------   Adj R-squared   =    0.1945
+       Total |  4209.91207    19,237  .218844522   Root MSE        =    .41986
+
+------------------------------------------------------------------------------
+     ln_wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0509492   .0009353    54.47   0.000     .0491158    .0527825
+       union |   .1891156   .0071837    26.33   0.000     .1750348    .2031963
+             |
+        year |
+         71  |   .0091741   .0202773     0.45   0.651    -.0305712    .0489193
+         72  |  -.0081758   .0190692    -0.43   0.668    -.0455531    .0292015
+         73  |  -.0274795   .0197622    -1.39   0.164    -.0662152    .0112562
+         77  |  -.0751344   .0175503    -4.28   0.000    -.1095346   -.0407342
+         78  |  -.0305105   .0190736    -1.60   0.110    -.0678963    .0068754
+         80  |  -.1303222   .0185739    -7.02   0.000    -.1667287   -.0939158
+         82  |  -.1832471   .0182765   -10.03   0.000    -.2190707   -.1474235
+         83  |  -.1744143   .0189043    -9.23   0.000    -.2114684   -.1373601
+         85  |  -.1930536   .0189896   -10.17   0.000    -.2302748   -.1558324
+         87  |  -.2435542   .0194171   -12.54   0.000    -.2816135   -.2054949
+         88  |  -.2570863   .0202171   -12.72   0.000    -.2967136    -.217459
+             |
+       _cons |   1.449961   .0150999    96.02   0.000     1.420363    1.479558
+------------------------------------------------------------------------------
+r; t=0.02 16:51:32
+
+.         est store ols
+r; t=0.00 16:51:32
+
+. 
+. xtreg ln_wage ttl_exp union i.year, fe
+
+Fixed-effects (within) regression               Number of obs     =     19,238
+Group variable: idcode                          Number of groups  =      4,150
+
+R-sq:                                           Obs per group:
+     within  = 0.1434                                         min =          1
+     between = 0.2535                                         avg =        4.6
+     overall = 0.1908                                         max =         12
+
+                                                F(13,15075)       =     194.16
+corr(u_i, Xb)  = 0.1121                         Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+     ln_wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0441618   .0015966    27.66   0.000     .0410323    .0472913
+       union |   .1009257   .0069226    14.58   0.000     .0873564    .1144949
+             |
+        year |
+         71  |   .0031987   .0134573     0.24   0.812    -.0231793    .0295766
+         72  |   -.020328   .0129642    -1.57   0.117    -.0457393    .0050833
+         73  |  -.0418055    .013637    -3.07   0.002    -.0685355   -.0150754
+         77  |  -.0813944   .0135614    -6.00   0.000    -.1079765   -.0548124
+         78  |  -.0628454   .0147277    -4.27   0.000    -.0917135   -.0339774
+         80  |  -.1409966   .0156806    -8.99   0.000    -.1717325   -.1102607
+         82  |  -.1791566   .0170563   -10.50   0.000    -.2125891   -.1457242
+         83  |  -.1828786    .018182   -10.06   0.000    -.2185175   -.1472396
+         85  |  -.2081133   .0199181   -10.45   0.000    -.2471552   -.1690714
+         87  |  -.2476665   .0219559   -11.28   0.000    -.2907027   -.2046303
+         88  |  -.2600918   .0237941   -10.93   0.000    -.3067311   -.2134524
+             |
+       _cons |   1.531584    .010593   144.58   0.000      1.51082    1.552347
+-------------+----------------------------------------------------------------
+     sigma_u |  .38056958
+     sigma_e |  .25527224
+         rho |  .68969138   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(4149, 15075) = 8.90                 Prob > F = 0.0000
+r; t=0.09 16:51:32
+
+.         est store fe
+r; t=0.00 16:51:32
+
+. 
+.         esttab ols fe, ///
+>                 drop(*.year _cons) ///
+>                 b(%6.3f) se(%6.3f)  sfmt(%5.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                 mlabel("OLS" "FE") nonumbers ///
+>                 scalars("N Observations" "N_g Firms" "r2_w R-sq-within" "r2_b R-sq-between" "rho Rho" "corr corr(u_
+> i,Xb)") label ///
+>                 nonotes addnotes("Notes: robust standard errors in parenthesis (clustered at the sector level)." "S
+> ignificance levels: *, 10 %; **, 5 %; ***, 1 %." "All regressions include a constant and time dummies.") title("Reg
+> ression analysis -- Wages (logs)")
+
+Regression analysis -- Wages (logs)
+----------------------------------------------------
+                              OLS              FE   
+----------------------------------------------------
+Experience (years)          0.051***        0.044***
+                          (0.001)         (0.002)   
+
+Union                       0.189***        0.101***
+                          (0.007)         (0.007)   
+----------------------------------------------------
+Observations                19238           19238   
+Firms                                     4150.00   
+R-sq-within                                  0.14   
+R-sq-between                                 0.25   
+Rho                                          0.69   
+corr(u_i,Xb)                                 0.11   
+----------------------------------------------------
+Notes: robust standard errors in parenthesis (clustered at the sector level).
+Significance levels: *, 10 %; **, 5 %; ***, 1 %.
+All regressions include a constant and time dummies.
+r; t=0.08 16:51:32
+
+. 
+.         esttab ols fe using logs/regression_table1.rtf, replace ///
+>                 drop(*.year _cons) ///
+>                 b(%6.3f) se(%6.3f)  sfmt(%5.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                 mlabel("OLS" "FE") nonumbers ///
+>                 scalars("N Observations" "N_g Firms" "r2_w R-sq-within" "r2_b R-sq-between" "rho Rho" "corr corr(u_
+> i,Xb)") label ///
+>                 nonotes addnotes("Notes: robust standard errors in parenthesis (clustered at the sector level)." "S
+> ignificance levels: *, 10 %; **, 5 %; ***, 1 %." "All regressions include a constant and time dummies.") title("Reg
+> ression analysis -- Wages (logs)")
+(output written to logs/regression_table1.rtf)
+r; t=0.07 16:51:33
+
+. 
+.         esttab ols fe using _text/tables/regression_table1.tex, replace ///
+>                 drop(*.year _cons) ///
+>                 b(%6.3f) se(%6.3f)  sfmt(%5.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                 mlabel("OLS" "FE") nonumbers ///
+>                 scalars("N Observations" "N_g Firms" "r2_w R-sq-within" "r2_b R-sq-between" "rho Rho" "corr corr(u_
+> i,Xb)") label ///
+>                 nonotes addnotes("Notes: robust standard errors in parenthesis (clustered at the sector level)." "S
+> ignificance levels: *, 10 \%; **, 5 \%; ***, 1 \%." "All regressions include a constant and time dummies.") title("
+> Regression analysis -- Wages (logs)\label{tb:regresults}")
+(output written to _text/tables/regression_table1.tex)
+r; t=0.04 16:51:33
+
+. 
+. // <<>> --- <<>>
+. 
+. timer off 1
+r; t=0.00 16:51:33
+
+. timer list 1
+r; t=0.00 16:51:33
+
+.                                 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/4.output_export/logs/output_export.txt
+  log type:  text
+ closed on:  19 May 2021, 16:51:33
+---------------------------------------------------------------------------------------------------------------------

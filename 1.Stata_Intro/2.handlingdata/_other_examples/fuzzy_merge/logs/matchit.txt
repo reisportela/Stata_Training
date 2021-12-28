@@ -1,0 +1,648 @@
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/_other_examples/fuzzy_merge/logs/m
+> atchit.txt
+  log type:  text
+ opened on:  19 May 2021, 14:54:18
+r; t=0.00 14:54:18
+
+. 
+. use data/pwt70, clear
+r; t=0.00 14:54:18
+
+.         des
+
+Contains data from data/pwt70.dta
+  obs:        11,400                          
+ vars:            12                          28 Jan 2015 00:28
+---------------------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------------------------------
+country         str24   %24s                  Country name
+year            int     %8.0g                 Year of observation
+isocode         str3    %9s                   Country code
+pop             float   %9.0g                 Population (in thousands)
+xrat            double  %10.0g                Exchange Rate to US$; national currency units per US dollar
+ppp             float   %9.0g                 Purchasing Power Parity over GDP (in national currency units per US$)
+rgdpl           float   %9.0g                 PPP Converted GDP Per Capita (Laspeyres), derived from growth rates of
+                                                c, g, i,
+kc              float   %9.0g                 Consumption Share of PPP Converted GDP Per Capita at 2005 constant
+                                                prices [rgdpl
+kg              float   %9.0g                 Government Consumption Share of PPP Converted GDP Per Capita at 2005
+                                                constant pr
+ki              float   %9.0g                 Investment Share of PPP Converted GDP Per Capita at 2005 constant
+                                                prices [rgdpl]
+openk           float   %9.0g                 Openness at 2005 constant prices (%)
+rgdpwok         float   %9.0g                 PPP Converted GDP Chain per worker at 2005 constant prices
+---------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+r; t=0.00 14:54:18
+
+.         keep country
+r; t=0.00 14:54:18
+
+.         bysort country: keep if _n == 1
+(11,210 observations deleted)
+r; t=0.00 14:54:18
+
+.         save tmp_files/country_pwt, replace
+file tmp_files/country_pwt.dta saved
+r; t=0.00 14:54:18
+
+. 
+. use data/data_educ, clear
+r; t=0.00 14:54:18
+
+.         des
+
+Contains data from data/data_educ.dta
+  obs:         1,086                          
+ vars:             3                          27 Jan 2015 17:29
+---------------------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------------------------------
+country         str31   %31s                  country
+year            int     %10.0g                year
+education       str5    %9s                   education
+---------------------------------------------------------------------------------------------------------------------
+Sorted by: country  year
+r; t=0.00 14:54:18
+
+.         keep country
+r; t=0.00 14:54:18
+
+.         bysort country: keep if _n == 1
+(944 observations deleted)
+r; t=0.00 14:54:18
+
+.         save tmp_files/country_educ, replace
+file tmp_files/country_educ.dta saved
+r; t=0.00 14:54:18
+
+. 
+. 
+. use tmp_files/country_pwt, clear
+r; t=0.00 14:54:18
+
+.         merge 1:1 country using tmp_files/country_educ
+(note: variable country was str24, now str31 to accommodate using data's values)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                           106
+        from master                        77  (_merge==1)
+        from using                         29  (_merge==2)
+
+    matched                               113  (_merge==3)
+    -----------------------------------------
+r; t=0.00 14:54:18
+
+.         tab country if _merge == 3
+
+                   Country name |      Freq.     Percent        Cum.
+--------------------------------+-----------------------------------
+                    afghanistan |          1        0.88        0.88
+                        algeria |          1        0.88        1.77
+                      argentina |          1        0.88        2.65
+                      australia |          1        0.88        3.54
+                        austria |          1        0.88        4.42
+                        bahrain |          1        0.88        5.31
+                     bangladesh |          1        0.88        6.19
+                       barbados |          1        0.88        7.08
+                        belgium |          1        0.88        7.96
+                         belize |          1        0.88        8.85
+                          benin |          1        0.88        9.73
+                        bolivia |          1        0.88       10.62
+                       botswana |          1        0.88       11.50
+                         brazil |          1        0.88       12.39
+                         brunei |          1        0.88       13.27
+                       bulgaria |          1        0.88       14.16
+                        burundi |          1        0.88       15.04
+                       cameroon |          1        0.88       15.93
+                         canada |          1        0.88       16.81
+                          chile |          1        0.88       17.70
+                       colombia |          1        0.88       18.58
+                     costa rica |          1        0.88       19.47
+                        croatia |          1        0.88       20.35
+                           cuba |          1        0.88       21.24
+                         cyprus |          1        0.88       22.12
+                        denmark |          1        0.88       23.01
+                       dominica |          1        0.88       23.89
+                        ecuador |          1        0.88       24.78
+                          egypt |          1        0.88       25.66
+                    el salvador |          1        0.88       26.55
+                        estonia |          1        0.88       27.43
+                       ethiopia |          1        0.88       28.32
+                           fiji |          1        0.88       29.20
+                        finland |          1        0.88       30.09
+                         france |          1        0.88       30.97
+                          ghana |          1        0.88       31.86
+                         greece |          1        0.88       32.74
+                      guatemala |          1        0.88       33.63
+                         guyana |          1        0.88       34.51
+                          haiti |          1        0.88       35.40
+                       honduras |          1        0.88       36.28
+                      hong kong |          1        0.88       37.17
+                        hungary |          1        0.88       38.05
+                        iceland |          1        0.88       38.94
+                          india |          1        0.88       39.82
+                      indonesia |          1        0.88       40.71
+                           iraq |          1        0.88       41.59
+                        ireland |          1        0.88       42.48
+                         israel |          1        0.88       43.36
+                          italy |          1        0.88       44.25
+                        jamaica |          1        0.88       45.13
+                          japan |          1        0.88       46.02
+                         jordan |          1        0.88       46.90
+                          kenya |          1        0.88       47.79
+                         kuwait |          1        0.88       48.67
+                         latvia |          1        0.88       49.56
+                        lesotho |          1        0.88       50.44
+                        liberia |          1        0.88       51.33
+                          libya |          1        0.88       52.21
+                      lithuania |          1        0.88       53.10
+                         malawi |          1        0.88       53.98
+                       malaysia |          1        0.88       54.87
+                           mali |          1        0.88       55.75
+                          malta |          1        0.88       56.64
+                     mauritania |          1        0.88       57.52
+                      mauritius |          1        0.88       58.41
+                         mexico |          1        0.88       59.29
+                        moldova |          1        0.88       60.18
+                     mozambique |          1        0.88       61.06
+                        namibia |          1        0.88       61.95
+                          nepal |          1        0.88       62.83
+                    netherlands |          1        0.88       63.72
+                    new zealand |          1        0.88       64.60
+                      nicaragua |          1        0.88       65.49
+                          niger |          1        0.88       66.37
+                         norway |          1        0.88       67.26
+                       pakistan |          1        0.88       68.14
+                         panama |          1        0.88       69.03
+                       paraguay |          1        0.88       69.91
+                           peru |          1        0.88       70.80
+                    philippines |          1        0.88       71.68
+                         poland |          1        0.88       72.57
+                       portugal |          1        0.88       73.45
+                        romania |          1        0.88       74.34
+                         rwanda |          1        0.88       75.22
+                        senegal |          1        0.88       76.11
+                     seychelles |          1        0.88       76.99
+                   sierra leone |          1        0.88       77.88
+                      singapore |          1        0.88       78.76
+                       slovenia |          1        0.88       79.65
+                solomon islands |          1        0.88       80.53
+                   south africa |          1        0.88       81.42
+                          spain |          1        0.88       82.30
+                      sri lanka |          1        0.88       83.19
+                          sudan |          1        0.88       84.07
+                      swaziland |          1        0.88       84.96
+                         sweden |          1        0.88       85.84
+                    switzerland |          1        0.88       86.73
+                          syria |          1        0.88       87.61
+                         taiwan |          1        0.88       88.50
+                     tajikistan |          1        0.88       89.38
+                       thailand |          1        0.88       90.27
+                           togo |          1        0.88       91.15
+                        tunisia |          1        0.88       92.04
+                         turkey |          1        0.88       92.92
+                         uganda |          1        0.88       93.81
+                 united kingdom |          1        0.88       94.69
+                  united states |          1        0.88       95.58
+                        uruguay |          1        0.88       96.46
+                        vanuatu |          1        0.88       97.35
+                      venezuela |          1        0.88       98.23
+                         zambia |          1        0.88       99.12
+                       zimbabwe |          1        0.88      100.00
+--------------------------------+-----------------------------------
+                          Total |        113      100.00
+r; t=0.00 14:54:18
+
+.         
+.         tab country if _merge == 1
+
+                   Country name |      Freq.     Percent        Cum.
+--------------------------------+-----------------------------------
+                        albania |          1        1.30        1.30
+                         angola |          1        1.30        2.60
+            antigua and barbuda |          1        1.30        3.90
+                        armenia |          1        1.30        5.19
+                     azerbaijan |          1        1.30        6.49
+                        bahamas |          1        1.30        7.79
+                        belarus |          1        1.30        9.09
+                        bermuda |          1        1.30       10.39
+                         bhutan |          1        1.30       11.69
+         bosnia and herzegovina |          1        1.30       12.99
+                   burkina faso |          1        1.30       14.29
+                       cambodia |          1        1.30       15.58
+                     cape verde |          1        1.30       16.88
+       central african republic |          1        1.30       18.18
+                           chad |          1        1.30       19.48
+                china version 1 |          1        1.30       20.78
+                china version 2 |          1        1.30       22.08
+                        comoros |          1        1.30       23.38
+               congo, dem. rep. |          1        1.30       24.68
+             congo, republic of |          1        1.30       25.97
+                  cote d`ivoire |          1        1.30       27.27
+                 czech republic |          1        1.30       28.57
+                       djibouti |          1        1.30       29.87
+             dominican republic |          1        1.30       31.17
+              equatorial guinea |          1        1.30       32.47
+                        eritrea |          1        1.30       33.77
+                          gabon |          1        1.30       35.06
+                    gambia, the |          1        1.30       36.36
+                        georgia |          1        1.30       37.66
+                        germany |          1        1.30       38.96
+                        grenada |          1        1.30       40.26
+                         guinea |          1        1.30       41.56
+                  guinea-bissau |          1        1.30       42.86
+                           iran |          1        1.30       44.16
+                     kazakhstan |          1        1.30       45.45
+                       kiribati |          1        1.30       46.75
+             korea, republic of |          1        1.30       48.05
+                     kyrgyzstan |          1        1.30       49.35
+                           laos |          1        1.30       50.65
+                        lebanon |          1        1.30       51.95
+                     luxembourg |          1        1.30       53.25
+                          macao |          1        1.30       54.55
+                      macedonia |          1        1.30       55.84
+                     madagascar |          1        1.30       57.14
+                       maldives |          1        1.30       58.44
+               marshall islands |          1        1.30       59.74
+          micronesia, fed. sts. |          1        1.30       61.04
+                       mongolia |          1        1.30       62.34
+                     montenegro |          1        1.30       63.64
+                        morocco |          1        1.30       64.94
+                        nigeria |          1        1.30       66.23
+                           oman |          1        1.30       67.53
+                          palau |          1        1.30       68.83
+               papua new guinea |          1        1.30       70.13
+                    puerto rico |          1        1.30       71.43
+                          qatar |          1        1.30       72.73
+                         russia |          1        1.30       74.03
+                          samoa |          1        1.30       75.32
+          sao tome and principe |          1        1.30       76.62
+                   saudi arabia |          1        1.30       77.92
+                         serbia |          1        1.30       79.22
+                slovak republic |          1        1.30       80.52
+                        somalia |          1        1.30       81.82
+              st. kitts & nevis |          1        1.30       83.12
+                      st. lucia |          1        1.30       84.42
+        st.vincent & grenadines |          1        1.30       85.71
+                       suriname |          1        1.30       87.01
+                       tanzania |          1        1.30       88.31
+                    timor-leste |          1        1.30       89.61
+                          tonga |          1        1.30       90.91
+               trinidad &tobago |          1        1.30       92.21
+                   turkmenistan |          1        1.30       93.51
+                        ukraine |          1        1.30       94.81
+           united arab emirates |          1        1.30       96.10
+                     uzbekistan |          1        1.30       97.40
+                        vietnam |          1        1.30       98.70
+                          yemen |          1        1.30      100.00
+--------------------------------+-----------------------------------
+                          Total |         77      100.00
+r; t=0.00 14:54:18
+
+.                 preserve
+r; t=0.00 14:54:18
+
+.                         keep if _merge == 1
+(142 observations deleted)
+r; t=0.00 14:54:18
+
+.                         drop _merge
+r; t=0.00 14:54:18
+
+.                         encode country, gen(pwtid)
+r; t=0.00 14:54:18
+
+.                         order pwtid country
+r; t=0.00 14:54:18
+
+.                         save tmp_files/country_pwt_miss, replace
+file tmp_files/country_pwt_miss.dta saved
+r; t=0.00 14:54:18
+
+.                 restore
+r; t=0.00 14:54:18
+
+.                 
+.         tab country if _merge == 2
+
+                   Country name |      Freq.     Percent        Cum.
+--------------------------------+-----------------------------------
+                antigua & barb. |          1        3.45        3.45
+                central afr. r. |          1        3.45        6.90
+                          china |          1        3.45       10.34
+                          congo |          1        3.45       13.79
+                          czech |          1        3.45       17.24
+                 czechoslovakia |          1        3.45       20.69
+                 dominican rep. |          1        3.45       24.14
+                         gambia |          1        3.45       27.59
+                  germany, east |          1        3.45       31.03
+                germany, united |          1        3.45       34.48
+                  germany, west |          1        3.45       37.93
+                  iran, i.r. of |          1        3.45       41.38
+                    kazakhastan |          1        3.45       44.83
+                          korea |          1        3.45       48.28
+                myanmar (burma) |          1        3.45       51.72
+                papua new guin. |          1        3.45       55.17
+                     pueto rico |          1        3.45       58.62
+                        reunion |          1        3.45       62.07
+                       slovakia |          1        3.45       65.52
+                st.kitts& nevis |          1        3.45       68.97
+                       st.lucia |          1        3.45       72.41
+                st.vincent & g. |          1        3.45       75.86
+                trinidad & tob. |          1        3.45       79.31
+                       u.s.s.r. |          1        3.45       82.76
+                united arab em. |          1        3.45       86.21
+                       viet nam |          1        3.45       89.66
+                  western samoa |          1        3.45       93.10
+                     yugoslavia |          1        3.45       96.55
+                          zaire |          1        3.45      100.00
+--------------------------------+-----------------------------------
+                          Total |         29      100.00
+r; t=0.00 14:54:18
+
+.                 preserve
+r; t=0.00 14:54:18
+
+.                         keep if _merge == 2
+(190 observations deleted)
+r; t=0.00 14:54:18
+
+.                         drop _merge
+r; t=0.00 14:54:18
+
+.                         encode country, gen(educid)
+r; t=0.00 14:54:18
+
+.                         replace educid = educid + 1000
+(29 real changes made)
+r; t=0.00 14:54:18
+
+.                         order educid country
+r; t=0.00 14:54:18
+
+.                         save tmp_files/country_educ_miss, replace
+file tmp_files/country_educ_miss.dta saved
+r; t=0.00 14:54:18
+
+.                 restore
+r; t=0.00 14:54:18
+
+.         
+. use tmp_files/country_pwt_miss, clear
+r; t=0.00 14:54:18
+
+.         matchit pwtid country using tmp_files/country_educ_miss.dta, idusing(educid) txtusing(country)
+Matching current dataset with tmp_files/country_educ_miss.dta
+Similarity function: bigram
+Loading USING file: tmp_files/country_educ_miss.dta
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (61%)
+        40%               ...   (62%)
+        60%               ...   (63%)
+        80%               ...   (65%)
+        Done!
+Total search space saved by index: 64%
+r; t=0.04 14:54:18
+
+.                 list
+
+     +-------------------------------------------------------------------------+
+     | pwtid                    country   educid          country1   similsc~e |
+     |-------------------------------------------------------------------------|
+  1. |     3        antigua and barbuda     1001   antigua & barb.   .71713717 |
+  2. |    12                   cambodia     1008            gambia   .50709255 |
+  3. |    14   central african republic     1002   central afr. r.         .55 |
+  4. |    16            china version 1     1003             china   .53452248 |
+  5. |    17            china version 2     1003             china   .53452248 |
+     |-------------------------------------------------------------------------|
+  6. |    19           congo, dem. rep.     1004             congo   .51639778 |
+  7. |    22             czech republic     1005             czech    .5547002 |
+  8. |    24         dominican republic     1007    dominican rep.   .82717019 |
+  9. |    28                gambia, the     1008            gambia   .70710678 |
+ 10. |    30                    germany     1009     germany, east   .70710678 |
+     |-------------------------------------------------------------------------|
+ 11. |    30                    germany     1010   germany, united   .65465367 |
+ 12. |    30                    germany     1011     germany, west   .70710678 |
+ 13. |    34                       iran     1012     iran, i.r. of          .5 |
+ 14. |    35                 kazakhstan     1013       kazakhastan   .84327404 |
+ 15. |    37         korea, republic of     1014             korea   .57353933 |
+     |-------------------------------------------------------------------------|
+ 16. |    48                   mongolia     1004             congo   .56694671 |
+ 17. |    54           papua new guinea     1016   papua new guin.   .90748521 |
+ 18. |    55                puerto rico     1017        pueto rico   .84327404 |
+ 19. |    58                      samoa     1027     western samoa   .57735027 |
+ 20. |    62            slovak republic     1019          slovakia   .50507627 |
+     |-------------------------------------------------------------------------|
+ 21. |    64          st. kitts & nevis     1020   st.kitts& nevis   .80178373 |
+ 22. |    65                  st. lucia     1021          st.lucia   .80178373 |
+ 23. |    66    st.vincent & grenadines     1022   st.vincent & g.   .78621363 |
+ 24. |    70                      tonga     1004             congo          .5 |
+ 25. |    71           trinidad &tobago     1023   trinidad & tob.   .75907212 |
+     |-------------------------------------------------------------------------|
+ 26. |    74       united arab emirates     1025   united arab em.   .83591732 |
+ 27. |    76                    vietnam     1026          viet nam   .77151675 |
+     +-------------------------------------------------------------------------+
+r; t=0.00 14:54:18
+
+.                 save tmp_files/country_corrections, replace
+file tmp_files/country_corrections.dta saved
+r; t=0.78 14:54:19
+
+. 
+. use tmp_files/country_pwt_miss, clear
+r; t=0.00 14:54:19
+
+.         matchit pwtid country using tmp_files/country_educ_miss.dta, idusing(educid) txtusing(country) sim(token) s
+> core(jaccard)
+Matching current dataset with tmp_files/country_educ_miss.dta
+Similarity function: token
+Loading USING file: tmp_files/country_educ_miss.dta
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (100%)
+        40%               ...   (100%)
+        60%               ...   (100%)
+        80%               ...   (100%)
+        Done!
+Total search space saved by index: 100%
+r; t=0.07 14:54:19
+
+.                 list
+
+     +------------------------------------------------------------------------+
+     | pwtid                   country   educid          country1   similsc~e |
+     |------------------------------------------------------------------------|
+  1. |    16           china version 1     1003             china   .57735027 |
+  2. |    17           china version 2     1003             china   .57735027 |
+  3. |    22            czech republic     1005             czech   .70710678 |
+  4. |    24        dominican republic     1007    dominican rep.          .5 |
+  5. |    54          papua new guinea     1016   papua new guin.   .66666667 |
+     |------------------------------------------------------------------------|
+  6. |    55               puerto rico     1017        pueto rico          .5 |
+  7. |    58                     samoa     1027     western samoa   .70710678 |
+  8. |    66   st.vincent & grenadines     1022   st.vincent & g.   .66666667 |
+  9. |    74      united arab emirates     1025   united arab em.   .66666667 |
+     +------------------------------------------------------------------------+
+r; t=0.00 14:54:19
+
+. 
+. use tmp_files/country_pwt_miss, clear
+r; t=0.00 14:54:19
+
+.         matchit pwtid country using tmp_files/country_educ_miss.dta, idusing(educid) txtusing(country) sim(bigram) 
+> score(jaccard)
+Matching current dataset with tmp_files/country_educ_miss.dta
+Similarity function: bigram
+Loading USING file: tmp_files/country_educ_miss.dta
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (61%)
+        40%               ...   (62%)
+        60%               ...   (63%)
+        80%               ...   (65%)
+        Done!
+Total search space saved by index: 64%
+r; t=0.02 14:54:19
+
+.                 list
+
+     +-------------------------------------------------------------------------+
+     | pwtid                    country   educid          country1   similsc~e |
+     |-------------------------------------------------------------------------|
+  1. |     3        antigua and barbuda     1001   antigua & barb.   .71713717 |
+  2. |    12                   cambodia     1008            gambia   .50709255 |
+  3. |    14   central african republic     1002   central afr. r.         .55 |
+  4. |    16            china version 1     1003             china   .53452248 |
+  5. |    17            china version 2     1003             china   .53452248 |
+     |-------------------------------------------------------------------------|
+  6. |    19           congo, dem. rep.     1004             congo   .51639778 |
+  7. |    22             czech republic     1005             czech    .5547002 |
+  8. |    24         dominican republic     1007    dominican rep.   .82717019 |
+  9. |    28                gambia, the     1008            gambia   .70710678 |
+ 10. |    30                    germany     1009     germany, east   .70710678 |
+     |-------------------------------------------------------------------------|
+ 11. |    30                    germany     1010   germany, united   .65465367 |
+ 12. |    30                    germany     1011     germany, west   .70710678 |
+ 13. |    34                       iran     1012     iran, i.r. of          .5 |
+ 14. |    35                 kazakhstan     1013       kazakhastan   .84327404 |
+ 15. |    37         korea, republic of     1014             korea   .57353933 |
+     |-------------------------------------------------------------------------|
+ 16. |    48                   mongolia     1004             congo   .56694671 |
+ 17. |    54           papua new guinea     1016   papua new guin.   .90748521 |
+ 18. |    55                puerto rico     1017        pueto rico   .84327404 |
+ 19. |    58                      samoa     1027     western samoa   .57735027 |
+ 20. |    62            slovak republic     1019          slovakia   .50507627 |
+     |-------------------------------------------------------------------------|
+ 21. |    64          st. kitts & nevis     1020   st.kitts& nevis   .80178373 |
+ 22. |    65                  st. lucia     1021          st.lucia   .80178373 |
+ 23. |    66    st.vincent & grenadines     1022   st.vincent & g.   .78621363 |
+ 24. |    70                      tonga     1004             congo          .5 |
+ 25. |    71           trinidad &tobago     1023   trinidad & tob.   .75907212 |
+     |-------------------------------------------------------------------------|
+ 26. |    74       united arab emirates     1025   united arab em.   .83591732 |
+ 27. |    76                    vietnam     1026          viet nam   .77151675 |
+     +-------------------------------------------------------------------------+
+r; t=0.00 14:54:19
+
+. 
+. use tmp_files/country_pwt_miss, clear
+r; t=0.00 14:54:19
+
+.         matchit pwtid country using tmp_files/country_educ_miss.dta, idusing(educid) txtusing(country) sim(bigram) 
+> score(simple)
+Matching current dataset with tmp_files/country_educ_miss.dta
+Similarity function: bigram
+Loading USING file: tmp_files/country_educ_miss.dta
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (61%)
+        40%               ...   (62%)
+        60%               ...   (63%)
+        80%               ...   (65%)
+        Done!
+Total search space saved by index: 64%
+r; t=0.02 14:54:19
+
+.                 list
+
+     +-------------------------------------------------------------------------+
+     | pwtid                    country   educid          country1   similsc~e |
+     |-------------------------------------------------------------------------|
+  1. |     3        antigua and barbuda     1001   antigua & barb.   .70588235 |
+  2. |    12                   cambodia     1008            gambia          .5 |
+  3. |    14   central african republic     1002   central afr. r.   .53658537 |
+  4. |    24         dominican republic     1007    dominican rep.       .8125 |
+  5. |    28                gambia, the     1008            gambia   .66666667 |
+     |-------------------------------------------------------------------------|
+  6. |    30                    germany     1009     germany, east   .66666667 |
+  7. |    30                    germany     1010   germany, united          .6 |
+  8. |    30                    germany     1011     germany, west   .66666667 |
+  9. |    35                 kazakhstan     1013       kazakhastan   .84210526 |
+ 10. |    48                   mongolia     1004             congo   .54545455 |
+     |-------------------------------------------------------------------------|
+ 11. |    54           papua new guinea     1016   papua new guin.   .90322581 |
+ 12. |    55                puerto rico     1017        pueto rico   .84210526 |
+ 13. |    58                      samoa     1027     western samoa          .5 |
+ 14. |    64          st. kitts & nevis     1020   st.kitts& nevis          .8 |
+ 15. |    65                  st. lucia     1021          st.lucia          .8 |
+     |-------------------------------------------------------------------------|
+ 16. |    66    st.vincent & grenadines     1022   st.vincent & g.         .75 |
+ 17. |    70                      tonga     1004             congo          .5 |
+ 18. |    71           trinidad &tobago     1023   trinidad & tob.   .75862069 |
+ 19. |    74       united arab emirates     1025   united arab em.   .81081081 |
+ 20. |    76                    vietnam     1026          viet nam   .76923077 |
+     +-------------------------------------------------------------------------+
+r; t=0.00 14:54:19
+
+. 
+. timer off 1
+r; t=0.00 14:54:19
+
+. timer list 1
+   1:      0.96 /        1 =       0.9600
+r; t=0.00 14:54:19
+
+.                                 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/_other_examples/fuzzy_merge/logs/m
+> atchit.txt
+  log type:  text
+ closed on:  19 May 2021, 14:54:19
+---------------------------------------------------------------------------------------------------------------------

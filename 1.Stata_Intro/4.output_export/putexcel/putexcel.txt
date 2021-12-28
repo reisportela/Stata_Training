@@ -1,0 +1,989 @@
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/4.output_export/putexcel/putexcel.txt
+  log type:  text
+ opened on:  19 May 2021, 15:45:47
+r; t=0.00 15:45:47
+
+. 
+. use graph_data, clear
+r; t=0.00 15:45:47
+
+.         codebook, compact
+
+Variable   Obs Unique      Mean       Min       Max  Label
+---------------------------------------------------------------------------------------------------------------------
+country    839    106         .         .         .  Country name
+year       839      9  1980.906      1960      2000  Year of observation
+education  839    574  4.794076       .04     12.25  Education
+lngdp      839    838  9.308131  5.983335  12.51058  Log Real GDP per Worker
+open       839      2  .4982122         0         1  1 = high degree of openness; 0 otherwise
+gdp        839    838  20100.66  396.7612  271192.2  GDP level
+---------------------------------------------------------------------------------------------------------------------
+r; t=0.01 15:45:47
+
+. 
+. // # 1. summarize
+.         
+.         // 1.1 MEANS
+. 
+.                         putexcel clear
+r; t=0.10 15:45:47
+
+.                         putexcel set descriptives.xlsx, sheet("Avg. Educ. & desc.") replace
+Note: file will be replaced when the first putexcel command is issued
+r; t=0.00 15:45:47
+
+.                         
+.                         // 1.1.1 report only aggregate average education
+.                         
+.                                 putexcel B1=("Country"), italic left
+file descriptives.xlsx saved
+r; t=0.03 15:45:47
+
+.                                 putexcel C1=("Average Education"), italic left
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                                 
+.                                 putexcel B2=("All"), bold left border(bottom)
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                                 
+.                                 sum education
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |        839    4.794076    2.888875        .04      12.25
+r; t=0.00 15:45:47
+
+.                                         
+.                                         putexcel C2=(r(mean)), nformat(number_d2) bold right border(bottom)
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+. 
+.                         // 1.1.2 report average education for a set of countries
+.                         
+.                                 // select only countries that at some point in time exceed
+.                                 // 10 years of education
+.                                 
+.                                         // ==>> IDENTIFY THE COUNTRIES THAT SATISFY THE CRITERIA
+. 
+.                                                 preserve
+r; t=0.00 15:45:47
+
+.                                                         gen i = (education > 10)
+r; t=0.00 15:45:47
+
+.                                                         egen max = max(i),by(country)
+r; t=0.00 15:45:47
+
+.                                                         keep if max == 1
+(758 observations deleted)
+r; t=0.00 15:45:47
+
+.                                                         drop i max
+r; t=0.00 15:45:47
+
+.                                                         contract country
+r; t=0.00 15:45:47
+
+.                                                                 list
+
+     +-----------------------+
+     |       country   _freq |
+     |-----------------------|
+  1. |     australia       9 |
+  2. |        canada       9 |
+  3. |       denmark       9 |
+  4. |       finland       9 |
+  5. |   new zealand       9 |
+     |-----------------------|
+  6. |        norway       9 |
+  7. |        sweden       9 |
+  8. |   switzerland       9 |
+  9. | united states       9 |
+     +-----------------------+
+r; t=0.00 15:45:47
+
+.                                                         levelsof country,local(ccc)
+`"australia"' `"canada"' `"denmark"' `"finland"' `"new zealand"' `"norway"' `"sweden"' `"switzerland"' `"united state
+> s"'
+r; t=0.00 15:45:47
+
+.                                                 restore
+r; t=0.00 15:45:47
+
+.                                 
+.                                 local i = 3
+r; t=0.00 15:45:47
+
+.                                 
+.                                 foreach aaa of local ccc {
+  2.                                         preserve
+  3.                                                 di _new _new "COUNTRY:  `aaa'" _new
+  4.                                                         keep if country == "`aaa'"
+  5.                                                         
+.                                                                 putexcel B`i'=("`aaa'"),font(arial)
+  6.                                                                 sum education
+  7.                                                                 putexcel C`i' = (r(mean)),font(newsgott) nformat
+> (number_d2)
+  8.                                                         
+.                                         restore
+  9.                                         
+.                                         local i = `i' + 1
+ 10.                                 }
+
+
+COUNTRY:  australia
+
+(830 observations deleted)
+file descriptives.xlsx saved
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |          9    9.967778     .401428        9.3      10.57
+file descriptives.xlsx saved
+
+
+COUNTRY:  canada
+
+(830 observations deleted)
+file descriptives.xlsx saved
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |          9    9.835556    1.208833       8.07      11.43
+file descriptives.xlsx saved
+
+
+COUNTRY:  denmark
+
+(830 observations deleted)
+file descriptives.xlsx saved
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |          9    9.355556    .5410432       8.78      10.13
+file descriptives.xlsx saved
+
+
+COUNTRY:  finland
+
+(830 observations deleted)
+file descriptives.xlsx saved
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |          9    7.844444    1.755855       5.37      10.14
+file descriptives.xlsx saved
+
+
+COUNTRY:  new zealand
+
+(830 observations deleted)
+file descriptives.xlsx saved
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |          9       10.69     .946269       9.36      11.52
+file descriptives.xlsx saved
+
+
+COUNTRY:  norway
+
+(830 observations deleted)
+file descriptives.xlsx saved
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |          9        8.73    2.248194       6.11      11.86
+file descriptives.xlsx saved
+
+
+COUNTRY:  sweden
+
+(830 observations deleted)
+file descriptives.xlsx saved
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |          9    9.118889    1.469783       7.47      11.36
+file descriptives.xlsx saved
+
+
+COUNTRY:  switzerland
+
+(830 observations deleted)
+file descriptives.xlsx saved
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |          9        9.07    1.267152        7.3      10.39
+file descriptives.xlsx saved
+
+
+COUNTRY:  united states
+
+(830 observations deleted)
+file descriptives.xlsx saved
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   education |          9    10.86222    1.418562       8.66      12.25
+file descriptives.xlsx saved
+r; t=0.15 15:45:47
+
+. 
+. 
+.         // 1.2 DETAILED DESCRIPTIVES
+.         
+.                 putexcel F1:G1 = ("Detailed descriptive statistics"), merge
+file descriptives.xlsx saved
+r; t=0.02 15:45:47
+
+.                 
+.                 sum education, detail
+
+                          Education
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%          .19            .04
+ 5%          .69            .07
+10%         1.13             .1       Obs                 839
+25%         2.35            .14       Sum of Wgt.         839
+
+50%          4.5                      Mean           4.794076
+                        Largest       Std. Dev.      2.888875
+75%         7.11          11.91
+90%         8.86             12       Variance       8.345602
+95%         9.74          12.18       Skewness       .3516196
+99%        11.43          12.25       Kurtosis        2.19733
+r; t=0.00 15:45:47
+
+.                                 
+.                                 return list
+
+scalars:
+                  r(N) =  839
+              r(sum_w) =  839
+               r(mean) =  4.794076281287246
+                r(Var) =  8.345601502527442
+                 r(sd) =  2.888875473696892
+           r(skewness) =  .3516196325548323
+           r(kurtosis) =  2.197329929696698
+                r(sum) =  4022.23
+                r(min) =  .04
+                r(max) =  12.25
+                 r(p1) =  .19
+                 r(p5) =  .6899999999999999
+                r(p10) =  1.13
+                r(p25) =  2.35
+                r(p50) =  4.5
+                r(p75) =  7.11
+                r(p90) =  8.859999999999999
+                r(p95) =  9.74
+                r(p99) =  11.43
+r; t=0.00 15:45:47
+
+.                         
+.                         putexcel G2 = rscalars
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         
+.                         putexcel F2 = ("Obs.")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F3 = ("Sum observations = N")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F4 = ("Overall mean")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F5 = ("Variance")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F6 = ("Standard deviation")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F7 = ("Skewness")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F8 = ("Kurtosis")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F9 = ("Sum education")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F10 = ("Minimum")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F11 = ("Maximum")
+file descriptives.xlsx saved
+r; t=0.02 15:45:47
+
+.                         putexcel F12 = ("Percentile 1")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F13 = ("Percentile 5")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F14 = ("Percentile 10")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F15 = ("Percentile 25")
+file descriptives.xlsx saved
+r; t=0.02 15:45:47
+
+.                         putexcel F16 = ("Percentile 50")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F17 = ("Percentile 75")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F18 = ("Percentile 90")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F19 = ("Percentile 95")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                         putexcel F20 = ("Percentile 99")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                 
+.                 putexcel G2:G20, italic bold right nformat(#.000)
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+. 
+.                 putexcel G2:G3, italic nformat(#.0) overwritefmt
+file descriptives.xlsx saved
+r; t=0.01 15:45:47
+
+.                 putexcel G9,nformat(#) noitalic nobold
+file descriptives.xlsx saved
+r; t=0.02 15:45:47
+
+. 
+. // # 2. tabstat
+. 
+.                         putexcel set descriptives.xlsx, sheet("Averages by openness") modify
+r; t=0.00 15:45:47
+
+. 
+.                                 tabstat gdp education, by(open) save stat(mean)
+
+Summary statistics: mean
+  by categories of: open (1 = high degree of openness; 0 otherwise)
+
+    open |       gdp  educat~n
+---------+--------------------
+       0 |  18053.72   4.64076
+       1 |   22162.3  4.948493
+---------+--------------------
+   Total |  20100.66  4.794076
+------------------------------
+r; t=0.00 15:45:47
+
+.                                         
+.                                         return list
+
+macros:
+              r(name2) : "1"
+              r(name1) : "0"
+
+matrices:
+              r(Stat2) :  1 x 2
+              r(Stat1) :  1 x 2
+          r(StatTotal) :  1 x 2
+r; t=0.00 15:45:47
+
+. 
+.                                         matrix open_0 = r(Stat1)'
+r; t=0.00 15:45:47
+
+.                                         matrix open_1 = r(Stat2)'
+r; t=0.00 15:45:47
+
+.                                 
+.                                         putexcel A3 = matrix(open_0), rownames
+file descriptives.xlsx saved
+r; t=0.02 15:45:47
+
+.                                         putexcel C3 = matrix(open_1)
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                                         
+.                                         putexcel B2 = ("open = 0")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                                         putexcel C2 = ("open = 1")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                                         
+.                                         putexcel A1:D1 = ("Averages of education and GDP by degree of openness"), m
+> erge
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                                         
+.                                         putexcel describe
+
+  -----------------+--------------------
+  Filename         |  descriptives.xlsx
+  Filetype         |  xlsx
+  Write mode       |  modify
+  Sheetname        |  Averages by openness
+  Locale           |  UTF-8
+  Open file handle |  no
+r; t=0.00 15:45:47
+
+.                                         
+.                                         putexcel B3:C4, nformat(#.0)
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                                         putexcel A3:A4, bold
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                                         putexcel B2:C2, italic border(bottom) font(arial,9,blue)
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+. 
+. // # 3. matrix
+. 
+.                         putexcel set descriptives.xlsx, sheet("Alternative statistics") modify
+r; t=0.00 15:45:47
+
+.                         
+.                 preserve
+r; t=0.00 15:45:47
+
+.                         
+.                         collapse (mean) education lngdp gdp, by(open)
+r; t=0.00 15:45:47
+
+.                         
+.                         label var education "Education"
+r; t=0.00 15:45:47
+
+.                         label var lngdp "ln GDP"
+r; t=0.00 15:45:47
+
+.                         label var gdp "GDP"
+r; t=0.00 15:45:47
+
+.                         
+.                                 list open
+
+     +------+
+     | open |
+     |------|
+  1. |    0 |
+  2. |    1 |
+     +------+
+r; t=0.00 15:45:47
+
+.                                 
+.                                 mkmat education - gdp,mat(main) rownames(open)
+r; t=0.00 15:45:47
+
+.                                         matrix colnames main = "Education" "ln GDP" "GDP"
+r; t=0.00 15:45:47
+
+.                         
+.                         
+.                                 putexcel B2 = matrix(main), names
+file descriptives.xlsx saved
+r; t=0.02 15:45:47
+
+.                                 putexcel B2 = ("Openness")
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                                 
+.                 restore
+r; t=0.00 15:45:47
+
+.                 
+.                 putexcel C3:E4,nformat(#.000)
+file descriptives.xlsx saved
+r; t=0.00 15:45:47
+
+.                 putexcel B2:E2,fpattern(gray25,blue) border(bottom)
+file descriptives.xlsx saved
+r; t=0.02 15:45:48
+
+. 
+. // # 4.1 regress, simple
+. 
+.                         putexcel set descriptives.xlsx, sheet("Regression") modify
+r; t=0.00 15:45:48
+
+. 
+.                                 regress lngdp education open
+
+      Source |       SS           df       MS      Number of obs   =       839
+-------------+----------------------------------   F(2, 836)       =    584.63
+       Model |  714.246859         2   357.12343   Prob > F        =    0.0000
+    Residual |   510.67161       836  .610851209   R-squared       =    0.5831
+-------------+----------------------------------   Adj R-squared   =    0.5821
+       Total |  1224.91847       838  1.46171655   Root MSE        =    .78157
+
+------------------------------------------------------------------------------
+       lngdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   education |   .3186534   .0093591    34.05   0.000     .3002833    .3370235
+        open |   .0729281   .0540427     1.35   0.178    -.0331472    .1790035
+       _cons |   7.744149   .0577703   134.05   0.000     7.630757    7.857541
+------------------------------------------------------------------------------
+r; t=0.04 15:45:48
+
+.                                         ereturn list
+
+scalars:
+                  e(N) =  839
+               e(df_m) =  2
+               e(df_r) =  836
+                  e(F) =  584.632434976505
+                 e(r2) =  .5830974688049114
+               e(rmse) =  .7815697081062694
+                e(mss) =  714.2468590185997
+                e(rss) =  510.6716104141107
+               e(r2_a) =  .5821000943283681
+                 e(ll) =  -982.2144064967722
+               e(ll_0) =  -1349.236140596613
+               e(rank) =  3
+
+macros:
+            e(cmdline) : "regress lngdp education open"
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "ols"
+             e(depvar) : "lngdp"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+
+matrices:
+                  e(b) :  1 x 3
+                  e(V) :  3 x 3
+
+functions:
+             e(sample)   
+r; t=0.00 15:45:48
+
+. 
+.                                 putexcel B1 = ("Coef.")
+file descriptives.xlsx saved
+r; t=0.02 15:45:48
+
+.                                         matrix b = e(b)'
+r; t=0.00 15:45:48
+
+.                                         putexcel A2 = matrix(b), rownames
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                 
+.                                 putexcel C1 = ("Var.")
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                 
+.                                         mat varcovar = e(V)
+r; t=0.00 15:45:48
+
+.                                         mat var = (varcovar[1,1]\varcovar[2,2]\varcovar[3,3])
+r; t=0.00 15:45:48
+
+.                                         
+.                                         putexcel C2 = matrix(var)
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                 
+.                                 putexcel A6 = ("N = ")
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                 putexcel B6 = matrix(e(N))
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                 
+.                                 putexcel A7 = ("R^2 = ")
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                 putexcel B7 = matrix(e(r2))
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                 
+.                                 putexcel C2:C4,nformat((0.00000))
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                 putexcel B2:B3,nformat(#.00%)
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                 putexcel B4,nformat(#.00)
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                 putexcel A4 = ("Cons.")
+file descriptives.xlsx saved
+r; t=0.02 15:45:48
+
+. 
+. // # 4.2 regress, additional features
+. 
+.                                 regress lngdp education open
+
+      Source |       SS           df       MS      Number of obs   =       839
+-------------+----------------------------------   F(2, 836)       =    584.63
+       Model |  714.246859         2   357.12343   Prob > F        =    0.0000
+    Residual |   510.67161       836  .610851209   R-squared       =    0.5831
+-------------+----------------------------------   Adj R-squared   =    0.5821
+       Total |  1224.91847       838  1.46171655   Root MSE        =    .78157
+
+------------------------------------------------------------------------------
+       lngdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   education |   .3186534   .0093591    34.05   0.000     .3002833    .3370235
+        open |   .0729281   .0540427     1.35   0.178    -.0331472    .1790035
+       _cons |   7.744149   .0577703   134.05   0.000     7.630757    7.857541
+------------------------------------------------------------------------------
+r; t=0.00 15:45:48
+
+.                                 
+.                                         matrix results = r(table)
+r; t=0.00 15:45:48
+
+.                                         mat l results
+
+results[9,3]
+         education        open       _cons
+     b   .31865337   .07292813   7.7441486
+    se   .00935911   .05404271   .05777033
+     t   34.047405   1.3494536   134.05061
+pvalue   4.40e-160   .17755664           0
+    ll   .30028326  -.03314721   7.6307566
+    ul   .33702348   .17900347   7.8575405
+    df         836         836         836
+  crit   1.9628057   1.9628057   1.9628057
+ eform           0           0           0
+r; t=0.00 15:45:48
+
+.                                         
+.                                         mat b = results[1,1...]'
+r; t=0.00 15:45:48
+
+.                                         mat t = results[3,1...]'
+r; t=0.00 15:45:48
+
+.                                         
+.                                         putexcel E8="Coef." F8="t"
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                         putexcel D9 = matrix(b), rownames nformat(number_d2) right
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                         putexcel F9 = matrix(t),nformat("0.00")
+file descriptives.xlsx saved
+r; t=0.00 15:45:48
+
+.                                         
+. // # 5. graph
+. 
+.                         putexcel set descriptives.xlsx, sheet("Graph") modify
+r; t=0.00 15:45:48
+
+.                         
+.                                 kdensity lngdp, scheme(economist) graphregion(color(white)) ///
+>                                         legend(region(color(white))) title("") note("") lpattern(dash)
+r; t=0.57 15:45:48
+
+.                                         
+.                                         graph export gdp_density.png, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/4.output_export/putexcel/gdp_density.png written in PNG 
+> format)
+r; t=0.09 15:45:48
+
+.                                                 
+.                                                 putexcel B2 = picture(gdp_density.png)
+file descriptives.xlsx saved
+r; t=0.01 15:45:48
+
+. 
+.                                         
+. // # 6. loop
+. 
+. // 'academic' example: aggregate countries by their first letter; it could be continents; economic region, ...
+. 
+. gen first = substr(country,1,1)
+r; t=0.00 15:45:48
+
+. 
+.         levelsof first,local(ff)
+`"a"' `"b"' `"c"' `"d"' `"e"' `"f"' `"g"' `"h"' `"i"' `"j"' `"k"' `"l"' `"m"' `"n"' `"p"' `"r"' `"s"' `"t"' `"u"' `"v
+> "' `"z"'
+r; t=0.01 15:45:48
+
+.         
+.         foreach vv of local ff {
+  2.         
+.                 di _new(3) "Country's first letter:     `vv'"
+  3.                 
+.                 preserve
+  4.                 quiet keep if first == "`vv'"
+  5.                 
+.                 quiet unique country
+  6.                         
+.                         if r(unique) > 5 {
+  7.                         di _new(2) "    Number of countries:    " r(unique) _new(1)
+  8.                         quietly {
+  9.                                 collapse (mean) lngdp education,by(country)
+ 10.                                         putexcel set descriptives.xlsx, sheet("FIRST LETTER `vv'") modify
+ 11.                                         
+.                                         regress lngdp education
+ 12.                                                 
+.                                                         matrix list r(table)
+ 13.                                                 
+.                                                 matrix results = r(table)
+ 14.                                                         mat l results
+ 15.                                                 
+.                                                 mat b = results[1,1...]'
+ 16.                                                 mat t = results[3,1...]'
+ 17.                                                 
+.                                                 putexcel C2="Coef." F2="t"
+ 18.                                                 putexcel B3 = matrix(b), rownames nformat(number_d2) right
+ 19.                                                 putexcel D3 = matrix(t),nformat("0.00")
+ 20.                                 }
+ 21.                         }
+ 22.                         
+.                         if r(unique) <= 5 {
+ 23.                                 di _new(2) "    Insufficient number of countries; n countries = " r(unique) _new
+> (1)
+ 24.                         }
+ 25.                         
+.                 restore
+ 26.         
+.         }
+
+
+
+Country's first letter:     a
+
+
+    Insufficient number of countries; n countries = 5
+
+
+
+
+Country's first letter:     b
+
+
+    Number of countries:    11
+
+
+
+
+Country's first letter:     c
+
+
+    Number of countries:    9
+
+
+
+
+Country's first letter:     d
+
+
+    Insufficient number of countries; n countries = 2
+
+
+
+
+Country's first letter:     e
+
+
+    Insufficient number of countries; n countries = 5
+
+
+
+
+Country's first letter:     f
+
+
+    Insufficient number of countries; n countries = 3
+
+
+
+
+Country's first letter:     g
+
+
+    Insufficient number of countries; n countries = 4
+
+
+
+
+Country's first letter:     h
+
+
+    Insufficient number of countries; n countries = 4
+
+
+
+
+Country's first letter:     i
+
+
+    Number of countries:    7
+
+
+
+
+Country's first letter:     j
+
+
+    Insufficient number of countries; n countries = 3
+
+
+
+
+Country's first letter:     k
+
+
+    Insufficient number of countries; n countries = 2
+
+
+
+
+Country's first letter:     l
+
+
+    Insufficient number of countries; n countries = 2
+
+
+
+
+Country's first letter:     m
+
+
+    Number of countries:    8
+
+
+
+
+Country's first letter:     n
+
+
+    Number of countries:    6
+
+
+
+
+Country's first letter:     p
+
+
+    Number of countries:    7
+
+
+
+
+Country's first letter:     r
+
+
+    Insufficient number of countries; n countries = 2
+
+
+
+
+Country's first letter:     s
+
+
+    Number of countries:    14
+
+
+
+
+Country's first letter:     t
+
+
+    Insufficient number of countries; n countries = 5
+
+
+
+
+Country's first letter:     u
+
+
+    Insufficient number of countries; n countries = 4
+
+
+
+
+Country's first letter:     v
+
+
+    Insufficient number of countries; n countries = 1
+
+
+
+
+Country's first letter:     z
+
+
+    Insufficient number of countries; n countries = 2
+
+r; t=0.54 15:45:49
+
+. 
+.                                         
+. timer off 1
+r; t=0.00 15:45:49
+
+. timer list 1
+   1:      2.10 /        1 =       2.1020
+r; t=0.00 15:45:49
+
+.                                 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/4.output_export/putexcel/putexcel.txt
+  log type:  text
+ closed on:  19 May 2021, 15:45:49
+---------------------------------------------------------------------------------------------------------------------

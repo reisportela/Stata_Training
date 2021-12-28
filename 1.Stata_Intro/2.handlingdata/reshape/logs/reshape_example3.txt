@@ -1,0 +1,190 @@
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/reshape/logs/reshape_example3.txt
+  log type:  text
+ opened on:  19 May 2021, 14:55:57
+r; t=0.00 14:55:57
+
+. 
+. import excel "data/bankscope_example.xls", sheet("Results (Selected Top 125 Bank)") firstrow case(lower) clear
+(78 vars, 96 obs)
+r; t=0.04 14:55:57
+
+. 
+. keep bankname totalassetsmilusd2013-totalassetsmilusd2008 equitymilusd2013-equitymilusd2008
+r; t=0.00 14:55:57
+
+. tab bankname, miss
+
+                              Bank Name |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+                                        |          5        5.21        5.21
+                      AXIS Bank Limited |          1        1.04        6.25
+     Agricultural Bank of China Limited |          1        1.04        7.29
+Al Rajhi Bank Public Joint Stock Comp.. |          1        1.04        8.33
+                 Allied Irish Banks plc |          1        1.04        9.38
+               American Express Company |          1        1.04       10.42
+Australia and New Zealand Banking Gro.. |          1        1.04       11.46
+                       BB&T Corporation |          1        1.04       12.50
+                            BNP Paribas |          1        1.04       13.54
+           BOC Hong Kong (Holdings) Ltd |          1        1.04       14.58
+     Banco Bilbao Vizcaya Argentaria SA |          1        1.04       15.62
+                     Banco Santander SA |          1        1.04       16.67
+                   Banco de Sabadell SA |          1        1.04       17.71
+            Bank of America Corporation |          1        1.04       18.75
+                 Bank of Beijing Co Ltd |          1        1.04       19.79
+                  Bank of China Limited |          1        1.04       20.83
+         Bank of Communications Co. Ltd |          1        1.04       21.88
+Bank of Ireland-Governor and Company .. |          1        1.04       22.92
+    Bank of New York Mellon Corporation |          1        1.04       23.96
+          Barclays Africa Group Limited |          1        1.04       25.00
+                           Barclays Plc |          1        1.04       26.04
+      Capital One Financial Corporation |          1        1.04       27.08
+             Charles Schwab Corporation |          1        1.04       28.13
+   China CITIC Bank Corporation Limited |          1        1.04       29.17
+            China Merchants Bank Co Ltd |          1        1.04       30.21
+                          Citigroup Inc |          1        1.04       31.25
+          Citizens Financial Group Inc. |          1        1.04       32.29
+                         Commerzbank AG |          1        1.04       33.33
+         Commonwealth Bank of Australia |          1        1.04       34.38
+                 Credit Suisse Group AG |          1        1.04       35.42
+                   Crédit Agricole S.A. |          1        1.04       36.46
+                 DBS Group Holdings Ltd |          1        1.04       37.50
+             Daiwa Securities Group Inc |          1        1.04       38.54
+                        Danske Bank A/S |          1        1.04       39.58
+                       Deutsche Bank AG |          1        1.04       40.62
+            Discover Financial Services |          1        1.04       41.67
+                                DnB ASA |          1        1.04       42.71
+                      Emirates NBD PJSC |          1        1.04       43.75
+                    Erste Group Bank AG |          1        1.04       44.79
+                    Fifth Third Bancorp |          1        1.04       45.83
+                      FirstRand Limited |          1        1.04       46.87
+               Goldman Sachs Group, Inc |          1        1.04       47.92
+                          HDFC Bank Ltd |          1        1.04       48.96
+                      HSBC Holdings Plc |          1        1.04       50.00
+                    Hang Seng Bank Ltd. |          1        1.04       51.04
+              Hua Xia Bank co., Limited |          1        1.04       52.08
+                     ICICI Bank Limited |          1        1.04       53.12
+                           ING Groep NV |          1        1.04       54.17
+Industrial & Commercial Bank of China.. |          1        1.04       55.21
+                        Intesa Sanpaolo |          1        1.04       56.25
+                    JPMorgan Chase & Co |          1        1.04       57.29
+                 Japan Post Bank Co Ltd |          1        1.04       58.33
+  KBC Groep NV/ KBC Groupe SA-KBC Group |          1        1.04       59.37
+                                KeyCorp |          1        1.04       60.42
+               Lloyds Banking Group Plc |          1        1.04       61.46
+                   M&T Bank Corporation |          1        1.04       62.50
+                    Macquarie Group Ltd |          1        1.04       63.54
+Mitsubishi UFJ Financial Group Inc-Ka.. |          1        1.04       64.58
+                 Mizuho Financial Group |          1        1.04       65.62
+                         Morgan Stanley |          1        1.04       66.67
+        National Australia Bank Limited |          1        1.04       67.71
+             National Bank of Abu Dhabi |          1        1.04       68.75
+         National Commercial Bank (The) |          1        1.04       69.79
+                             Natixis SA |          1        1.04       70.83
+                    Nomura Holdings Inc |          1        1.04       71.87
+                  Nordea Bank AB (publ) |          1        1.04       72.92
+             Northern Trust Corporation |          1        1.04       73.96
+Oversea-Chinese Banking Corporation L.. |          1        1.04       75.00
+       PNC Financial Services Group Inc |          1        1.04       76.04
+                    Qatar National Bank |          1        1.04       77.08
+          Regions Financial Corporation |          1        1.04       78.12
+                   Resona Holdings, Inc |          1        1.04       79.17
+ Royal Bank of Scotland Group Plc (The) |          1        1.04       80.21
+                 Sberbank of Russia OAO |          1        1.04       81.25
+Siam Commercial Bank Public Company L.. |          1        1.04       82.29
+       Skandinaviska Enskilda Banken AB |          1        1.04       83.33
+                    Société Générale SA |          1        1.04       84.38
+            Standard Bank Group Limited |          1        1.04       85.42
+                 Standard Chartered Plc |          1        1.04       86.46
+                    State Bank of India |          1        1.04       87.50
+               State Street Corporation |          1        1.04       88.54
+    Sumitomo Mitsui Trust Holdings, Inc |          1        1.04       89.58
+                   SunTrust Banks, Inc. |          1        1.04       90.63
+                  Svenska Handelsbanken |          1        1.04       91.67
+                            Swedbank AB |          1        1.04       92.71
+           Turkiye Garanti Bankasi A.S. |          1        1.04       93.75
+                             US Bancorp |          1        1.04       94.79
+                          UniCredit SpA |          1        1.04       95.83
+       United Overseas Bank Limited UOB |          1        1.04       96.88
+VTB Bank (public joint-stock company).. |          1        1.04       97.92
+                  Wells Fargo & Company |          1        1.04       98.96
+            Westpac Banking Corporation |          1        1.04      100.00
+----------------------------------------+-----------------------------------
+                                  Total |         96      100.00
+r; t=0.00 14:55:57
+
+. return list
+
+scalars:
+                  r(N) =  96
+                  r(r) =  92
+r; t=0.00 14:55:57
+
+. drop if bankname == ""
+(5 observations deleted)
+r; t=0.00 14:55:57
+
+. 
+.         reshape long totalassetsmilusd equitymilusd,i(bankname) j(time)
+(note: j = 2008 2009 2010 2011 2012 2013)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                       91   ->     546
+Number of variables                  13   ->       4
+j variable (6 values)                     ->   time
+xij variables:
+totalassetsmilusd2008 totalassetsmilusd2009 ... totalassetsmilusd2013->totalassetsmilusd
+equitymilusd2008 equitymilusd2009 ... equitymilusd2013->equitymilusd
+-----------------------------------------------------------------------------
+r; t=0.00 14:55:57
+
+. 
+. // 'destring', alternative a
+. 
+.         preserve
+r; t=0.00 14:55:57
+
+.                 local nnnn = "totalassetsmilusd equitymilusd"
+r; t=0.00 14:55:57
+
+. 
+.                 foreach v of local nnnn {
+  2.                         destring `v', replace force
+  3.                 }
+totalassetsmilusd already numeric; no replace
+equitymilusd already numeric; no replace
+r; t=0.00 14:55:57
+
+.         restore
+r; t=0.00 14:55:57
+
+. 
+. // 'destring', alternative b
+. 
+.         destring totalassetsmilusd equitymilusd, replace force
+totalassetsmilusd already numeric; no replace
+equitymilusd already numeric; no replace
+r; t=0.00 14:55:57
+
+. 
+. save data_stata/bankscope_example, replace
+file data_stata/bankscope_example.dta saved
+r; t=0.00 14:55:57
+
+. 
+. timer off 1
+r; t=0.00 14:55:57
+
+. timer list 1
+   1:      0.05 /        1 =       0.0530
+r; t=0.00 14:55:57
+
+.                                 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/reshape/logs/reshape_example3.txt
+  log type:  text
+ closed on:  19 May 2021, 14:55:57
+---------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,261 @@
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/reshape/logs/reshape_example1.txt
+  log type:  text
+ opened on:  19 May 2021, 14:56:02
+r; t=0.00 14:56:02
+
+. 
+. // # 1. import an excel file, wide format, and save it in Stata format
+. 
+.         // # 1.1 variable 1
+.                 import excel "data/data_example1.xlsx", sheet("fertility_index") firstrow clear
+(7 vars, 310 obs)
+r; t=0.05 14:56:02
+
+. 
+.                 ren TOTAL municipioid
+r; t=0.05 14:56:02
+
+.                 ren B municipio
+r; t=0.00 14:56:02
+
+.         
+.         // 1.2 save municipality name
+.                 preserve
+r; t=0.00 14:56:02
+
+.                         keep mun*
+r; t=0.00 14:56:02
+
+.                         drop if municipioid == ""
+(2 observations deleted)
+r; t=0.00 14:56:02
+
+.                         save data_stata/municipios_id, replace
+file data_stata/municipios_id.dta saved
+r; t=0.00 14:56:02
+
+.                 restore
+r; t=0.00 14:56:02
+
+. 
+.                 drop municipio
+r; t=0.00 14:56:02
+
+. 
+.                 drop if municipioid == ""
+(2 observations deleted)
+r; t=0.00 14:56:02
+
+.         
+.         // 1.3 reshape
+.                 ren (C-G) (ifecund2009 ifecund2010 ifecund2011 ifecund2012 ifecund2013)
+r; t=0.00 14:56:02
+
+.                         reshape long ifecund, i(municipioid) j(ano)
+(note: j = 2009 2010 2011 2012 2013)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                      308   ->    1540
+Number of variables                   6   ->       3
+j variable (5 values)                     ->   ano
+xij variables:
+ifecund2009 ifecund2010 ... ifecund2013   ->   ifecund
+-----------------------------------------------------------------------------
+r; t=0.01 14:56:02
+
+.                         save data_stata/ifecund, replace
+file data_stata/ifecund.dta saved
+r; t=0.00 14:56:02
+
+.         
+.         // 1.4 variable 2
+.                 import excel "data/data_example1.xlsx", sheet("foreign_women") firstrow clear
+(7 vars, 308 obs)
+r; t=0.03 14:56:02
+
+. 
+.                 ren TOTAL municipioid
+r; t=0.00 14:56:02
+
+.                 ren Anos municipio
+r; t=0.00 14:56:02
+
+. 
+.                 drop municipio
+r; t=0.00 14:56:02
+
+. 
+.                 drop if municipioid == ""
+(0 observations deleted)
+r; t=0.00 14:56:02
+
+. 
+.                 ren (C-G) (foreignw2009 foreignw2010 foreignw2011 foreignw2012 foreignw2013)
+r; t=0.00 14:56:02
+
+.                         reshape long foreignw, i(municipioid) j(ano)
+(note: j = 2009 2010 2011 2012 2013)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                      308   ->    1540
+Number of variables                   6   ->       3
+j variable (5 values)                     ->   ano
+xij variables:
+foreignw2009 foreignw2010 ... foreignw2013->   foreignw
+-----------------------------------------------------------------------------
+r; t=0.02 14:56:02
+
+.                         save data_stata/mulheres_estrangeiras, replace
+file data_stata/mulheres_estrangeiras.dta saved
+r; t=0.00 14:56:02
+
+. 
+.         // 1.5 variable 3
+.                 import excel "data/data_example1.xlsx", sheet("net_migration") firstrow clear
+(7 vars, 308 obs)
+r; t=0.03 14:56:02
+
+. 
+.                 ren TOTAL municipioid
+r; t=0.00 14:56:02
+
+.                 ren Anos municipio
+r; t=0.00 14:56:02
+
+. 
+.                 drop municipio
+r; t=0.00 14:56:02
+
+. 
+.                 drop if municipioid == ""
+(0 observations deleted)
+r; t=0.00 14:56:02
+
+. 
+.                 ren (C-G) (migr2009 migr2010 migr2011 migr2012 migr2013)
+r; t=0.00 14:56:02
+
+.                         reshape long migr, i(municipioid) j(ano)
+(note: j = 2009 2010 2011 2012 2013)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                      308   ->    1540
+Number of variables                   6   ->       3
+j variable (5 values)                     ->   ano
+xij variables:
+         migr2009 migr2010 ... migr2013   ->   migr
+-----------------------------------------------------------------------------
+r; t=0.00 14:56:02
+
+.                         save data_stata/migr, replace   
+file data_stata/migr.dta saved
+r; t=0.00 14:56:02
+
+.         
+. // # 2. merge data and build a single Stata data file
+.                 use  data_stata/ifecund, clear
+r; t=0.00 14:56:02
+
+.                         merge 1:1 municipioid ano using data_stata/mulheres_estrangeiras
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             1,540  (_merge==3)
+    -----------------------------------------
+r; t=0.00 14:56:02
+
+.                                 drop _merge
+r; t=0.00 14:56:02
+
+.                         
+.                         merge 1:1 municipioid ano using data_stata/migr
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             1,540  (_merge==3)
+    -----------------------------------------
+r; t=0.00 14:56:02
+
+.                                 drop _merge
+r; t=0.00 14:56:02
+
+.                         
+.                         merge m:1 municipioid using data_stata/municipios_id
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             1,540  (_merge==3)
+    -----------------------------------------
+r; t=0.00 14:56:02
+
+.                                 drop _merge
+r; t=0.00 14:56:02
+
+.                         
+.                         order municipio municipioid ano
+r; t=0.00 14:56:02
+
+.                         describe
+
+Contains data from data_stata/ifecund.dta
+  obs:         1,540                          
+ vars:             6                          19 May 2021 14:56
+---------------------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------------------------------
+municipio       str40   %40s                  
+municipioid     str7    %9s                   TOTAL
+ano             int     %10.0g                
+ifecund         double  %10.0g                
+foreignw        double  %10.0g                
+migr            int     %10.0g                
+---------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+     Note: Dataset has changed since last saved.
+r; t=0.00 14:56:02
+
+.                         sum
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   municipio |          0
+ municipioid |          0
+         ano |      1,540        2011    1.414673       2009       2013
+     ifecund |      1,540     1.20476    .2408292        .39       3.17
+    foreignw |      1,540    2.583506    3.323588         .1         27
+-------------+---------------------------------------------------------
+        migr |      1,540   -51.13831    562.6678     -11502       3001
+r; t=0.00 14:56:02
+
+.                         
+.                         sort municipio ano
+r; t=0.00 14:56:02
+
+.                         save data_stata/data_full, replace
+file data_stata/data_full.dta saved
+r; t=0.00 14:56:02
+
+. 
+. timer off 1
+r; t=0.00 14:56:02
+
+. timer list 1
+   1:      0.24 /        1 =       0.2440
+r; t=0.00 14:56:02
+
+.                                 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/2.handlingdata/reshape/logs/reshape_example1.txt
+  log type:  text
+ closed on:  19 May 2021, 14:56:02
+---------------------------------------------------------------------------------------------------------------------

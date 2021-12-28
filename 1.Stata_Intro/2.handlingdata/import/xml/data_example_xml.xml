@@ -1,0 +1,1051 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Regina Gonçalves</Author>
+  <LastAuthor>Miguel Portela</LastAuthor>
+  <Created>2015-05-20T12:03:25Z</Created>
+  <LastSaved>2015-06-06T10:33:47Z</LastSaved>
+  <Version>14.0</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>6400</WindowHeight>
+  <WindowWidth>25360</WindowWidth>
+  <WindowTopX>240</WindowTopX>
+  <WindowTopY>-1080</WindowTopY>
+  <TabRatio>600</TabRatio>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="xml example">
+  <Names>
+   <NamedRange ss:Name="tblEscolas" ss:RefersTo="='xml example'!R1C1:R5406C6"
+    ss:Hidden="1"/>
+  </Names>
+  <Table ss:ExpandedColumnCount="6" ss:ExpandedRowCount="109" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="53" ss:DefaultRowHeight="14">
+   <Column ss:Width="52"/>
+   <Column ss:Width="487"/>
+   <Column ss:Width="49"/>
+   <Column ss:Width="61"/>
+   <Column ss:Width="59"/>
+   <Column ss:Width="69"/>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Escola</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Nome</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Tipo</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PubPriv</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Distrito</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Concelho</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">247388</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do Mosteiro, Oliveira - Santa Maria, Vila Nova de Famalicão</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">216987</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Convento, Ancede, Baião</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">02</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">296181</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica n.º 1 de Tábua</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">06</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">16</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">341733</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica Guilherme Stephens, Marinha Grande</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">292930</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Vera Cruz</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">07</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">09</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">211953</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo Carregueira</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">14</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">07</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">217670</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Costa do Valado, Aveiro</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">05</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">272024</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de São Salvador, Marco de Canaveses</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">07</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">243036</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Fontelo, Calendário, Vila Nova de Famalicão</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">501839</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Externato Miguel Ângelo</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EXT</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">05</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">236639</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica n.º 1 de Anta, Espinho</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">07</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">295607</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Castanheira de Pêra</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">07</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">922106</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo dos Louros</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">22</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">200979</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo de Albufeira nº 1</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">235118</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Mourinho, Lousada</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">05</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">267995</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Quintã, Vagos</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">18</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">263746</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Penhas Juntas, Vinhais</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">04</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">505810</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Colégio Luso-Francês</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">C</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">244685</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do Bairro Primeiro de Maio, Arcozelo, Barcelos</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">02</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">230121</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância de Loulé nº 3</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">346299</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica e Secundária de Oliveira de Frades</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EBS</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">18</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">345623</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Celeirós, Braga</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">224080</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Fragosela de Cima, Viseu</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">18</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">23</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">637889</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Árvores, Vila Real</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">17</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">14</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">249701</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo Prof. Romeu Gil</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">14</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">213561</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Casal da Rola, Pombal</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">208000</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Boavista, Gondomar</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">04</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">342701</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica dos 2º e 3º Ciclos Professor Agostinho da Silva</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB23</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">217062</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância Coroados</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">14</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">21</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">269797</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Rio de Moinhos</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">02</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">250843</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo Entroncamento nº 3</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">14</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">380026</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Externato da Associação Escola de São Mamede</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EXT</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">06</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">343572</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Gafanha da Nazaré</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">285444</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Vinha, Guimarães</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">221351</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Fail, Viseu</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">18</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">23</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">271688</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo São Miguel</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">14</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">18</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">258120</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Cabeças, Estarreja</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">922053</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Pré-Escolar dos Ilhéus - Coronel Sarmento</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/PE</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">22</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">213949</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Casal Fernão João, Pombal</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">340467</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Caldas de Vizela, Vizela</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">14</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">506606</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Colégio do Sardão</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">C</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">17</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">270544</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de São Bento, Porto de Mós</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">16</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">506151</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola de Santa Maria</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">E</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">208553</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Boticas</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">17</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">02</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">345910</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica e Secundária Henrique Sommer</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EBS</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">09</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">340522</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica dos 2º e 3º Ciclos José Cardoso Pires</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB23</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">400117</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Secundária D. Pedro V</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">ES</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">06</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">943031</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Externato O Refúgio dos Fidalguinhos</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EXT</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">04</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">246025</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância Veiga Ferreira</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">16</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">210109</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância Cadaval nº1</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">04</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">226889</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Sande, Vila Verde</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">250788</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância Quinta do Campo</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">500069</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Instituto de Promoção Social de Bustos</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">I</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">14</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">256780</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Presa, Santa Joana, Aveiro</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">05</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">287751</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância São Marcos nº 1</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">342210</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica Integrada Miraflores</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EBI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">271720</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de São Miguel do Outeiro, Tondela</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">18</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">21</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">245264</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo Casal Velho</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">503617</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Colégio Escolinha do Largo</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">C</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">05</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">922094</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Pré-Escolar do Faial (Faial)</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/PE</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">22</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">221156</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Cambeses, Barcelos</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">02</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">277757</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Tarei, Santa Maria da Feira</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">09</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">502583</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Externato Marcelino Champagnat</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EXT</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">06</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">210705</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica Prof.ª Elvira Valente, Custóias, Matosinhos</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">912649</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância de Santa Bárbara, Santa Bárbara</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">19</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">23</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">250922</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância Faralhão</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">254800</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Aguim, Anadia</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">251367</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo Gomes Freire de Andrade</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">505950</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Externato Bom Jesus (Matosinhos)</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EXT</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">224893</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Galveias</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">912665</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância da Lomba do Botão, Povoação</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">19</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">24</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">344813</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Algoz</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">259688</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de São Tiago, Castelo Branco</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">05</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">02</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">521863</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Externato S. João Bosco (Viana do Castelo)</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EXT</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">16</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">09</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">342154</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica dos 2º e 3º Ciclos Marvila</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB23</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">06</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">227195</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Negreiros, Barcelos</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">02</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">208462</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo Bordinheira</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">205680</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Riba de Ave, Vila Nova de Famalicão</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">292928</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Aldeia da Luz</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">07</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">295231</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Santa Maria, Bragança</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">04</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">02</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">289851</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Febres, Cantanhede</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">06</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">02</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">344795</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica dos 2º e 3º Ciclos de S. Vicente</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB23</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">505160</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Externato da Torre</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EXT</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">06</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">201110</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo Alcanhões</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">14</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">16</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">345866</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica e Secundária José Falcão, Miranda do Corvo</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EBS</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">06</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">09</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">296612</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de São Julião, Tavarede, Figueira da Foz</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">06</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">05</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">266668</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Praia de Vieira, Marinha Grande</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">210171</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica n.º 1 de Marco de Canaveses</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">07</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">240345</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Alvelos, Barcelos</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">03</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">02</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">330309</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Santa Cruz da Trapa, São Pedro do Sul</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">18</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">16</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">295360</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Almancil n.º 2</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">08</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">212738</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Carvalho de Baixo, Válega, Ovar</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">01</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">340662</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica dos 2º e 3º Ciclos Cónego Dr Manuel Lopes Perdigão</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB23</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">14</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">21</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">213160</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância Casais da Serra</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">06</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">266700</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo Praias do Sado</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">346020</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica e Secundária Pintor José de Brito</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EBS</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">16</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">09</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">503563</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Colégio São José</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">C</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">263199</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância de Pedrógão</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">02</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">14</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">243103</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de São Nicolau, Porto</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">13</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">223438</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Fontes, Santa Marta de Penaguião</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">17</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">290038</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância Maceira</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">248800</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica do 1º Ciclo com Jardim de Infância de Cotovia</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB1/JI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">380691</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Externato Arendrup</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EXT</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">22</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">09</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">200702</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Colégio Jean Piaget Nuclisol</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">C</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">11</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">06</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">290002</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica de Raposeira</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">07</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">340169</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Escola Básica dos 2º e 3º Ciclos Álvaro Velho</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">EB23</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PUB</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">04</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">501542</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Colégio Conciliar de Maria Imaculada</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">C</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">10</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">09</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">941011</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">Colégio São Cristóvão</Data><NamedCell
+      ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">C</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">PRI</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">15</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+    <Cell><Data ss:Type="String">12</Data><NamedCell ss:Name="tblEscolas"/></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Unsynced/>
+   <PageLayoutZoom>0</PageLayoutZoom>
+   <Selected/>
+   <TopRowVisible>83</TopRowVisible>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>102</ActiveRow>
+     <ActiveCol>1</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

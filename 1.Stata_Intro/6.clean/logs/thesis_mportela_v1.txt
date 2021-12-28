@@ -1,0 +1,427 @@
+-------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/Stata/stata_training/day1/6.clean/logs/thesis_mpo
+> rtela_v1.txt
+  log type:  text
+ opened on:  21 May 2021, 21:22:51
+r; t=0.00 21:22:51
+
+. 
+. // # 1. Data
+. webuse nlswork, clear
+(National Longitudinal Survey.  Young Women 14-26 years of age in 1968)
+r; t=2.70 21:22:54
+
+.         gen wage = exp(ln_wage)
+r; t=0.00 21:22:54
+
+.         compress
+  (0 bytes saved)
+r; t=0.00 21:22:54
+
+.         sort idcode year
+r; t=0.00 21:22:54
+
+.         xtset idcode year
+       panel variable:  idcode (unbalanced)
+        time variable:  year, 68 to 88, but with gaps
+                delta:  1 unit
+r; t=0.04 21:22:54
+
+.         
+.                 save ../data/nlswork_local, replace
+file ../data/nlswork_local.dta saved
+r; t=0.00 21:22:54
+
+. 
+.         codebook, compact
+
+Variable     Obs Unique      Mean  Min       Max  Label
+-------------------------------------------------------------------------------------------
+idcode     28534   4711  2601.284    1      5159  NLS ID
+year       28534     15  77.95865   68        88  interview year
+birth_yr   28534     14  48.08509   41        54  birth year
+age        28510     33  29.04511   14        46  age in current year
+race       28534      3  1.303392    1         3  race
+msp        28518      2  .6029175    0         1  1 if married, spouse present
+nev_mar    28518      2  .2296795    0         1  1 if never married
+grade      28532     19  12.53259    0        18  current grade completed
+collgrad   28534      2  .1680451    0         1  1 if college graduate
+not_smsa   28526      2  .2824441    0         1  1 if not SMSA
+c_city     28526      2   .357218    0         1  1 if central city
+south      28526      2  .4095562    0         1  1 if south
+ind_code   28193     12  7.692973    1        12  industry of employment
+occ_code   28413     13  4.777672    1        13  occupation
+union      19238      2  .2344319    0         1  1 if union
+wks_ue     22830     61  2.548095    0        76  weeks unemployed last year
+ttl_exp    28534   4744  6.215316    0  28.88461  total work experience
+tenure     28101    270  3.123836    0  25.91667  job tenure, in years
+hours      28467     85  36.55956    1       168  usual hours worked
+wks_work   27831    105  53.98933    0       104  weeks worked last year
+ln_wage    28534   8173  1.674907    0  5.263916  ln(wage/GNP deflator)
+wage       28534   8172  6.048016    1  193.2367  
+-------------------------------------------------------------------------------------------
+r; t=0.27 21:22:54
+
+. 
+. // 2. Statistics
+. 
+. label var age "Age (years)"
+r; t=0.00 21:22:54
+
+. label var collgrad "Graduate"
+r; t=0.00 21:22:54
+
+. label var union "Union"
+r; t=0.00 21:22:54
+
+. label var ttl_exp "Experience (years)"
+r; t=0.00 21:22:54
+
+. label var tenure "Tenure (years)"
+r; t=0.00 21:22:54
+
+. label var hours "Working hours"
+r; t=0.00 21:22:54
+
+. label var ln_wage "Wage (log)"
+r; t=0.00 21:22:54
+
+. 
+. estpost sum age collgrad union ttl_exp tenure hours ln_wage if year == 88, listwise
+
+             |  e(count)   e(sum_w)    e(mean)     e(Var)      e(sd)     e(min)     e(max) 
+-------------+-----------------------------------------------------------------------------
+         age |      1870       1870   39.22193   9.226806   3.037566         34         46 
+    collgrad |      1870       1870   .2481283   .1866605   .4320422          0          1 
+       union |      1870       1870   .2465241   .1858493   .4311025          0          1 
+     ttl_exp |      1870       1870   12.84127   21.12986   4.596723   .1153846   28.88461 
+      tenure |      1870       1870   6.570989   31.79628   5.638819          0   25.91667 
+       hours |      1870       1870   37.63316   101.2854   10.06406          1        100 
+     ln_wage |      1870       1870   1.896219    .273281   .5227628   .2961001   5.263916 
+
+             |    e(sum) 
+-------------+-----------
+         age |     73345 
+    collgrad |       464 
+       union |       461 
+     ttl_exp |  24013.17 
+      tenure |  12287.75 
+       hours |     70374 
+     ln_wage |   3545.93 
+r; t=0.01 21:22:54
+
+.         
+.         esttab, cells("mean(fmt(1)) sd(fmt(3)) min(fmt(2)) max(fmt(1))") nomtitle nonumbe
+> r label
+
+------------------------------------------------------------------------
+                             mean           sd          min          max
+------------------------------------------------------------------------
+Age (years)                  39.2        3.038        34.00         46.0
+Graduate                      0.2        0.432         0.00          1.0
+Union                         0.2        0.431         0.00          1.0
+Experience (years)           12.8        4.597         0.12         28.9
+Tenure (years)                6.6        5.639         0.00         25.9
+Working hours                37.6       10.064         1.00        100.0
+Wage (log)                    1.9        0.523         0.30          5.3
+------------------------------------------------------------------------
+Observations                 1870                                       
+------------------------------------------------------------------------
+r; t=0.02 21:22:54
+
+. 
+.         esttab using ../_text/tables/descriptives_table1.rtf, replace cells("mean(fmt(7))
+>  sd(fmt(3)) min(fmt(2)) max(fmt(1))") nomtitle nonumber label
+(note: file ../_text/tables/descriptives_table1.rtf not found)
+(output written to ../_text/tables/descriptives_table1.rtf)
+r; t=0.02 21:22:54
+
+.         
+. 
+end of do-file
+
+r; t=3.16 21:22:54
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD69436.000000"
+
+.         esttab using ../_text/tables/descriptives_table1.rtf, replace cells("mean(fmt(2))
+>  sd(fmt(3)) min(fmt(2)) max(fmt(1))") nomtitle nonumber label
+(output written to ../_text/tables/descriptives_table1.rtf)
+r; t=0.06 21:25:35
+
+. 
+end of do-file
+
+r; t=0.07 21:25:35
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD69436.000000"
+
+.         twoway (kdensity ln_wage if union == 0) (kdensity ln_wage if union == 1),scheme(e
+> conomist) graphregion(color(white)) legend(region(color(white))) legend(order(1 "Non-Unio
+> n" 2 "Union")) ytitle("Density") xtitle("Wage (log)")
+r; t=0.71 21:27:20
+
+. 
+end of do-file
+
+r; t=0.71 21:27:20
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD69436.000000"
+
+.         twoway (kdensity ln_wage if union == 0) (kdensity ln_wage if union == 1),scheme(e
+> conomist) graphregion(color(white)) legend(region(color(white))) legend(order(1 "Non-Unio
+> n" 2 "Union")) ytitle("Density") xtitle("Wage (log)")
+r; t=0.59 21:29:09
+
+.         
+.         graph export ../_text/figures/fig_wage_density_union.png, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/6.clean/logs/../_text/figures/
+> fig_wage_density_union.png written in PNG format)
+r; t=0.02 21:29:09
+
+. 
+end of do-file
+
+r; t=0.61 21:29:09
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD69436.000000"
+
+.         twoway (kdensity ln_wage if union == 0) (kdensity ln_wage if union == 1),scheme(s
+> j) graphregion(color(white)) legend(region(color(white))) legend(order(1 "Non-Union" 2 "U
+> nion")) ytitle("Density") xtitle("Wage (log)")
+r; t=0.60 21:30:00
+
+.         
+.         graph export ../_text/figures/fig_wage_density_union.png, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/6.clean/logs/../_text/figures/
+> fig_wage_density_union.png written in PNG format)
+r; t=0.02 21:30:00
+
+. 
+end of do-file
+
+r; t=0.62 21:30:00
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD69436.000000"
+
+.         twoway (kdensity ln_wage if union == 0) (kdensity ln_wage if union == 1),scheme(s
+> j) graphregion(color(white)) legend(region(color(white))) legend(order(1 "Non-Union" 2 "U
+> nion")) ytitle("Density") xtitle("Wage (log)")
+r; t=0.52 21:31:12
+
+.         
+.         graph export ../_text/figures/fig_wage_density_union.pdf, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/6.clean/logs/../_text/figures/
+> fig_wage_density_union.pdf written in PDF format)
+r; t=0.01 21:31:12
+
+. 
+end of do-file
+
+r; t=0.53 21:31:12
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD69436.000000"
+
+.         twoway (kdensity ln_wage if union == 0) (kdensity ln_wage if union == 1),scheme(e
+> conomist) graphregion(color(white)) legend(region(color(white))) legend(order(1 "Non-Unio
+> n" 2 "Union")) ytitle("Density") xtitle("Wage (log)")
+r; t=0.55 21:31:54
+
+.         
+.         graph export ../_text/figures/fig_wage_density_union.pdf, replace
+(file /Users/miguelportela/Dropbox/Stata/stata_training/day1/6.clean/logs/../_text/figures/
+> fig_wage_density_union.pdf written in PDF format)
+r; t=0.00 21:31:54
+
+. 
+end of do-file
+
+r; t=0.56 21:31:54
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD69436.000000"
+
+. reg ln_wage ttl_exp union i.year
+
+      Source |       SS           df       MS      Number of obs   =    19,238
+-------------+----------------------------------   F(13, 19224)    =    358.32
+       Model |  821.128092        13  63.1636994   Prob > F        =    0.0000
+    Residual |  3388.78398    19,224  .176278817   R-squared       =    0.1950
+-------------+----------------------------------   Adj R-squared   =    0.1945
+       Total |  4209.91207    19,237  .218844522   Root MSE        =    .41986
+
+------------------------------------------------------------------------------
+     ln_wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0509492   .0009353    54.47   0.000     .0491158    .0527825
+       union |   .1891156   .0071837    26.33   0.000     .1750348    .2031963
+             |
+        year |
+         71  |   .0091741   .0202773     0.45   0.651    -.0305712    .0489193
+         72  |  -.0081758   .0190692    -0.43   0.668    -.0455531    .0292015
+         73  |  -.0274795   .0197622    -1.39   0.164    -.0662152    .0112562
+         77  |  -.0751344   .0175503    -4.28   0.000    -.1095346   -.0407342
+         78  |  -.0305105   .0190736    -1.60   0.110    -.0678963    .0068754
+         80  |  -.1303222   .0185739    -7.02   0.000    -.1667287   -.0939158
+         82  |  -.1832471   .0182765   -10.03   0.000    -.2190707   -.1474235
+         83  |  -.1744143   .0189043    -9.23   0.000    -.2114684   -.1373601
+         85  |  -.1930536   .0189896   -10.17   0.000    -.2302748   -.1558324
+         87  |  -.2435542   .0194171   -12.54   0.000    -.2816135   -.2054949
+         88  |  -.2570863   .0202171   -12.72   0.000    -.2967136    -.217459
+             |
+       _cons |   1.449961   .0150999    96.02   0.000     1.420363    1.479558
+------------------------------------------------------------------------------
+r; t=0.07 21:34:01
+
+.         est store ols
+r; t=0.00 21:34:01
+
+. 
+end of do-file
+
+r; t=0.08 21:34:01
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD69436.000000"
+
+. xtreg ln_wage ttl_exp union i.year, fe
+
+Fixed-effects (within) regression               Number of obs     =     19,238
+Group variable: idcode                          Number of groups  =      4,150
+
+R-sq:                                           Obs per group:
+     within  = 0.1434                                         min =          1
+     between = 0.2535                                         avg =        4.6
+     overall = 0.1908                                         max =         12
+
+                                                F(13,15075)       =     194.16
+corr(u_i, Xb)  = 0.1121                         Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+     ln_wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0441618   .0015966    27.66   0.000     .0410323    .0472913
+       union |   .1009257   .0069226    14.58   0.000     .0873564    .1144949
+             |
+        year |
+         71  |   .0031987   .0134573     0.24   0.812    -.0231793    .0295766
+         72  |   -.020328   .0129642    -1.57   0.117    -.0457393    .0050833
+         73  |  -.0418055    .013637    -3.07   0.002    -.0685355   -.0150754
+         77  |  -.0813944   .0135614    -6.00   0.000    -.1079765   -.0548124
+         78  |  -.0628454   .0147277    -4.27   0.000    -.0917135   -.0339774
+         80  |  -.1409966   .0156806    -8.99   0.000    -.1717325   -.1102607
+         82  |  -.1791566   .0170563   -10.50   0.000    -.2125891   -.1457242
+         83  |  -.1828786    .018182   -10.06   0.000    -.2185175   -.1472396
+         85  |  -.2081133   .0199181   -10.45   0.000    -.2471552   -.1690714
+         87  |  -.2476665   .0219559   -11.28   0.000    -.2907027   -.2046303
+         88  |  -.2600918   .0237941   -10.93   0.000    -.3067311   -.2134524
+             |
+       _cons |   1.531584    .010593   144.58   0.000      1.51082    1.552347
+-------------+----------------------------------------------------------------
+     sigma_u |  .38056958
+     sigma_e |  .25527224
+         rho |  .68969138   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(4149, 15075) = 8.90                 Prob > F = 0.0000
+r; t=0.11 21:34:28
+
+.         est store fe
+r; t=0.00 21:34:28
+
+. 
+end of do-file
+
+r; t=0.11 21:34:28
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD69436.000000"
+
+. reg ln_wage ttl_exp union i.year
+
+      Source |       SS           df       MS      Number of obs   =    19,238
+-------------+----------------------------------   F(13, 19224)    =    358.32
+       Model |  821.128092        13  63.1636994   Prob > F        =    0.0000
+    Residual |  3388.78398    19,224  .176278817   R-squared       =    0.1950
+-------------+----------------------------------   Adj R-squared   =    0.1945
+       Total |  4209.91207    19,237  .218844522   Root MSE        =    .41986
+
+------------------------------------------------------------------------------
+     ln_wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0509492   .0009353    54.47   0.000     .0491158    .0527825
+       union |   .1891156   .0071837    26.33   0.000     .1750348    .2031963
+             |
+        year |
+         71  |   .0091741   .0202773     0.45   0.651    -.0305712    .0489193
+         72  |  -.0081758   .0190692    -0.43   0.668    -.0455531    .0292015
+         73  |  -.0274795   .0197622    -1.39   0.164    -.0662152    .0112562
+         77  |  -.0751344   .0175503    -4.28   0.000    -.1095346   -.0407342
+         78  |  -.0305105   .0190736    -1.60   0.110    -.0678963    .0068754
+         80  |  -.1303222   .0185739    -7.02   0.000    -.1667287   -.0939158
+         82  |  -.1832471   .0182765   -10.03   0.000    -.2190707   -.1474235
+         83  |  -.1744143   .0189043    -9.23   0.000    -.2114684   -.1373601
+         85  |  -.1930536   .0189896   -10.17   0.000    -.2302748   -.1558324
+         87  |  -.2435542   .0194171   -12.54   0.000    -.2816135   -.2054949
+         88  |  -.2570863   .0202171   -12.72   0.000    -.2967136    -.217459
+             |
+       _cons |   1.449961   .0150999    96.02   0.000     1.420363    1.479558
+------------------------------------------------------------------------------
+r; t=0.03 21:36:48
+
+.         est store ols
+r; t=0.00 21:36:48
+
+. 
+. xtreg ln_wage ttl_exp union i.year, fe
+
+Fixed-effects (within) regression               Number of obs     =     19,238
+Group variable: idcode                          Number of groups  =      4,150
+
+R-sq:                                           Obs per group:
+     within  = 0.1434                                         min =          1
+     between = 0.2535                                         avg =        4.6
+     overall = 0.1908                                         max =         12
+
+                                                F(13,15075)       =     194.16
+corr(u_i, Xb)  = 0.1121                         Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+     ln_wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0441618   .0015966    27.66   0.000     .0410323    .0472913
+       union |   .1009257   .0069226    14.58   0.000     .0873564    .1144949
+             |
+        year |
+         71  |   .0031987   .0134573     0.24   0.812    -.0231793    .0295766
+         72  |   -.020328   .0129642    -1.57   0.117    -.0457393    .0050833
+         73  |  -.0418055    .013637    -3.07   0.002    -.0685355   -.0150754
+         77  |  -.0813944   .0135614    -6.00   0.000    -.1079765   -.0548124
+         78  |  -.0628454   .0147277    -4.27   0.000    -.0917135   -.0339774
+         80  |  -.1409966   .0156806    -8.99   0.000    -.1717325   -.1102607
+         82  |  -.1791566   .0170563   -10.50   0.000    -.2125891   -.1457242
+         83  |  -.1828786    .018182   -10.06   0.000    -.2185175   -.1472396
+         85  |  -.2081133   .0199181   -10.45   0.000    -.2471552   -.1690714
+         87  |  -.2476665   .0219559   -11.28   0.000    -.2907027   -.2046303
+         88  |  -.2600918   .0237941   -10.93   0.000    -.3067311   -.2134524
+             |
+       _cons |   1.531584    .010593   144.58   0.000      1.51082    1.552347
+-------------+----------------------------------------------------------------
+     sigma_u |  .38056958
+     sigma_e |  .25527224
+         rho |  .68969138   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(4149, 15075) = 8.90                 Prob > F = 0.0000
+r; t=0.07 21:36:48
+
+.         est store fe
+r; t=0.00 21:36:48
+
+. 
+.         esttab ols fe using ../_text/tables/regression_table1.rtf, replace ///
+>                 drop(*.year _cons) ///
+>                 b(%6.3f) se(%6.3f)  sfmt(%5.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                 mlabel("OLS" "FE") nonumbers ///
+>                 scalars("N Observations" "N_g Firms" "r2_w R-sq-within" "r2_b R-sq-betwee
+> n" "rho Rho" "corr corr(u_i,Xb)") label ///
+>                 nonotes addnotes("Notes: robust standard errors in parenthesis (clustered
+>  at the sector level)." "Significance levels: *, 10 \%; **, 5 \%; ***, 1 \%." "All regres
+> sions include a constant and time dummies.") title("Regression analysis -- Wages (logs)\l
+> abel{tb:regresults}")
+(note: file ../_text/tables/regression_table1.rtf not found)
+(output written to ../_text/tables/regression_table1.rtf)
+r; t=0.04 21:36:48
+
+. 
+end of do-file
+
+r; t=0.16 21:36:48
+. exit, clear

@@ -1,0 +1,50 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\reisportela_win\Dropbox\statafep2016\day1\2.handlingdata\growth\capital\complete_exercise_output.txt
+  log type:  text
+ opened on:  24 Jan 2017, 00:34:42
+r; t=0.00 0:34:42
+
+. 
+. // # 1. Build the data
+.         // We will use the 3 datasets discussed under section "handling data", namely income, education and capital data at the country level
+. 
+. // # 1.1 explore the three data files
+. 
+.         use ..\data\pwt70, clear
+file ..\data\pwt70.dta not found
+r(601); t=0.00 0:34:42
+
+end of do-file
+
+r(601); t=0.13 0:34:42
+
+. do "C:\Users\REISPO~1\AppData\Local\Temp\STD0d000000.tmp"
+
+. //////////////////////////////////////////////////////////////////////////
+> // 2017 STATA ECONOMETRICS WINTER SCHOOL                                                                //
+. // January 23-27, 2017                                                                                                  //
+. // Faculdade de Economia da Universidade do Porto, Portugal                             //
+. // Anabela Carneiro, João Cerejeira, Miguel Portela    & Paulo Guimarães      //
+. //////////////////////////////////////////////////////////////////////////
+> 
+. // DAY 1: Complete exercise
+. 
+.         clear all
+r; t=0.09 0:35:27
+
+.         set more off
+r; t=0.00 0:35:27
+
+.         set rmsg on
+r; t=0.00 0:35:27
+
+. 
+.                 capture cd "C:\fep2017\day1\5.exercise_complete\logs"
+r; t=0.00 0:35:27
+
+.                 capture cd "C:\Users\reisportela_win\Dropbox\statafep2016\day1\5.exercise_complete\logs"
+r; t=0.00 0:35:27
+
+. 
+. capture log close

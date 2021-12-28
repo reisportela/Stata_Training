@@ -1,0 +1,138 @@
+
+-> tabulation of country  
+
+                   Country_name |      Freq.     Percent        Cum.
+--------------------------------+-----------------------------------
+                    afghanistan |          9        1.00        1.00
+                        algeria |          9        1.00        2.01
+                      argentina |          9        1.00        3.01
+                      australia |          9        1.00        4.02
+                        austria |          9        1.00        5.02
+                        bahrain |          9        1.00        6.03
+                     bangladesh |          9        1.00        7.03
+                       barbados |          9        1.00        8.04
+                        belgium |          9        1.00        9.04
+                         belize |          3        0.33        9.38
+                          benin |          9        1.00       10.38
+                        bolivia |          9        1.00       11.38
+                       botswana |          9        1.00       12.39
+                         brazil |          9        1.00       13.39
+                         brunei |          3        0.33       13.73
+                       bulgaria |          9        1.00       14.73
+                        burundi |          1        0.11       14.84
+                       cameroon |          9        1.00       15.85
+                         canada |          9        1.00       16.85
+                          chile |          9        1.00       17.86
+                          china |          9        1.00       18.86
+                       colombia |          9        1.00       19.87
+                     costa rica |          9        1.00       20.87
+                        croatia |          3        0.33       21.21
+                           cuba |          9        1.00       22.21
+                         cyprus |          9        1.00       23.21
+                        denmark |          9        1.00       24.22
+                       dominica |          2        0.22       24.44
+                        ecuador |          9        1.00       25.45
+                          egypt |          9        1.00       26.45
+                    el salvador |          9        1.00       27.46
+                        estonia |          1        0.11       27.57
+                       ethiopia |          1        0.11       27.68
+                           fiji |          9        1.00       28.68
+                        finland |          9        1.00       29.69
+                         france |          9        1.00       30.69
+                          ghana |          9        1.00       31.70
+                         greece |          9        1.00       32.70
+                      guatemala |          9        1.00       33.71
+                         guyana |          9        1.00       34.71
+                          haiti |          9        1.00       35.71
+                       honduras |          9        1.00       36.72
+                      hong kong |          9        1.00       37.72
+                        hungary |          9        1.00       38.73
+                        iceland |          9        1.00       39.73
+                          india |          9        1.00       40.74
+                      indonesia |          9        1.00       41.74
+                           iraq |          9        1.00       42.75
+                        ireland |          9        1.00       43.75
+                         israel |          9        1.00       44.75
+                          italy |          9        1.00       45.76
+                        jamaica |          9        1.00       46.76
+                          japan |          9        1.00       47.77
+                         jordan |          9        1.00       48.77
+                          kenya |          9        1.00       49.78
+                         kuwait |          9        1.00       50.78
+                         latvia |          1        0.11       50.89
+                        lesotho |          9        1.00       51.90
+                        liberia |          9        1.00       52.90
+                          libya |          3        0.33       53.24
+                      lithuania |          1        0.11       53.35
+                         malawi |          9        1.00       54.35
+                       malaysia |          9        1.00       55.36
+                           mali |          9        1.00       56.36
+                          malta |          9        1.00       57.37
+                     mauritania |          1        0.11       57.48
+                      mauritius |          9        1.00       58.48
+                         mexico |          9        1.00       59.49
+                        moldova |          1        0.11       59.60
+                     mozambique |          9        1.00       60.60
+                        namibia |          2        0.22       60.83
+                          nepal |          9        1.00       61.83
+                    netherlands |          9        1.00       62.83
+                    new zealand |          9        1.00       63.84
+                      nicaragua |          9        1.00       64.84
+                          niger |          9        1.00       65.85
+                         norway |          9        1.00       66.85
+                       pakistan |          9        1.00       67.86
+                         panama |          9        1.00       68.86
+                       paraguay |          9        1.00       69.87
+                           peru |          9        1.00       70.87
+                    philippines |          9        1.00       71.88
+                         poland |          9        1.00       72.88
+                       portugal |          9        1.00       73.88
+                        romania |          9        1.00       74.89
+                         rwanda |          9        1.00       75.89
+                        senegal |          9        1.00       76.90
+                     seychelles |          3        0.33       77.23
+                   sierra leone |          9        1.00       78.24
+                      singapore |          9        1.00       79.24
+                       slovenia |          3        0.33       79.58
+                solomon islands |          1        0.11       79.69
+                   south africa |          9        1.00       80.69
+                          spain |          9        1.00       81.70
+                      sri lanka |          9        1.00       82.70
+                          sudan |          9        1.00       83.71
+                      swaziland |          9        1.00       84.71
+                         sweden |          9        1.00       85.71
+                    switzerland |          9        1.00       86.72
+                          syria |          9        1.00       87.72
+                         taiwan |          9        1.00       88.73
+                     tajikistan |          1        0.11       88.84
+                       thailand |          9        1.00       89.84
+                           togo |          9        1.00       90.85
+                        tunisia |          9        1.00       91.85
+                         turkey |          9        1.00       92.86
+                         uganda |          9        1.00       93.86
+                 united kingdom |          9        1.00       94.87
+                  united states |          9        1.00       95.87
+                        uruguay |          9        1.00       96.88
+                        vanuatu |          1        0.11       96.99
+                      venezuela |          9        1.00       97.99
+                         zambia |          9        1.00       99.00
+                       zimbabwe |          9        1.00      100.00
+--------------------------------+-----------------------------------
+                          Total |        896      100.00
+
+-> tabulation of year  
+
+Year_of_obs |
+   ervation |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1960 |         99       11.05       11.05
+       1965 |         97       10.83       21.88
+       1970 |        100       11.16       33.04
+       1975 |         98       10.94       43.97
+       1980 |        100       11.16       55.13
+       1985 |         98       10.94       66.07
+       1990 |        107       11.94       78.01
+       1995 |         99       11.05       89.06
+       2000 |         98       10.94      100.00
+------------+-----------------------------------
+      Total |        896      100.00
