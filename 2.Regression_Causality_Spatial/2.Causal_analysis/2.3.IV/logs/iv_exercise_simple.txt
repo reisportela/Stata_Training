@@ -1,0 +1,413 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causal
+> ity_Spatial/2.Causal_analysis/2.3.IV/logs/iv_exercise_simple.txt
+  log type:  text
+ opened on:  28 Dec 2021, 20:25:33
+r; t=0.00 20:25:33
+
+. 
+. 
+. // Wooldridge's data
+. // use http://fmwww.bc.edu/ec-p/data/wooldridge/card.dta, clear // THE DESCRIPTION 
+> OF VARIABLES IS AT http://fmwww.bc.edu/ec-p/data/wooldridge/card.DES
+. // save data\card, replace
+. 
+. use data/card, clear
+r; t=0.00 20:25:33
+
+.         
+. ****** 1
+. *** first step    
+.         regress educ exper nearc4
+
+      Source |       SS           df       MS      Number of obs   =     3,010
+-------------+----------------------------------   F(2, 3007)      =   1168.01
+       Model |  9427.15876         2  4713.57938   Prob > F        =    0.0000
+    Residual |  12134.9213     3,007  4.03555747   R-squared       =    0.4372
+-------------+----------------------------------   Adj R-squared   =    0.4368
+       Total |  21562.0801     3,009  7.16586243   Root MSE        =    2.0089
+
+------------------------------------------------------------------------------
+        educ | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       exper |  -.4178713   .0088591   -47.17   0.000    -.4352419   -.4005007
+      nearc4 |   .6000438    .078779     7.62   0.000     .4455776    .7545101
+       _cons |   16.55492   .1044175   158.55   0.000     16.35018    16.75966
+------------------------------------------------------------------------------
+r; t=0.04 20:25:33
+
+.         predict educ_hat, xb
+r; t=0.00 20:25:33
+
+. 
+. *** second step
+.         reg lwage educ_hat exper
+
+      Source |       SS           df       MS      Number of obs   =     3,010
+-------------+----------------------------------   F(2, 3007)      =     42.17
+       Model |  16.1689846         2  8.08449232   Prob > F        =    0.0000
+    Residual |  576.472627     3,007  .191710218   R-squared       =    0.0273
+-------------+----------------------------------   Adj R-squared   =    0.0266
+       Total |  592.641611     3,009  .196956335   Root MSE        =    .43785
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    educ_hat |   .2620435   .0286153     9.16   0.000     .2059359    .3181511
+       exper |   .1119278   .0122293     9.15   0.000     .0879491    .1359064
+       _cons |   1.794981    .486854     3.69   0.000     .8403808    2.749582
+------------------------------------------------------------------------------
+r; t=0.00 20:25:33
+
+. 
+. *** ivregress command
+.         ivregress 2sls lwage (educ=nearc4) exper
+
+Instrumental variables 2SLS regression            Number of obs   =      3,010
+                                                  Wald chi2(2)    =      58.08
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =          .
+                                                  Root MSE        =     .52762
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .2620434   .0344824     7.60   0.000     .1944591    .3296277
+       exper |   .1119277   .0147367     7.60   0.000     .0830443    .1408112
+       _cons |   1.794982   .5866753     3.06   0.002     .6451199    2.944845
+------------------------------------------------------------------------------
+Instrumented: educ
+ Instruments: exper nearc4
+r; t=0.02 20:25:33
+
+.         estat firststage
+
+  First-stage regression summary statistics
+  --------------------------------------------------------------------------
+               |            Adjusted      Partial
+      Variable |   R-sq.       R-sq.        R-sq.     F(1,3007)   Prob > F
+  -------------+------------------------------------------------------------
+          educ |  0.4372      0.4368       0.0189       58.0156    0.0000
+  --------------------------------------------------------------------------
+
+
+  Minimum eigenvalue statistic = 58.0156     
+
+  Critical Values                      # of endogenous regressors:    1
+  H0: Instruments are weak             # of excluded instruments:     1
+  ---------------------------------------------------------------------
+                                     |    5%     10%     20%     30%
+  2SLS relative bias                 |         (not available)
+  -----------------------------------+---------------------------------
+                                     |   10%     15%     20%     25%
+  2SLS size of nominal 5% Wald test  |  16.38    8.96    6.66    5.53
+  LIML size of nominal 5% Wald test  |  16.38    8.96    6.66    5.53
+  ---------------------------------------------------------------------
+
+r; t=0.04 20:25:33
+
+.         capture estat overid    // if you have overidentifying restrictions - more 
+> excluded instruments than endogenous variables 
+r; t=0.00 20:25:33
+
+. 
+. ****** Wald estimator
+. 
+.         reg educ nearc4 exper
+
+      Source |       SS           df       MS      Number of obs   =     3,010
+-------------+----------------------------------   F(2, 3007)      =   1168.01
+       Model |  9427.15876         2  4713.57938   Prob > F        =    0.0000
+    Residual |  12134.9213     3,007  4.03555747   R-squared       =    0.4372
+-------------+----------------------------------   Adj R-squared   =    0.4368
+       Total |  21562.0801     3,009  7.16586243   Root MSE        =    2.0089
+
+------------------------------------------------------------------------------
+        educ | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      nearc4 |   .6000438    .078779     7.62   0.000     .4455776    .7545101
+       exper |  -.4178713   .0088591   -47.17   0.000    -.4352419   -.4005007
+       _cons |   16.55492   .1044175   158.55   0.000     16.35018    16.75966
+------------------------------------------------------------------------------
+r; t=0.00 20:25:33
+
+.                 loc p=_b[nearc4]
+r; t=0.00 20:25:33
+
+.         reg lwage  nearc4 exper
+
+      Source |       SS           df       MS      Number of obs   =     3,010
+-------------+----------------------------------   F(2, 3007)      =     42.17
+       Model |  16.1689806         2  8.08449028   Prob > F        =    0.0000
+    Residual |  576.472631     3,007   .19171022   R-squared       =    0.0273
+-------------+----------------------------------   Adj R-squared   =    0.0266
+       Total |  592.641611     3,009  .196956335   Root MSE        =    .43785
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      nearc4 |   .1572375   .0171704     9.16   0.000     .1235705    .1909045
+       exper |   .0024273   .0019309     1.26   0.209    -.0013587    .0062134
+       _cons |    6.13309   .0227585   269.49   0.000     6.088466    6.177714
+------------------------------------------------------------------------------
+r; t=0.00 20:25:33
+
+.                 loc g=_b[nearc4]
+r; t=0.00 20:25:33
+
+.                 
+.                 di `g'/`p'
+.26204342
+r; t=0.00 20:25:33
+
+. 
+. **** example with ivreg2
+. 
+.         loc x exper* smsa* south mar black reg662-reg669
+r; t=0.00 20:25:33
+
+.         reg lw educ `x'
+
+      Source |       SS           df       MS      Number of obs   =     3,003
+-------------+----------------------------------   F(16, 2986)     =     88.77
+       Model |  190.491439        16  11.9057149   Prob > F        =    0.0000
+    Residual |  400.469678     2,986  .134115766   R-squared       =    0.3223
+-------------+----------------------------------   Adj R-squared   =    0.3187
+       Total |  590.961117     3,002  .196855802   Root MSE        =    .36622
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0721602   .0034563    20.88   0.000     .0653832    .0789372
+       exper |   .0729737    .006633    11.00   0.000      .059968    .0859794
+     expersq |  -.0019353   .0003138    -6.17   0.000    -.0025506     -.00132
+        smsa |    .146736   .0198151     7.41   0.000     .1078833    .1855887
+      smsa66 |   .0273701   .0191493     1.43   0.153    -.0101771    .0649173
+       south |  -.1500989   .0255626    -5.87   0.000     -.200221   -.0999768
+     married |  -.0337244   .0033959    -9.93   0.000     -.040383   -.0270659
+       black |  -.1776566   .0181329    -9.80   0.000    -.2132109   -.1421023
+      reg662 |   .0865361   .0353271     2.45   0.014     .0172681    .1558041
+      reg663 |   .1314438   .0345821     3.80   0.000     .0636367     .199251
+      reg664 |   .0396375   .0410496     0.97   0.334    -.0408508    .1201258
+      reg665 |   .1221119   .0411657     2.97   0.003     .0413958     .202828
+      reg666 |   .1260921    .044545     2.83   0.005     .0387501    .2134341
+      reg667 |   .1009636    .044113     2.29   0.022     .0144687    .1874586
+      reg668 |  -.0688523    .050639    -1.36   0.174    -.1681431    .0304385
+      reg669 |   .1119442   .0382476     2.93   0.003       .03695    .1869385
+       _cons |   4.800592   .0753959    63.67   0.000     4.652758    4.948425
+------------------------------------------------------------------------------
+r; t=0.00 20:25:33
+
+.         ivreg2 lw `x' (educ=nearc2 nearc4), first endog(educ)
+
+First-stage regressions
+-----------------------
+
+
+First-stage regression of educ:
+
+Statistics consistent for homoskedasticity only
+Number of obs =                   3003
+------------------------------------------------------------------------------
+        educ | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      nearc2 |   .1337323   .0773159     1.73   0.084    -.0178655    .2853301
+      nearc4 |   .3046451   .0877441     3.47   0.001     .1326001    .4766901
+       exper |  -.4353127   .0341231   -12.76   0.000      -.50222   -.3684055
+     expersq |   .0015345   .0016575     0.93   0.355    -.0017154    .0047844
+        smsa |   .4206891    .104688     4.02   0.000     .2154211     .625957
+      smsa66 |  -.0003157   .1067079    -0.00   0.998    -.2095441    .2089127
+       south |   -.043702   .1351725    -0.32   0.746    -.3087426    .2213386
+     married |  -.0759753   .0179028    -4.24   0.000    -.1110784   -.0408722
+       black |  -.8815549   .0947926    -9.30   0.000     -1.06742   -.6956894
+      reg662 |  -.1236749   .1871108    -0.66   0.509    -.4905542    .2432044
+      reg663 |  -.0555278   .1830055    -0.30   0.762    -.4143574    .3033019
+      reg664 |   .0912466   .2171169     0.42   0.674    -.3344672    .5169605
+      reg665 |  -.2839695   .2177912    -1.30   0.192    -.7110055    .1430665
+      reg666 |  -.3797225   .2373238    -1.60   0.110    -.8450573    .0856123
+      reg667 |  -.2546649   .2339252    -1.09   0.276    -.7133358    .2040059
+      reg668 |   .5169989    .268261     1.93   0.054    -.0089964    1.042994
+      reg669 |   .1774331   .2037843     0.87   0.384    -.2221388     .577005
+       _cons |   16.92218   .2520529    67.14   0.000     16.42797     17.4164
+------------------------------------------------------------------------------
+F test of excluded instruments:
+  F(  2,  2985) =     7.49
+  Prob > F      =   0.0006
+Sanderson-Windmeijer multivariate F test of excluded instruments:
+  F(  2,  2985) =     7.49
+  Prob > F      =   0.0006
+
+
+
+Summary results for first-stage regressions
+-------------------------------------------
+
+                                           (Underid)            (Weak id)
+Variable     | F(  2,  2985)  P-val | SW Chi-sq(  2) P-val | SW F(  2,  2985)
+educ         |       7.49    0.0006 |       15.07   0.0005 |        7.49
+
+Stock-Yogo weak ID F test critical values for single endogenous regressor:
+                                   10% maximal IV size             19.93
+                                   15% maximal IV size             11.59
+                                   20% maximal IV size              8.75
+                                   25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Sanderson-Windmeijer F statistic.
+
+Underidentification test
+Ho: matrix of reduced form coefficients has rank=K1-1 (underidentified)
+Ha: matrix has rank=K1 (identified)
+Anderson canon. corr. LM statistic       Chi-sq(2)=15.00    P-val=0.0006
+
+Weak identification test
+Ho: equation is weakly identified
+Cragg-Donald Wald F statistic                                       7.49
+
+Stock-Yogo weak ID test critical values for K1=1 and L1=2:
+                                   10% maximal IV size             19.93
+                                   15% maximal IV size             11.59
+                                   20% maximal IV size              8.75
+                                   25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+
+Weak-instrument-robust inference
+Tests of joint significance of endogenous regressors B1 in main equation
+Ho: B1=0 and orthogonality conditions are valid
+Anderson-Rubin Wald test           F(2,2985)=      5.79     P-val=0.0031
+Anderson-Rubin Wald test           Chi-sq(2)=     11.66     P-val=0.0029
+Stock-Wright LM S statistic        Chi-sq(2)=     11.61     P-val=0.0030
+
+Number of observations               N  =       3003
+Number of regressors                 K  =         17
+Number of endogenous regressors      K1 =          1
+Number of instruments                L  =         18
+Number of excluded instruments       L1 =          2
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =     3003
+                                                      F( 16,  2986) =    51.30
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  590.9611167                Centered R2   =   0.1785
+Total (uncentered) SS   =  118352.1588                Uncentered R2 =   0.9959
+Residual SS             =  485.4778239                Root MSE      =    .4021
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .1591769   .0536943     2.96   0.003      .053938    .2644158
+       exper |   .1108912   .0244485     4.54   0.000     .0629729    .1588094
+     expersq |  -.0020689   .0003542    -5.84   0.000    -.0027632   -.0013747
+        smsa |   .1075362   .0324878     3.31   0.001     .0438613     .171211
+      smsa66 |   .0159268   .0221727     0.72   0.473     -.027531    .0593845
+       south |  -.1448748   .0282491    -5.13   0.000     -.200242   -.0895077
+     married |  -.0270899   .0055296    -4.90   0.000    -.0379278    -.016252
+       black |  -.1032364    .049946    -2.07   0.039    -.2011286   -.0053441
+      reg662 |   .0951615   .0391477     2.43   0.015     .0184334    .1718897
+      reg663 |   .1400007   .0383316     3.65   0.000     .0648721    .2151294
+      reg664 |   .0351235   .0451543     0.78   0.437    -.0533774    .1236243
+      reg665 |   .1512305   .0486203     3.11   0.002     .0559364    .2465246
+      reg666 |   .1638293   .0541421     3.03   0.002     .0577127    .2699459
+      reg667 |   .1301422   .0516549     2.52   0.012     .0289004    .2313839
+      reg668 |  -.1070199   .0603568    -1.77   0.076     -.225317    .0112772
+      reg669 |   .0942512   .0433816     2.17   0.030     .0092249    .1792776
+       _cons |   3.310985   .9206035     3.60   0.000     1.506635    5.115335
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):          14.999
+                                                   Chi-sq(2) P-val =    0.0006
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):                7.492
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           2.190
+                                                   Chi-sq(1) P-val =    0.1389
+-endog- option:
+Endogeneity test of endogenous regressors:                               3.200
+                                                   Chi-sq(1) P-val =    0.0736
+Regressors tested:    educ
+------------------------------------------------------------------------------
+Instrumented:         educ
+Included instruments: exper expersq smsa smsa66 south married black reg662
+                      reg663 reg664 reg665 reg666 reg667 reg668 reg669
+Excluded instruments: nearc2 nearc4
+------------------------------------------------------------------------------
+r; t=0.34 20:25:33
+
+.         ivreg2 lw `x' (educ=nearc2 nearc4), liml
+
+LIML estimation
+---------------
+k               =1.00071
+lambda          =1.00071
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =     3003
+                                                      F( 16,  2986) =    48.29
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  590.9611167                Centered R2   =   0.1270
+Total (uncentered) SS   =  118352.1588                Uncentered R2 =   0.9956
+Residual SS             =  515.9200897                Root MSE      =    .4145
+
+------------------------------------------------------------------------------
+       lwage | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .1735677    .059733     2.91   0.004     .0564931    .2906423
+       exper |   .1171619    .027036     4.33   0.000     .0641724    .1701515
+     expersq |   -.002091   .0003668    -5.70   0.000    -.0028099   -.0013722
+        smsa |   .1010533    .034985     2.89   0.004     .0324839    .1696227
+      smsa66 |   .0140343   .0230473     0.61   0.543    -.0311375    .0592061
+       south |  -.1440109   .0291525    -4.94   0.000    -.2011486   -.0868731
+     married |  -.0259927   .0059519    -4.37   0.000    -.0376582   -.0143272
+       black |  -.0909288   .0549526    -1.65   0.098     -.198634    .0167764
+      reg662 |    .096588   .0404178     2.39   0.017     .0173706    .1758054
+      reg663 |   .1414159   .0395768     3.57   0.000     .0638468     .218985
+      reg664 |    .034377   .0465631     0.74   0.460     -.056885     .125639
+      reg665 |   .1560461   .0506816     3.08   0.002      .056712    .2553803
+      reg666 |   .1700702   .0566569     3.00   0.003     .0590247    .2811157
+      reg667 |   .1349677   .0537795     2.51   0.012     .0295619    .2403735
+      reg668 |   -.113332    .062995    -1.80   0.072    -.2367999    .0101359
+      reg669 |   .0913251   .0449535     2.03   0.042     .0032179    .1794324
+       _cons |   3.064634   1.023914     2.99   0.003     1.057799    5.071469
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):          14.999
+                                                   Chi-sq(2) P-val =    0.0006
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):                7.492
+Stock-Yogo weak ID test critical values: 10% maximal LIML size            8.68
+                                         15% maximal LIML size            5.33
+                                         20% maximal LIML size            4.42
+                                         25% maximal LIML size            3.92
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           2.128
+                                                   Chi-sq(1) P-val =    0.1446
+------------------------------------------------------------------------------
+Anderson-Rubin statistic (overidentification test of all instruments):   2.129
+                                                   Chi-sq(1) P-val =    0.1445
+------------------------------------------------------------------------------
+Instrumented:         educ
+Included instruments: exper expersq smsa smsa66 south married black reg662
+                      reg663 reg664 reg665 reg666 reg667 reg668 reg669
+Excluded instruments: nearc2 nearc4
+------------------------------------------------------------------------------
+r; t=0.04 20:25:34
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causal
+> ity_Spatial/2.Causal_analysis/2.3.IV/logs/iv_exercise_simple.txt
+  log type:  text
+ closed on:  28 Dec 2021, 20:25:34
+-------------------------------------------------------------------------------------

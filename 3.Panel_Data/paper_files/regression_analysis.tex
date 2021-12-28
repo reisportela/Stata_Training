@@ -1,0 +1,27 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{5}{c}}
+\hline\hline
+            &\multicolumn{1}{c}{OLS}&\multicolumn{1}{c}{IV}&\multicolumn{1}{c}{FE}&\multicolumn{1}{c}{RE}&\multicolumn{1}{c}{FE (cluster)}\\
+\hline
+Education   &      0.2011\sym{***}&      0.2041\sym{***}&      0.0275         &      0.0551\sym{***}&     -0.0180         \\
+            &      (0.02)         &      (0.02)         &      (0.02)         &      (0.02)         &      (0.04)         \\
+[1em]
+Log Capital &      0.1958\sym{***}&      0.1932\sym{***}&      0.2243\sym{***}&      0.1966\sym{***}&      0.2126\sym{***}\\
+            &      (0.03)         &      (0.03)         &      (0.03)         &      (0.03)         &      (0.06)         \\
+[1em]
+Openness    &      0.0061\sym{***}&      0.0061\sym{***}&     -0.0020\sym{***}&     -0.0017\sym{***}&     -0.0020\sym{**} \\
+            &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         &      (0.00)         \\
+\hline
+\(N\)       &         232         &         232         &         232         &         232         &         232         \\
+\textit{AIC}&    476.3275         &    476.3513         &    -3.2e+02         &           .         &    -3.2e+02         \\
+Log likelihood&    -2.3e+02         &    -2.3e+02         &    162.1656         &                     &    165.2199         \\
+$R^{2}$     &      0.5793         &      0.5793         &      0.4423         &                     &      0.4568         \\
+F statistic (overall)&    104.6699         &    104.4600         &     48.1072         &                     &     27.6674         \\
+Root MSE    &      0.6697         &      0.6639         &      0.1358         &      0.1440         &      0.1208         \\
+\hline\hline
+\multicolumn{6}{l}{\footnotesize Notes: standard errors in parenthesis. Significance levels: *, 10\%;}\\
+\multicolumn{6}{l}{\footnotesize **, 5\%; ***, 1\%. The dependent variable is ln real GDP per workers.}\\
+\multicolumn{6}{l}{\footnotesize Source: own computations.}\\
+\end{tabular}
+}

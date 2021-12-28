@@ -1,0 +1,789 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/3.Panel_Data/panel_
+> simulation/logs/iv_panel_simulation.txt
+  log type:  text
+ opened on:  28 Dec 2021, 20:18:03
+r; t=0.00 20:18:03
+
+. 
+. ****** 10000 observations ******
+. 
+. // build simulated data
+. set obs 10000                   // define the number of observations
+Number of observations (_N) was 0, now 10,000.
+r; t=0.00 20:18:03
+
+. set seed 345567789              // define the 'seed' in order to be able to replica
+> te the results
+r; t=0.00 20:18:03
+
+. 
+. // define worker's id and year of observation
+. gen workerid = int(_n/10.1)+1
+r; t=0.00 20:18:03
+
+. bysort workerid: gen ano = _n
+r; t=0.00 20:18:03
+
+. 
+. sort workerid ano
+r; t=0.00 20:18:03
+
+. tsset workerid ano
+
+Panel variable: workerid (unbalanced)
+ Time variable: ano, 1 to 11
+         Delta: 1 unit
+r; t=0.01 20:18:03
+
+. 
+. // generate individual's specific effect, ui
+. bysort workerid (ano): gen double ui = runiform() if _n == 1
+(9,009 missing values generated)
+r; t=0.00 20:18:03
+
+.      bysort workerid (ano): replace ui = ui[_n-1] if _n > 1
+(9009 real changes made)
+r; t=0.00 20:18:03
+
+. 
+. // build the instrument, q1
+. bysort workerid (ano): gen quarter= int(4*uniform()+1) if _n == 1
+(9,009 missing values generated)
+r; t=0.00 20:18:03
+
+.      bysort workerid (ano): replace quarter = quarter[_n-1] if _n > 1
+(9009 real changes made)
+r; t=0.00 20:18:03
+
+.          
+.         gen q1=(quarter==1)
+r; t=0.00 20:18:03
+
+. 
+. // build education and experience; education is a function of ui, the worker specif
+> ic effect, as well as the instrument, q1
+. bysort workerid (ano): gen educ= int(16*uniform())*ui if _n == 1
+(9,009 missing values generated)
+r; t=0.00 20:18:03
+
+.         bysort workerid (ano): replace educ= educ - 3*q1 if _n == 1
+(255 real changes made)
+r; t=0.00 20:18:03
+
+.         
+.         bysort workerid (ano): replace educ = educ[_n-1] + round(uniform()) if _n >
+>  1
+(9,009 real changes made)
+r; t=0.00 20:18:03
+
+.         egen sd = sd(educ),by(workerid)
+r; t=0.00 20:18:03
+
+.                 sum sd, detail
+
+                             sd
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%      .421637              0
+ 5%     .6992059              0
+10%      .942809              0       Obs              10,000
+25%     1.229273              0       Sum of wgt.      10,000
+
+50%     1.567021                      Mean           1.584525
+                        Largest       Std. dev.        .52303
+75%      1.95789       3.027651
+90%     2.250926       3.027651       Variance       .2735604
+95%      2.44949       3.027651       Skewness       .0067619
+99%     2.750758       3.027651       Kurtosis       2.718482
+r; t=0.00 20:18:03
+
+.                 drop sd
+r; t=0.00 20:18:03
+
+. 
+. bysort workerid (ano): gen exper= int(20*uniform()) if _n == 1
+(9,009 missing values generated)
+r; t=0.00 20:18:03
+
+.         bysort workerid (ano): replace exper = exper[_n-1] + 1 if _n > 1
+(9009 real changes made)
+r; t=0.00 20:18:03
+
+.         
+.         gen exper2 = exper^2
+r; t=0.00 20:18:03
+
+. 
+. // generate the true log wage equation, where the error term is defined by 'uniform
+> ()/ln(485)'; 485 is the minimum wage
+. gen double lnwage = ln(485) + 0.06*educ + 0.007*exper - 0.00001*exper2 + 0.02*ano +
+>  ui + uniform()/ln(485)
+r; t=0.00 20:18:03
+
+. 
+. // # 1. OLS
+. 
+. reg lnwage educ exper exper2
+
+      Source |       SS           df       MS      Number of obs   =    10,000
+-------------+----------------------------------   F(3, 9996)      =   9977.08
+       Model |  1787.15231         3  595.717436   Prob > F        =    0.0000
+    Residual |   596.84698     9,996  .059708581   R-squared       =    0.7496
+-------------+----------------------------------   Adj R-squared   =    0.7496
+       Total |  2383.99929     9,999  .238423771   Root MSE        =    .24435
+
+------------------------------------------------------------------------------
+      lnwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .1045954   .0006174   169.42   0.000     .1033852    .1058056
+       exper |   .0038243   .0015415     2.48   0.013     .0008027    .0068458
+      exper2 |   .0000246   .0000535     0.46   0.646    -.0000803    .0001295
+       _cons |   6.679093   .0104279   640.50   0.000     6.658652    6.699534
+------------------------------------------------------------------------------
+r; t=0.04 20:18:03
+
+. reg lnwage educ exper exper2 i.ano ui
+
+      Source |       SS           df       MS      Number of obs   =    10,000
+-------------+----------------------------------   F(14, 9985)     =  76168.49
+       Model |  2361.88346        14  168.705962   Prob > F        =    0.0000
+    Residual |   22.115825     9,985  .002214905   R-squared       =    0.9907
+-------------+----------------------------------   Adj R-squared   =    0.9907
+       Total |  2383.99929     9,999  .238423771   Root MSE        =    .04706
+
+------------------------------------------------------------------------------
+      lnwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |    .059892   .0001542   388.44   0.000     .0595898    .0601943
+       exper |    .007413   .0003041    24.38   0.000      .006817    .0080091
+      exper2 |  -.0000242   .0000105    -2.31   0.021    -.0000447   -3.66e-06
+             |
+         ano |
+          2  |   .0206929    .002119     9.77   0.000     .0165393    .0248466
+          3  |   .0384738    .002132    18.05   0.000     .0342946     .042653
+          4  |   .0601573   .0021504    27.97   0.000      .055942    .0643726
+          5  |   .0797889   .0021736    36.71   0.000     .0755281    .0840496
+          6  |   .0971509   .0022004    44.15   0.000     .0928376    .1014641
+          7  |   .1185836   .0022295    53.19   0.000     .1142134    .1229537
+          8  |    .139834   .0022618    61.82   0.000     .1354003    .1442676
+          9  |   .1606693   .0022985    69.90   0.000     .1561637    .1651749
+         10  |   .1787051   .0023415    76.32   0.000     .1741154    .1832949
+         11  |   .1985104   .0051297    38.70   0.000     .1884551    .2085657
+             |
+          ui |   .9992167   .0019617   509.37   0.000     .9953715    1.003062
+       _cons |   6.283603   .0024061  2611.50   0.000     6.278886    6.288319
+------------------------------------------------------------------------------
+r; t=0.00 20:18:03
+
+. 
+. reg lnwage educ exper exper2 i.ano
+
+      Source |       SS           df       MS      Number of obs   =    10,000
+-------------+----------------------------------   F(13, 9986)     =   2300.35
+       Model |  1787.20088        13  137.476991   Prob > F        =    0.0000
+    Residual |  596.798405     9,986  .059763509   R-squared       =    0.7497
+-------------+----------------------------------   Adj R-squared   =    0.7493
+       Total |  2383.99929     9,999  .238423771   Root MSE        =    .24447
+
+------------------------------------------------------------------------------
+      lnwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |    .104553   .0006588   158.70   0.000     .1032616    .1058444
+       exper |   .0038454   .0015791     2.44   0.015     .0007499    .0069408
+      exper2 |   .0000226   .0000544     0.42   0.677    -.0000839    .0001292
+             |
+         ano |
+          2  |   .0020216   .0110054     0.18   0.854    -.0195512    .0235943
+          3  |    .001037   .0110682     0.09   0.925    -.0206588    .0227328
+          4  |   .0031645   .0111552     0.28   0.777     -.018702    .0250311
+          5  |    .002109    .011263     0.19   0.851    -.0199688    .0241868
+          6  |  -.0013098   .0113858    -0.12   0.908    -.0236283    .0210087
+          7  |    .000692   .0115183     0.06   0.952    -.0218861    .0232701
+          8  |   .0023277    .011665     0.20   0.842    -.0205381    .0251935
+          9  |    .003229   .0118312     0.27   0.785    -.0199625    .0264206
+         10  |   .0005155   .0120261     0.04   0.966    -.0230581    .0240891
+         11  |   .0191802   .0265834     0.72   0.471    -.0329285     .071289
+             |
+       _cons |   6.677916    .011834   564.30   0.000     6.654719    6.701113
+------------------------------------------------------------------------------
+r; t=0.00 20:18:03
+
+.         est store OLS
+r; t=0.00 20:18:03
+
+.         outreg2 using iv_panel_simulationdoc, dec(4) alpha(0.001, 0.01, 0.05) sortv
+> ar(educ exper exper2) /*
+>                 */ keep(educ exper exper2) nocons/*
+>                 */ word label addnote(Sourse: Own computations; simulated data) rep
+> lace ctitle(OLS) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+iv_panel_simulationdoc.rtf
+dir : seeout
+r; t=0.09 20:18:03
+
+. 
+. // # 2. PANEL
+. xtreg lnwage educ exper exper2 i.ano, re theta
+
+Random-effects GLS regression                   Number of obs     =     10,000
+Group variable: workerid                        Number of groups  =        991
+
+R-squared:                                      Obs per group:
+     Within  = 0.9341                                         min =          2
+     Between = 0.7267                                         avg =       10.1
+     Overall = 0.7213                                         max =         11
+
+                                                Wald chi2(13)     =  124847.89
+corr(u_i, X) = 0 (assumed)                      Prob > chi2       =     0.0000
+
+------------------- theta --------------------
+  min      5%       median        95%      max
+0.8616   0.9376     0.9376     0.9405   0.9405
+
+------------------------------------------------------------------------------
+      lnwage | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0650299   .0006997    92.94   0.000     .0636585    .0664013
+       exper |   .0032712   .0013911     2.35   0.019     .0005447    .0059977
+      exper2 |   1.79e-06   .0000142     0.13   0.900    -.0000261    .0000297
+             |
+         ano |
+          2  |   .0218708    .002567     8.52   0.000     .0168395    .0269021
+          3  |   .0407823   .0035125    11.61   0.000      .033898    .0476667
+          4  |     .06346   .0046804    13.56   0.000     .0542865    .0726335
+          5  |   .0839144   .0059438    14.12   0.000     .0722648    .0955641
+          6  |   .1020473   .0072507    14.07   0.000     .0878362    .1162585
+          7  |    .124365   .0085753    14.50   0.000     .1075578    .1411722
+          8  |   .1464382   .0099142    14.77   0.000     .1270068    .1658696
+          9  |   .1680183   .0112633    14.92   0.000     .1459427    .1900939
+         10  |    .186664   .0126221    14.79   0.000     .1619252    .2114028
+         11  |    .207941   .0148268    14.02   0.000      .178881     .237001
+             |
+       _cons |   6.800829   .0150567   451.68   0.000     6.771319     6.83034
+-------------+----------------------------------------------------------------
+     sigma_u |  .23831538
+     sigma_e |   .0470988
+         rho |  .96240972   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+r; t=0.06 20:18:03
+
+.         est store RE
+r; t=0.00 20:18:03
+
+.         outreg2 using iv_panel_simulationdoc, dec(4) alpha(0.001, 0.01, 0.05) sortv
+> ar(educ exper exper2) /*
+>                 */ keep(educ exper exper2) nocons/*
+>                 */ word label addnote(Sourse: Own computations; simulated data) app
+> end ctitle(RE) /*
+>                 */ adds(RMSE, e(rmse))
+warning: addnote ignored in appended columns
+iv_panel_simulationdoc.rtf
+dir : seeout
+r; t=0.03 20:18:03
+
+. 
+. // discuss why some time dummies are dropped
+. xtreg lnwage educ exper exper2, fe      // omit the time dummies
+
+Fixed-effects (within) regression               Number of obs     =     10,000
+Group variable: workerid                        Number of groups  =        991
+
+R-squared:                                      Obs per group:
+     Within  = 0.9343                                         min =          2
+     Between = 0.5216                                         avg =       10.1
+     Overall = 0.5702                                         max =         11
+
+                                                F(3,9006)         =   42720.32
+corr(u_i, Xb) = 0.1723                          Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+      lnwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |    .060015   .0007251    82.77   0.000     .0585936    .0614363
+       exper |   .0264515   .0005354    49.40   0.000     .0254019     .027501
+      exper2 |   5.79e-06   .0000136     0.43   0.670    -.0000209    .0000325
+       _cons |   6.599001   .0033048  1996.79   0.000     6.592523    6.605479
+-------------+----------------------------------------------------------------
+     sigma_u |  .32197879
+     sigma_e |  .04708704
+         rho |   .9790609   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(990, 9006) = 262.81                 Prob > F = 0.0000
+r; t=0.02 20:18:03
+
+. 
+. xtreg lnwage educ exper exper2 i.ano, fe        // complete model
+note: 11.ano omitted because of collinearity.
+
+Fixed-effects (within) regression               Number of obs     =     10,000
+Group variable: workerid                        Number of groups  =        991
+
+R-squared:                                      Obs per group:
+     Within  = 0.9344                                         min =          2
+     Between = 0.5214                                         avg =       10.1
+     Overall = 0.5701                                         max =         11
+
+                                                F(12,8997)        =   10675.12
+corr(u_i, Xb) = 0.1718                          Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+      lnwage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0600312   .0007255    82.74   0.000      .058609    .0614534
+       exper |   .0264998   .0007491    35.37   0.000     .0250313    .0279683
+      exper2 |   4.95e-06    .000014     0.35   0.723    -.0000224    .0000323
+             |
+         ano |
+          2  |   .0009658   .0020778     0.46   0.642    -.0031073    .0050388
+          3  |  -.0010072   .0021732    -0.46   0.643    -.0052671    .0032527
+          4  |    .000831   .0023807     0.35   0.727    -.0038358    .0054977
+          5  |   .0005558   .0026723     0.21   0.835    -.0046826    .0057941
+          6  |  -.0020473   .0030225    -0.68   0.498    -.0079721    .0038775
+          7  |  -.0006334   .0034129    -0.19   0.853    -.0073235    .0060566
+          8  |   .0005396   .0038311     0.14   0.888    -.0069702    .0080494
+          9  |   .0012386   .0042695     0.29   0.772    -.0071307    .0096078
+         10  |  -.0009224   .0047234    -0.20   0.845    -.0101814    .0083365
+         11  |          0  (omitted)
+             |
+       _cons |   6.598491   .0060158  1096.86   0.000     6.586699    6.610284
+-------------+----------------------------------------------------------------
+     sigma_u |  .32200922
+     sigma_e |   .0470988
+         rho |  .97905454   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(990, 8997) = 262.68                 Prob > F = 0.0000
+r; t=0.02 20:18:03
+
+.         est store FE
+r; t=0.00 20:18:03
+
+.         outreg2 using iv_panel_simulationdoc, dec(4) alpha(0.001, 0.01, 0.05) sortv
+> ar(educ exper exper2) /*
+>                 */ keep(educ exper exper2) nocons/*
+>                 */ word label addnote(Sourse: Own computations; simulated data) app
+> end ctitle(FE) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+iv_panel_simulationdoc.rtf
+dir : seeout
+r; t=0.03 20:18:03
+
+.         
+.         hausman FE RE
+
+Note: the rank of the differenced variance matrix (11) does not equal the number of
+        coefficients being tested (12); be sure this is what you expect, or there may
+        be problems computing the test.  Examine the output of your estimators for
+        anything unexpected and possibly consider scaling your variables so that the
+        coefficients are on a similar scale.
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |       FE           RE         Difference       Std. err.
+-------------+----------------------------------------------------------------
+        educ |    .0600312     .0650299       -.0049987        .0001918
+       exper |    .0264998     .0032712        .0232286               .
+      exper2 |    4.95e-06     1.79e-06        3.16e-06               .
+         ano |
+          2  |    .0009658     .0218708        -.020905               .
+          3  |   -.0010072     .0407823       -.0417895               .
+          4  |     .000831       .06346        -.062629               .
+          5  |    .0005558     .0839144       -.0833586               .
+          6  |   -.0020473     .1020473       -.1040946               .
+          7  |   -.0006334      .124365       -.1249985               .
+          8  |    .0005396     .1464382       -.1458986               .
+          9  |    .0012386     .1680183       -.1667797               .
+         10  |   -.0009224      .186664       -.1875864               .
+------------------------------------------------------------------------------
+                          b = Consistent under H0 and Ha; obtained from xtreg.
+           B = Inconsistent under Ha, efficient under H0; obtained from xtreg.
+
+Test of H0: Difference in coefficients not systematic
+
+   chi2(11) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+            = 608.60
+Prob > chi2 = 0.0000
+(V_b-V_B is not positive definite)
+r; t=0.01 20:18:03
+
+. 
+. // # 3. IV
+.     preserve
+r; t=0.00 20:18:03
+
+.                 bysort workerid (ano): keep if _n==1    // cross-section
+(9,009 observations deleted)
+r; t=0.00 20:18:03
+
+.         xi: ivreg2 lnwage (educ = q1) exper exper2 i.ano, first
+i.ano             _Iano_1-1           (naturally coded; _Iano_1 omitted)
+
+First-stage regressions
+-----------------------
+
+
+First-stage regression of educ:
+
+Statistics consistent for homoskedasticity only
+Number of obs =                    991
+------------------------------------------------------------------------------
+        educ | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          q1 |  -2.652487   .2452442   -10.82   0.000    -3.133747   -2.171227
+       exper |  -.2207339   .0704411    -3.13   0.002    -.3589654   -.0825023
+      exper2 |   .0104826   .0036033     2.91   0.004     .0034116    .0175537
+       _cons |   4.385635   .2906396    15.09   0.000     3.815293    4.955978
+------------------------------------------------------------------------------
+F test of excluded instruments:
+  F(  1,   987) =   116.98
+  Prob > F      =   0.0000
+Sanderson-Windmeijer multivariate F test of excluded instruments:
+  F(  1,   987) =   116.98
+  Prob > F      =   0.0000
+
+
+
+Summary results for first-stage regressions
+-------------------------------------------
+
+                                           (Underid)            (Weak id)
+Variable     | F(  1,   987)  P-val | SW Chi-sq(  1) P-val | SW F(  1,   987)
+educ         |     116.98    0.0000 |      117.45   0.0000 |      116.98
+
+Stock-Yogo weak ID F test critical values for single endogenous regressor:
+                                   10% maximal IV size             16.38
+                                   15% maximal IV size              8.96
+                                   20% maximal IV size              6.66
+                                   25% maximal IV size              5.53
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Sanderson-Windmeijer F statistic.
+
+Underidentification test
+Ho: matrix of reduced form coefficients has rank=K1-1 (underidentified)
+Ha: matrix has rank=K1 (identified)
+Anderson canon. corr. LM statistic       Chi-sq(1)=105.01   P-val=0.0000
+
+Weak identification test
+Ho: equation is weakly identified
+Cragg-Donald Wald F statistic                                     116.98
+
+Stock-Yogo weak ID test critical values for K1=1 and L1=1:
+                                   10% maximal IV size             16.38
+                                   15% maximal IV size              8.96
+                                   20% maximal IV size              6.66
+                                   25% maximal IV size              5.53
+Source: Stock-Yogo (2005).  Reproduced by permission.
+
+Weak-instrument-robust inference
+Tests of joint significance of endogenous regressors B1 in main equation
+Ho: B1=0 and orthogonality conditions are valid
+Anderson-Rubin Wald test           F(1,987)=      22.43     P-val=0.0000
+Anderson-Rubin Wald test           Chi-sq(1)=     22.52     P-val=0.0000
+Stock-Wright LM S statistic        Chi-sq(1)=     22.02     P-val=0.0000
+
+Number of observations               N  =        991
+Number of regressors                 K  =          4
+Number of endogenous regressors      K1 =          1
+Number of instruments                L  =          4
+Number of excluded instruments       L1 =          1
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      991
+                                                      F(  3,   987) =    20.90
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =   204.526855                Centered R2   =   0.5715
+Total (uncentered) SS   =  49053.61464                Uncentered R2 =   0.9982
+Residual SS             =  87.63945741                Root MSE      =    .2974
+
+------------------------------------------------------------------------------
+      lnwage | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |    .058357   .0081615     7.15   0.000     .0423606    .0743533
+       exper |  -.0071226   .0064377    -1.11   0.269    -.0197404    .0054951
+      exper2 |   .0005378   .0003265     1.65   0.099    -.0001021    .0011778
+       _cons |   6.852443   .0393731   174.04   0.000     6.775273    6.929613
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         105.008
+                                                   Chi-sq(1) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              116.979
+Stock-Yogo weak ID test critical values: 10% maximal IV size             16.38
+                                         15% maximal IV size              8.96
+                                         20% maximal IV size              6.66
+                                         25% maximal IV size              5.53
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           0.000
+                                                 (equation exactly identified)
+------------------------------------------------------------------------------
+Instrumented:         educ
+Included instruments: exper exper2
+Excluded instruments: q1
+------------------------------------------------------------------------------
+r; t=0.32 20:18:04
+
+.                 est store IV
+r; t=0.00 20:18:04
+
+.                 outreg2 using iv_panel_simulationdoc, dec(4) alpha(0.001, 0.01, 0.0
+> 5) sortvar(educ exper exper2) /*
+>                         */ keep(educ exper exper2) nocons/*
+>                         */ word label addnote(Sourse: Own computations; simulated d
+> ata) append ctitle(IV) /*
+>                         */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+iv_panel_simulationdoc.rtf
+dir : seeout
+r; t=0.02 20:18:04
+
+.     restore
+r; t=0.00 20:18:04
+
+. 
+. // # 4. PANEL + IV
+. 
+. // explain why education is dropped in the following regression
+. xtivreg lnwage (educ=q1) exper exper2 i.ano, fe
+
+Fixed-effects (within) IV regression            Number of obs     =     10,000
+Group variable: workerid                        Number of groups  =        991
+
+R-squared:                                      Obs per group:
+     Within  = 0.8844                                         min =          2
+     Between = 0.0005                                         avg =       10.1
+     Overall = 0.0285                                         max =         11
+
+                                                Wald chi2(11)     =   1.36e+08
+corr(u_i, Xb) = -0.5169                         Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      lnwage | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |          0  (omitted)
+       exper |   .0554797   .0008787    63.14   0.000     .0537575     .057202
+      exper2 |   .0000596   .0000185     3.22   0.001     .0000233    .0000958
+             |
+         ano |
+          2  |  -.0004374    .002757    -0.16   0.874    -.0058411    .0049663
+          3  |  -.0035443   .0028833    -1.23   0.219    -.0091955     .002107
+          4  |  -.0023881   .0031586    -0.76   0.450    -.0085789    .0038026
+          5  |  -.0020599   .0035457    -0.58   0.561    -.0090094    .0048896
+          6  |  -.0041688   .0040105    -1.04   0.299    -.0120292    .0036917
+          7  |  -.0043103   .0045282    -0.95   0.341    -.0131855    .0045649
+          8  |  -.0046806   .0050829    -0.92   0.357    -.0146429    .0052816
+          9  |   -.005331   .0056644    -0.94   0.347     -.016433    .0057709
+         10  |  -.0079804   .0062666    -1.27   0.203    -.0202626    .0043018
+         11  |          0  (omitted)
+             |
+       _cons |   6.495937   .0078112   831.62   0.000     6.480627    6.511247
+-------------+----------------------------------------------------------------
+     sigma_u |  .55805227
+     sigma_e |  .06249659
+         rho |  .98761346   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+ F test that all u_i=0: F(990,8998) =   146.95            Prob > F    = 0.0000
+------------------------------------------------------------------------------
+Instrumented: educ
+ Instruments: exper exper2 2.ano 3.ano 4.ano 5.ano 6.ano 7.ano 8.ano 9.ano
+              10.ano 11.ano q1
+r; t=0.19 20:18:04
+
+.         est store FE_IV
+r; t=0.00 20:18:04
+
+.         outreg2 using iv_panel_simulationdoc, dec(4) alpha(0.001, 0.01, 0.05) sortv
+> ar(educ exper exper2) /*
+>                 */ keep(educ exper exper2) nocons/*
+>                 */ word label addnote(Sourse: Own computations; simulated data) app
+> end ctitle(FE_IV)
+warning: addnote ignored in appended columns
+iv_panel_simulationdoc.rtf
+dir : seeout
+r; t=0.03 20:18:04
+
+. 
+. // comparar os resultados do ivreg2 com os do xtivreg2, re - explicar/debater
+. xtivreg lnwage (educ=q1) exper exper2 i.ano, re
+
+G2SLS random-effects IV regression              Number of obs     =     10,000
+Group variable: workerid                        Number of groups  =        991
+
+R-squared:                                      Obs per group:
+     Within  = 0.9343                                         min =          2
+     Between = 0.7267                                         avg =       10.1
+     Overall = 0.7041                                         max =         11
+
+                                                Wald chi2(13)     =  112715.26
+corr(u_i, X) = 0 (assumed)                      Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      lnwage | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        educ |   .0580691    .006465     8.98   0.000      .045398    .0707402
+       exper |   .0028947   .0013693     2.11   0.035     .0002108    .0055785
+      exper2 |   8.52e-06   .0000157     0.54   0.586    -.0000222    .0000392
+             |
+         ano |
+          2  |   .0254371   .0041701     6.10   0.000     .0172639    .0336103
+          3  |    .047946   .0074476     6.44   0.000      .033349    .0625431
+          4  |    .074272   .0109544     6.78   0.000     .0528017    .0957423
+          5  |   .0985231   .0146421     6.73   0.000     .0698252     .127221
+          6  |   .1204391   .0183412     6.57   0.000      .084491    .1563872
+          7  |   .1463015   .0218453     6.70   0.000     .1034855    .1891175
+          8  |     .17192   .0253562     6.78   0.000     .1222228    .2216172
+          9  |   .1970671   .0288902     6.82   0.000     .1404434    .2536907
+         10  |   .2193788   .0325133     6.75   0.000     .1556538    .2831038
+         11  |   .2452405   .0372425     6.58   0.000     .1722466    .3182343
+             |
+       _cons |   6.823791   .0255574   267.00   0.000     6.773699    6.873882
+-------------+----------------------------------------------------------------
+     sigma_u |  .29486418
+     sigma_e |  .06250701
+         rho |  .95699461   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+Instrumented: educ
+ Instruments: exper exper2 2.ano 3.ano 4.ano 5.ano 6.ano 7.ano 8.ano 9.ano
+              10.ano 11.ano q1
+r; t=0.10 20:18:04
+
+.         est store RE_IV
+r; t=0.00 20:18:04
+
+.         outreg2 using iv_panel_simulationdoc, dec(4) alpha(0.001, 0.01, 0.05) sortv
+> ar(educ exper exper2) /*
+>                 */ keep(educ exper exper2) nocons/*
+>                 */ word label addnote(Sourse: Own computations; simulated data) app
+> end ctitle(RE_IV)
+warning: addnote ignored in appended columns
+iv_panel_simulationdoc.rtf
+dir : seeout
+r; t=0.03 20:18:04
+
+. 
+. // discuss the underlying problems with this exercise
+. estimates dir
+
+-------------------------------------------------------------------
+             |           Dependent  Number of        
+        Name | Command    variable     param.  Title 
+-------------+-----------------------------------------------------
+         OLS | regress      lnwage         15  Linear regression
+          RE | xtreg        lnwage         15  
+          FE | xtreg        lnwage         15  
+          IV | ivreg2       lnwage          4  IV (2SLS) estimation
+       FE_IV | xtivreg      lnwage         15  
+       RE_IV | xtivreg      lnwage         15  
+-------------------------------------------------------------------
+r; t=0.00 20:18:04
+
+. est stats OLS RE FE IV FE_IV RE_IV
+
+Akaike's information criterion and Bayesian information criterion
+
+-----------------------------------------------------------------------------
+       Model |          N   ll(null)  ll(model)      df        AIC        BIC
+-------------+---------------------------------------------------------------
+         OLS |     10,000  -7020.357  -95.58036      14   219.1607   320.1055
+          RE |     10,000          .          .      14          .          .
+          FE |     10,000    3275.12   16894.16      13  -33762.32  -33668.59
+          IV |        991          .  -204.3412       4   416.6823   436.2772
+       FE_IV |     10,000          .          .      12          .          .
+       RE_IV |     10,000          .          .      14          .          .
+-----------------------------------------------------------------------------
+Note: BIC uses N = number of observations. See [R] BIC note.
+r; t=0.00 20:18:04
+
+. 
+.         estimates table OLS RE FE IV FE_IV RE_IV, keep(educ exper exper2) b(%7.4f) 
+> se(%7.4f) stats(N r2_a)
+
+--------------------------------------------------------------------------
+    Variable |    OLS         RE          FE          IV         FE_IV    
+-------------+------------------------------------------------------------
+        educ |    0.1046      0.0650      0.0600      0.0584   (omitted)  
+             |    0.0007      0.0007      0.0007      0.0082              
+       exper |    0.0038      0.0033      0.0265     -0.0071      0.0555  
+             |    0.0016      0.0014      0.0007      0.0064      0.0009  
+      exper2 |    0.0000      0.0000      0.0000      0.0005      0.0001  
+             |    0.0001      0.0000      0.0000      0.0003      0.0000  
+-------------+------------------------------------------------------------
+           N |     10000       10000       10000         991       10000  
+        r2_a |    0.7493                  0.9271      0.5702              
+--------------------------------------------------------------------------
+                                                              Legend: b/se
+
+
+--------------------------
+    Variable |   RE_IV    
+-------------+------------
+        educ |    0.0581  
+             |    0.0065  
+       exper |    0.0029  
+             |    0.0014  
+      exper2 |    0.0000  
+             |    0.0000  
+-------------+------------
+           N |     10000  
+        r2_a |            
+--------------------------
+              Legend: b/se
+r; t=0.02 20:18:04
+
+.         estimates table OLS RE FE IV FE_IV RE_IV, keep(educ exper exper2) b(%7.4f) 
+> star stats(N r2_a)
+
+--------------------------------------------------------------------------
+    Variable |     OLS             RE             FE             IV       
+-------------+------------------------------------------------------------
+        educ |    0.1046***      0.0650***      0.0600***      0.0584***  
+       exper |    0.0038*        0.0033*        0.0265***     -0.0071     
+      exper2 |    0.0000         0.0000         0.0000         0.0005     
+-------------+------------------------------------------------------------
+           N |     10000          10000          10000            991     
+        r2_a |    0.7493                        0.9271         0.5702     
+--------------------------------------------------------------------------
+                                  Legend: * p<0.05; ** p<0.01; *** p<0.001
+
+
+--------------------------------------------
+    Variable |    FE_IV          RE_IV      
+-------------+------------------------------
+        educ | (omitted)         0.0581***  
+       exper |    0.0555***      0.0029*    
+      exper2 |    0.0001**       0.0000     
+-------------+------------------------------
+           N |     10000          10000     
+        r2_a |                              
+--------------------------------------------
+    Legend: * p<0.05; ** p<0.01; *** p<0.001
+r; t=0.01 20:18:04
+
+.         sh start iv_panel_simulationdoc.rtf     // execute a DOS command == !start 
+> iv_panel_simulationdoc.rtf
+
+zsh:1: command not found: start
+r; t=0.11 20:18:04
+
+. 
+. timer off 1
+r; t=0.00 20:18:04
+
+. timer list 1
+   1:      1.26 /        1 =       1.2560
+r; t=0.00 20:18:04
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/3.Panel_Data/panel_
+> simulation/logs/iv_panel_simulation.txt
+  log type:  text
+ closed on:  28 Dec 2021, 20:18:04
+-------------------------------------------------------------------------------------

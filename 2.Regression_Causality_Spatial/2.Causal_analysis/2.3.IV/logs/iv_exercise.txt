@@ -1,0 +1,2257 @@
+------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/statafep2018/day2/2.causal_analysis/2.3.iv/logs/iv_exercise.txt
+  log type:  text
+ opened on:   6 Feb 2018, 09:45:22
+r; t=0.00 9:45:22
+
+. 
+. // IVREG2
+. 
+. // The following discussion follows the help file of the command 'ivreg2'
+. 
+.                 // ivreg2, ivregress, ivreg, newey
+.                 // overid, ivendog, ivhettest, ivreset, xtivreg2, xtoverid, ranktest, condivreg
+.                 // rivtest, cgmreg
+.                 // xtscc
+. 
+.                 // ssc install xtoverid
+.                 // net install st0033_2.pkg
+.                 // net install st0171_1.pkg
+.                 // 'cgmreg': available here: http://www.econ.ucdavis.edu/faculty/dlmiller/statafiles/
+.                 // ssc install xtscc
+. 
+. // Data: Griliches, Zvi (1976), "Wages of Very Young Men", The Journal of Political Economy,
+. // Vol. 84, No. 4, Part 2: Essays in Labor Economics in Honor of
+. // H. Gregg Lewis. (Aug., 1976), pp. S69-S86
+. 
+. capture use http://fmwww.bc.edu/ec-p/data/hayashi/griliches76.dta, clear
+r; t=0.74 9:45:23
+
+.         note: "Wages of Very Young Men, Zvi Griliches, J.Pol.Ec. 1976; downloaded june 2015"
+r; t=0.00 9:45:23
+
+.         notes
+
+_dta:
+  1.  "Wages of Very Young Men, Zvi Griliches, J.Pol.Ec. 1976; downloaded june 2015"
+r; t=0.00 9:45:23
+
+.         capture save data/griliches76, replace
+r; t=0.00 9:45:23
+
+.         
+. capture use data/griliches76, clear
+r; t=0.00 9:45:23
+
+. 
+. // the data
+. 
+. keep lw s expr tenure rns smsa year iq med kww age mrt
+r; t=0.00 9:45:23
+
+.         describe
+
+Contains data from data/griliches76.dta
+  obs:           758                          Wages of Very Young Men, Zvi Griliches, J.Pol.Ec. 1976
+ vars:            12                          6 Feb 2018 09:45
+ size:        36,384                          (_dta has notes)
+------------------------------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+------------------------------------------------------------------------------------------------------------------------------
+rns             float   %9.0g                 residency in South
+mrt             float   %9.0g                 marital status = 1 if married
+smsa            float   %9.0g                 reside metro area = 1 if urban
+med             float   %9.0g                 mother's education, years
+iq              float   %9.0g                 iq score
+kww             float   %9.0g                 score on knowledge in world of work test
+year            float   %9.0g                 
+age             float   %9.0g                 
+s               float   %9.0g                 completed years of schooling
+expr            float   %9.0g                 experience, years
+tenure          float   %9.0g                 tenure, years
+lw              float   %9.0g                 log wage
+------------------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+     Note: Dataset has changed since last saved.
+r; t=0.00 9:45:23
+
+.         sum
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         rns |        758    .2691293    .4438001          0          1
+         mrt |        758    .5145119    .5001194          0          1
+        smsa |        758    .7044855     .456575          0          1
+         med |        758    10.91029     2.74112          0         18
+          iq |        758    103.8562    13.61867         54        145
+-------------+---------------------------------------------------------
+         kww |        758    36.57388    7.302247         12         56
+        year |        758    69.03166    2.631794         66         73
+         age |        758    21.83509    2.981756         16         30
+           s |        758    13.40501    2.231828          9         18
+        expr |        758    1.735429    2.105542          0     11.444
+-------------+---------------------------------------------------------
+      tenure |        758    1.831135     1.67363          0         10
+          lw |        758    5.686739    .4289494      4.605      7.051
+r; t=0.00 9:45:23
+
+.         inspect rns-lw
+
+rns:  residency in South                        Number of Observations
+------------------------               ---------------------------------------
+                                             Total      Integers   Nonintegers
+|  #                         Negative            -             -             -
+|  #                         Zero              554           554             -
+|  #                         Positive          204           204             -
+|  #                                   -----------   -----------   -----------
+|  #   #                     Total             758           758             -
+|  #   #                     Missing             -
++----------------------                -----------
+0                     1                        758
+   (2 unique values)
+
+mrt:  marital status = 1 if married             Number of Observations
+-----------------------------------    ---------------------------------------
+                                             Total      Integers   Nonintegers
+|      #                     Negative            -             -             -
+|  #   #                     Zero              368           368             -
+|  #   #                     Positive          390           390             -
+|  #   #                               -----------   -----------   -----------
+|  #   #                     Total             758           758             -
+|  #   #                     Missing             -
++----------------------                -----------
+0                     1                        758
+   (2 unique values)
+
+smsa:  reside metro area = 1 if urban           Number of Observations
+-------------------------------------  ---------------------------------------
+                                             Total      Integers   Nonintegers
+|      #                     Negative            -             -             -
+|      #                     Zero              224           224             -
+|      #                     Positive          534           534             -
+|      #                               -----------   -----------   -----------
+|  #   #                     Total             758           758             -
+|  #   #                     Missing             -
++----------------------                -----------
+0                     1                        758
+   (2 unique values)
+
+med:  mother's education, years                 Number of Observations
+-------------------------------        ---------------------------------------
+                                             Total      Integers   Nonintegers
+|              #             Negative            -             -             -
+|              #             Zero                3             3             -
+|              #             Positive          755           755             -
+|              #                       -----------   -----------   -----------
+|          #   #             Total             758           758             -
+|  .   .   #   #   .         Missing             -
++----------------------                -----------
+0                    18                        758
+  (19 unique values)
+
+iq:  iq score                                   Number of Observations
+-------------                          ---------------------------------------
+                                             Total      Integers   Nonintegers
+|          #                 Negative            -             -             -
+|          #                 Zero                -             -             -
+|          #   #             Positive          758           758             -
+|          #   #                       -----------   -----------   -----------
+|          #   #             Total             758           758             -
+|  .   #   #   #   .         Missing             -
++----------------------                -----------
+54                  145                        758
+  (71 unique values)
+
+kww:  score on knowledge in world of wor        Number of Observations
+-------------------------------------------------------------------------------
+                                             Total      Integers   Nonintegers
+|          #                 Negative            -             -             -
+|          #   #             Zero                -             -             -
+|          #   #             Positive          758           758             -
+|          #   #                       -----------   -----------   -----------
+|      #   #   #             Total             758           758             -
+|  .   #   #   #   .         Missing             -
++----------------------                -----------
+12                   56                        758
+  (41 unique values)
+
+year:                                           Number of Observations
+-------                                ---------------------------------------
+                                             Total      Integers   Nonintegers
+|  #                         Negative            -             -             -
+|  #                         Zero                -             -             -
+|  #                         Positive          758           758             -
+|  #       #       #                   -----------   -----------   -----------
+|  #       #       #         Total             758           758             -
+|  #   #   #   #   #         Missing             -
++----------------------                -----------
+66                   73                        758
+   (7 unique values)
+
+age:                                            Number of Observations
+------                                 ---------------------------------------
+                                             Total      Integers   Nonintegers
+|          #                 Negative            -             -             -
+|      #   #                 Zero                -             -             -
+|      #   #                 Positive          758           758             -
+|      #   #                           -----------   -----------   -----------
+|  #   #   #                 Total             758           758             -
+|  #   #   #   #   .         Missing             -
++----------------------                -----------
+16                   30                        758
+  (15 unique values)
+
+s:  completed years of schooling                Number of Observations
+--------------------------------       ---------------------------------------
+                                             Total      Integers   Nonintegers
+|      #                     Negative            -             -             -
+|      #                     Zero                -             -             -
+|      #                     Positive          758           758             -
+|      #                               -----------   -----------   -----------
+|      #       #             Total             758           758             -
+|  .   #   #   #   #         Missing             -
++----------------------                -----------
+9                    18                        758
+  (10 unique values)
+
+expr:  experience, years                        Number of Observations
+------------------------               ---------------------------------------
+                                             Total      Integers   Nonintegers
+|  #                         Negative            -             -             -
+|  #                         Zero              176           176             -
+|  #                         Positive          582            22           560
+|  #                                   -----------   -----------   -----------
+|  #                         Total             758           198           560
+|  #   #   .   .   .         Missing             -
++----------------------                -----------
+0                11.444                        758
+(More than 99 unique values)
+
+tenure:  tenure, years                          Number of Observations
+----------------------                 ---------------------------------------
+                                             Total      Integers   Nonintegers
+|  #                         Negative            -             -             -
+|  #                         Zero               80            80             -
+|  #                         Positive          678           678             -
+|  #                                   -----------   -----------   -----------
+|  #   #                     Total             758           758             -
+|  #   #   .   .   .         Missing             -
++----------------------                -----------
+0                    10                        758
+  (11 unique values)
+
+lw:  log wage                                   Number of Observations
+-------------                          ---------------------------------------
+                                             Total      Integers   Nonintegers
+|          #                 Negative            -             -             -
+|      #   #                 Zero                -             -             -
+|      #   #                 Positive          758             -           758
+|      #   #                           -----------   -----------   -----------
+|      #   #   #             Total             758             -           758
+|  #   #   #   #   .         Missing             -
++----------------------                -----------
+4.605             7.051                        758
+(More than 99 unique values)
+r; t=0.00 9:45:23
+
+.         codebook lw tenure s
+
+------------------------------------------------------------------------------------------------------------------------------
+lw                                                                                                                    log wage
+------------------------------------------------------------------------------------------------------------------------------
+
+                  type:  numeric (float)
+
+                 range:  [4.605,7.051]                units:  .001
+         unique values:  304                      missing .:  0/758
+
+                  mean:   5.68674
+              std. dev:   .428949
+
+           percentiles:        10%       25%       50%       75%       90%
+                             5.165      5.38     5.684     5.991     6.252
+
+------------------------------------------------------------------------------------------------------------------------------
+tenure                                                                                                           tenure, years
+------------------------------------------------------------------------------------------------------------------------------
+
+                  type:  numeric (float)
+
+                 range:  [0,10]                       units:  1
+         unique values:  11                       missing .:  0/758
+
+                  mean:   1.83113
+              std. dev:   1.67363
+
+           percentiles:        10%       25%       50%       75%       90%
+                                 0         1         1         2         4
+
+------------------------------------------------------------------------------------------------------------------------------
+s                                                                                                 completed years of schooling
+------------------------------------------------------------------------------------------------------------------------------
+
+                  type:  numeric (float)
+
+                 range:  [9,18]                       units:  1
+         unique values:  10                       missing .:  0/758
+
+                  mean:    13.405
+              std. dev:   2.23183
+
+           percentiles:        10%       25%       50%       75%       90%
+                                11        12        12        16        16
+r; t=0.02 9:45:23
+
+.         l s in 1/10
+
+     +----+
+     |  s |
+     |----|
+  1. | 12 |
+  2. | 16 |
+  3. | 14 |
+  4. | 12 |
+  5. |  9 |
+     |----|
+  6. |  9 |
+  7. | 18 |
+  8. | 15 |
+  9. | 12 |
+ 10. | 18 |
+     +----+
+r; t=0.00 9:45:23
+
+.         tab s
+
+  completed |
+   years of |
+  schooling |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          9 |         16        2.11        2.11
+         10 |         29        3.83        5.94
+         11 |         34        4.49       10.42
+         12 |        330       43.54       53.96
+         13 |         61        8.05       62.01
+         14 |         42        5.54       67.55
+         15 |         27        3.56       71.11
+         16 |        151       19.92       91.03
+         17 |         33        4.35       95.38
+         18 |         35        4.62      100.00
+------------+-----------------------------------
+      Total |        758      100.00
+r; t=0.00 9:45:23
+
+.         tab s smsa, row
+
++----------------+
+| Key            |
+|----------------|
+|   frequency    |
+| row percentage |
++----------------+
+
+ completed | reside metro area = 1
+  years of |       if urban
+ schooling |         0          1 |     Total
+-----------+----------------------+----------
+         9 |         7          9 |        16 
+           |     43.75      56.25 |    100.00 
+-----------+----------------------+----------
+        10 |         9         20 |        29 
+           |     31.03      68.97 |    100.00 
+-----------+----------------------+----------
+        11 |        11         23 |        34 
+           |     32.35      67.65 |    100.00 
+-----------+----------------------+----------
+        12 |       112        218 |       330 
+           |     33.94      66.06 |    100.00 
+-----------+----------------------+----------
+        13 |        14         47 |        61 
+           |     22.95      77.05 |    100.00 
+-----------+----------------------+----------
+        14 |        11         31 |        42 
+           |     26.19      73.81 |    100.00 
+-----------+----------------------+----------
+        15 |         7         20 |        27 
+           |     25.93      74.07 |    100.00 
+-----------+----------------------+----------
+        16 |        41        110 |       151 
+           |     27.15      72.85 |    100.00 
+-----------+----------------------+----------
+        17 |         7         26 |        33 
+           |     21.21      78.79 |    100.00 
+-----------+----------------------+----------
+        18 |         5         30 |        35 
+           |     14.29      85.71 |    100.00 
+-----------+----------------------+----------
+     Total |       224        534 |       758 
+           |     29.55      70.45 |    100.00 
+
+r; t=0.00 9:45:23
+
+.         tab s smsa, sum(lw) means
+
+                             Means of log wage
+
+ completed | reside metro area =
+  years of |     1 if urban
+ schooling |         0          1 |     Total
+-----------+----------------------+----------
+         9 | 5.3542857  5.2902222 |   5.31825
+        10 | 5.4487778     5.3982 | 5.4138965
+        11 | 5.4610909  5.5653044 | 5.5315882
+        12 | 5.4153482  5.5824771 | 5.5257545
+        13 | 5.4832857  5.7452979 | 5.6851639
+        14 | 5.5715455  5.8093548 | 5.7470714
+        15 | 5.5878572    6.00395 | 5.8960741
+        16 | 5.8517317  5.9280636 | 5.9073377
+        17 | 5.9908572  6.1612308 | 6.1250909
+        18 |    5.9466  6.1881667 | 6.1536572
+-----------+----------------------+----------
+     Total | 5.5440536  5.7465918 | 5.6867388
+r; t=0.00 9:45:23
+
+.         tabstat lw,by(s) stat(mean sd p10 p50 p90 p95)
+
+Summary for variables: lw
+     by categories of: s (completed years of schooling)
+
+       s |      mean        sd       p10       p50       p90       p95
+---------+------------------------------------------------------------
+       9 |   5.31825  .4367386     4.804    5.3955     5.927     6.064
+      10 |  5.413897  .3224943     4.956     5.371     5.858     5.999
+      11 |  5.531588   .397366     5.011    5.6095     6.031     6.319
+      12 |  5.525755  .3552526     5.078     5.521      5.99     6.136
+      13 |  5.685164  .3829808     5.153     5.704     6.176     6.215
+      14 |  5.747071  .3996768     5.298    5.6885     6.215     6.333
+      15 |  5.896074  .4116025     5.416     5.964     6.358     6.551
+      16 |  5.907338  .3396442     5.464     5.927     6.297     6.394
+      17 |  6.125091  .4071887     5.421     6.176     6.615     6.706
+      18 |  6.153657   .486854     5.438     6.254     6.645     6.729
+---------+------------------------------------------------------------
+   Total |  5.686739  .4289494     5.165     5.684     6.252     6.399
+----------------------------------------------------------------------
+r; t=0.01 9:45:23
+
+. 
+. // OLS model
+. xi i.year
+i.year            _Iyear_66-73        (naturally coded; _Iyear_66 omitted)
+r; t=0.00 9:45:23
+
+. 
+. reg lw s expr tenure rns smsa _I*
+
+      Source |       SS           df       MS      Number of obs   =       758
+-------------+----------------------------------   F(11, 746)      =     50.10
+       Model |  59.1760912        11  5.37964465   Prob > F        =    0.0000
+    Residual |  80.1100586       746  .107386138   R-squared       =    0.4249
+-------------+----------------------------------   Adj R-squared   =    0.4164
+       Total |   139.28615       757  .183997556   Root MSE        =     .3277
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |    .069673   .0066869    10.42   0.000     .0565457    .0828003
+        expr |    .029799   .0065238     4.57   0.000     .0169919    .0426061
+      tenure |   .0433502   .0074971     5.78   0.000     .0286322    .0580682
+         rns |  -.1040919   .0274949    -3.79   0.000    -.1580686   -.0501152
+        smsa |   .1352673   .0266657     5.07   0.000     .0829187     .187616
+   _Iyear_67 |  -.0524871    .048037    -1.09   0.275    -.1467909    .0418167
+   _Iyear_68 |   .0793921   .0450704     1.76   0.079    -.0090879     .167872
+   _Iyear_69 |   .2111236   .0440133     4.80   0.000     .1247189    .2975284
+   _Iyear_70 |   .2393504    .048808     4.90   0.000     .1435331    .3351676
+   _Iyear_71 |    .228858   .0432016     5.30   0.000     .1440468    .3136692
+   _Iyear_73 |   .3261023   .0407997     7.99   0.000     .2460064    .4061981
+       _cons |   4.410852   .0919797    47.95   0.000     4.230282    4.591421
+------------------------------------------------------------------------------
+r; t=0.08 9:45:23
+
+.         est store OLS
+r; t=0.00 9:45:23
+
+.                 outreg2 using logs/iv_regressions, dec(4) alpha(0.001, 0.01, 0.05) /*
+>                 */ keep(iq s expr tenure rns smsa) sortvar(iq s expr tenure rns smsa) nocons/*
+>                 */ word label addnote(Source: Own computations; Griliches 1976's data.) /*
+>                 */ replace ctitle(OLS) adds(RMSE, e(rmse), LogLikelihood, e(ll))
+logs/iv_regressions.rtf
+dir : seeout
+r; t=0.13 9:45:23
+
+. 
+. // IV models
+. ivreg2 lw expr tenure rns smsa _I* (s = iq med kww age mrt)
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    49.44
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3511
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9963
+Residual SS             =  90.38293644                Root MSE      =    .3453
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1350754   .0108807    12.41   0.000     .1137497    .1564011
+        expr |   .0493546   .0073077     6.75   0.000     .0350318    .0636774
+      tenure |   .0389969   .0079193     4.92   0.000     .0234754    .0545184
+         rns |   -.079873   .0291348    -2.74   0.006    -.1369762   -.0227699
+        smsa |   .1207155   .0281592     4.29   0.000     .0655244    .1759065
+   _Iyear_67 |  -.0634714   .0506378    -1.25   0.210    -.1627196    .0357768
+   _Iyear_68 |   .0566513     .04758     1.19   0.234    -.0366039    .1499064
+   _Iyear_69 |   .1514251   .0469921     3.22   0.001     .0593223     .243528
+   _Iyear_70 |   .1523477   .0526003     2.90   0.004      .049253    .2554423
+   _Iyear_71 |   .0945112   .0486048     1.94   0.052    -.0007525    .1897749
+   _Iyear_73 |   .1187356   .0503922     2.36   0.018     .0199687    .2175024
+       _cons |   3.588752   .1423201    25.22   0.000      3.30981    3.867694
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         317.886
+                                                   Chi-sq(5) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              107.186
+Stock-Yogo weak ID test critical values:  5% maximal IV relative bias    18.37
+                                         10% maximal IV relative bias    10.83
+                                         20% maximal IV relative bias     6.77
+                                         30% maximal IV relative bias     5.25
+                                         10% maximal IV size             26.87
+                                         15% maximal IV size             15.09
+                                         20% maximal IV size             10.98
+                                         25% maximal IV size              8.84
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):          21.956
+                                                   Chi-sq(4) P-val =    0.0002
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq med kww age mrt
+------------------------------------------------------------------------------
+r; t=0.20 9:45:23
+
+.         ereturn list
+
+scalars:
+                  e(N) =  758
+          e(inexog_ct) =  10
+          e(exexog_ct) =  5
+           e(endog_ct) =  1
+         e(partial_ct) =  0
+               e(df_m) =  11
+          e(sdofminus) =  0
+           e(dofminus) =  0
+             e(center) =  0
+                 e(r2) =  .3510988957535538
+               e(rmse) =  .3453095747669814
+                e(rss) =  90.38293643872116
+                e(mss) =  48.90321340329639
+               e(r2_a) =  .3415306489080969
+                  e(F) =  49.44323126696937
+                 e(Fp) =  3.05429092563e-81
+               e(Fdf1) =  11
+               e(Fdf2) =  746
+                 e(yy) =  24652.24661741726
+                e(yyc) =  139.2861498420176
+               e(cons) =  1
+        e(partialcons) =  0
+           e(nocollin) =  0
+                e(cdf) =  107.1864816449797
+            e(widstat) =  107.1864816449797
+                 e(cd) =  .7222808736184613
+                e(idp) =  1.42646005155e-66
+               e(iddf) =  5
+             e(idstat) =  317.8859561115229
+            e(sarganp) =  .0002044986260782
+           e(sargandf) =  4
+             e(sargan) =  21.95604568352949
+                 e(jp) =  .0002044986260782
+                e(jdf) =  4
+                  e(j) =  21.95604568352949
+                 e(ll) =  -269.5634369988979
+              e(rankV) =  12
+              e(rankS) =  16
+             e(rankxx) =  12
+             e(rankzz) =  16
+             e(condxx) =  12122.56238284001
+             e(condzz) =  1831233.606271171
+                e(r2c) =  .3510988957535538
+                e(r2u) =  .9963336835850545
+
+macros:
+            e(predict) : "ivreg2_p"
+            e(version) : "04.1.10"
+          e(ivreg2cmd) : "ivreg2"
+                e(cmd) : "ivreg2"
+       e(hacsubtitleV) : "Statistics consistent for homoskedasticity only"
+       e(hacsubtitleB) : "Estimates efficient for homoskedasticity only"
+              e(title) : "IV (2SLS) estimation"
+            e(cmdline) : "ivreg2 lw expr tenure rns smsa _I* (s = iq med kww age mrt)"
+              e(model) : "iv"
+       e(partialsmall) : "small"
+             e(depvar) : "lw"
+            e(depvar0) : "lw"
+            e(depvar1) : "lw"
+              e(instd) : "s"
+             e(instd0) : "s"
+             e(instd1) : "s"
+              e(insts) : "iq med kww age mrt expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear.."
+             e(insts0) : "iq med kww age mrt expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear.."
+             e(insts1) : "iq med kww age mrt expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear.."
+             e(exexog) : "iq med kww age mrt"
+            e(exexog0) : "iq med kww age mrt"
+            e(exexog1) : "iq med kww age mrt"
+             e(inexog) : "expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+            e(inexog0) : "expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+            e(inexog1) : "expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+          e(marginsok) : "XB default"
+       e(marginsnotok) : "Residuals SCores"
+         e(properties) : "b V"
+
+matrices:
+                  e(b) :  1 x 12
+                  e(V) :  12 x 12
+               e(cdev) :  1 x 1
+               e(ccev) :  1 x 1
+                  e(W) :  16 x 16
+                  e(S) :  16 x 16
+
+functions:
+             e(sample)   
+r; t=0.00 9:45:23
+
+. 
+.         est store IV1
+r; t=0.00 9:45:23
+
+.         outreg2 using logs/iv_regressions, dec(4) alpha(0.001, 0.01, 0.05) /*
+>                 */ keep(iq s expr tenure rns smsa) sortvar(iq s expr tenure rns smsa) nocons/*
+>                 */ word label addnote(Source: Own computations; Griliches 1976's data.) /*
+>                 */ append ctitle(IV1) adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+logs/iv_regressions.rtf
+dir : seeout
+r; t=0.04 9:45:23
+
+.         
+. // endogeneity tests
+. 
+.         // Hausman test: validity of the OLS model
+.         
+.                 hausman IV1 OLS, sigmaless
+
+Note: the rank of the differenced variance matrix (1) does not equal the number of coefficients being tested (11); be sure
+        this is what you expect, or there may be problems computing the test.  Examine the output of your estimators for
+        anything unexpected and possibly consider scaling your variables so that the coefficients are on a similar scale.
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |      IV1          OLS         Difference          S.E.
+-------------+----------------------------------------------------------------
+           s |    .1350754      .069673        .0654025        .0082909
+        expr |    .0493546      .029799        .0195556         .002479
+      tenure |    .0389969     .0433502       -.0043533        .0005519
+         rns |    -.079873    -.1040919        .0242189        .0030702
+        smsa |    .1207155     .1352673       -.0145519        .0018447
+   _Iyear_67 |   -.0634714    -.0524871       -.0109843        .0013925
+   _Iyear_68 |    .0566513     .0793921       -.0227408        .0028828
+   _Iyear_69 |    .1514251     .2111236       -.0596985        .0075679
+   _Iyear_70 |    .1523477     .2393504       -.0870027        .0110292
+   _Iyear_71 |    .0945112      .228858       -.1343469        .0170309
+   _Iyear_73 |    .1187356     .3261023       -.2073667        .0262875
+------------------------------------------------------------------------------
+                          b = consistent under Ho and Ha; obtained from ivreg2
+          B = inconsistent under Ha, efficient under Ho; obtained from regress
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                  chi2(1) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =       62.23
+                Prob>chi2 =      0.0000
+                (V_b-V_B is not positive definite)
+r; t=0.07 9:45:23
+
+.                 
+.         // compare with the result below for 'ivendog'
+. 
+.                 // equivalence of DWH endogeneity test when regressor is endogenous...
+.                         ivendog
+
+Tests of endogeneity of: s
+H0: Regressor is exogenous
+    Wu-Hausman F test:                 76.04644  F(1,745)    P-value = 0.00000
+    Durbin-Wu-Hausman chi-sq test:     70.20700  Chi-sq(1)   P-value = 0.00000
+r; t=0.02 9:45:23
+
+. 
+.                 // ...endogeneity test using the endog option
+.                         ivreg2 lw expr tenure rns smsa _I* (s = iq med kww age mrt), endog(s)
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    49.44
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3511
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9963
+Residual SS             =  90.38293644                Root MSE      =    .3453
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1350754   .0108807    12.41   0.000     .1137497    .1564011
+        expr |   .0493546   .0073077     6.75   0.000     .0350318    .0636774
+      tenure |   .0389969   .0079193     4.92   0.000     .0234754    .0545184
+         rns |   -.079873   .0291348    -2.74   0.006    -.1369762   -.0227699
+        smsa |   .1207155   .0281592     4.29   0.000     .0655244    .1759065
+   _Iyear_67 |  -.0634714   .0506378    -1.25   0.210    -.1627196    .0357768
+   _Iyear_68 |   .0566513     .04758     1.19   0.234    -.0366039    .1499064
+   _Iyear_69 |   .1514251   .0469921     3.22   0.001     .0593223     .243528
+   _Iyear_70 |   .1523477   .0526003     2.90   0.004      .049253    .2554423
+   _Iyear_71 |   .0945112   .0486048     1.94   0.052    -.0007525    .1897749
+   _Iyear_73 |   .1187356   .0503922     2.36   0.018     .0199687    .2175024
+       _cons |   3.588752   .1423201    25.22   0.000      3.30981    3.867694
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         317.886
+                                                   Chi-sq(5) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              107.186
+Stock-Yogo weak ID test critical values:  5% maximal IV relative bias    18.37
+                                         10% maximal IV relative bias    10.83
+                                         20% maximal IV relative bias     6.77
+                                         30% maximal IV relative bias     5.25
+                                         10% maximal IV size             26.87
+                                         15% maximal IV size             15.09
+                                         20% maximal IV size             10.98
+                                         25% maximal IV size              8.84
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):          21.956
+                                                   Chi-sq(4) P-val =    0.0002
+-endog- option:
+Endogeneity test of endogenous regressors:                              70.207
+                                                   Chi-sq(1) P-val =    0.0000
+Regressors tested:    s
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq med kww age mrt
+------------------------------------------------------------------------------
+r; t=0.11 9:45:23
+
+. 
+.                 // ...and C-test of exogeneity when regressor is exogenous, using the orthog option
+.                         ivreg2 lw expr tenure rns smsa _I* (s = iq med kww age mrt), orthog(iq)
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    49.44
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3511
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9963
+Residual SS             =  90.38293644                Root MSE      =    .3453
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1350754   .0108807    12.41   0.000     .1137497    .1564011
+        expr |   .0493546   .0073077     6.75   0.000     .0350318    .0636774
+      tenure |   .0389969   .0079193     4.92   0.000     .0234754    .0545184
+         rns |   -.079873   .0291348    -2.74   0.006    -.1369762   -.0227699
+        smsa |   .1207155   .0281592     4.29   0.000     .0655244    .1759065
+   _Iyear_67 |  -.0634714   .0506378    -1.25   0.210    -.1627196    .0357768
+   _Iyear_68 |   .0566513     .04758     1.19   0.234    -.0366039    .1499064
+   _Iyear_69 |   .1514251   .0469921     3.22   0.001     .0593223     .243528
+   _Iyear_70 |   .1523477   .0526003     2.90   0.004      .049253    .2554423
+   _Iyear_71 |   .0945112   .0486048     1.94   0.052    -.0007525    .1897749
+   _Iyear_73 |   .1187356   .0503922     2.36   0.018     .0199687    .2175024
+       _cons |   3.588752   .1423201    25.22   0.000      3.30981    3.867694
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         317.886
+                                                   Chi-sq(5) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              107.186
+Stock-Yogo weak ID test critical values:  5% maximal IV relative bias    18.37
+                                         10% maximal IV relative bias    10.83
+                                         20% maximal IV relative bias     6.77
+                                         30% maximal IV relative bias     5.25
+                                         10% maximal IV size             26.87
+                                         15% maximal IV size             15.09
+                                         20% maximal IV size             10.98
+                                         25% maximal IV size              8.84
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):          21.956
+                                                   Chi-sq(4) P-val =    0.0002
+-orthog- option:
+Sargan statistic (eqn. excluding suspect orthogonality conditions):     20.236
+                                                   Chi-sq(3) P-val =    0.0002
+C statistic (exogeneity/orthogonality of suspect instruments):           1.720
+                                                   Chi-sq(1) P-val =    0.1897
+Instruments tested:   iq
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq med kww age mrt
+------------------------------------------------------------------------------
+r; t=0.11 9:45:24
+
+.                         ivreg2 lw expr tenure rns smsa _I* (s = iq med kww age mrt), orthog(kww)
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    49.44
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3511
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9963
+Residual SS             =  90.38293644                Root MSE      =    .3453
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1350754   .0108807    12.41   0.000     .1137497    .1564011
+        expr |   .0493546   .0073077     6.75   0.000     .0350318    .0636774
+      tenure |   .0389969   .0079193     4.92   0.000     .0234754    .0545184
+         rns |   -.079873   .0291348    -2.74   0.006    -.1369762   -.0227699
+        smsa |   .1207155   .0281592     4.29   0.000     .0655244    .1759065
+   _Iyear_67 |  -.0634714   .0506378    -1.25   0.210    -.1627196    .0357768
+   _Iyear_68 |   .0566513     .04758     1.19   0.234    -.0366039    .1499064
+   _Iyear_69 |   .1514251   .0469921     3.22   0.001     .0593223     .243528
+   _Iyear_70 |   .1523477   .0526003     2.90   0.004      .049253    .2554423
+   _Iyear_71 |   .0945112   .0486048     1.94   0.052    -.0007525    .1897749
+   _Iyear_73 |   .1187356   .0503922     2.36   0.018     .0199687    .2175024
+       _cons |   3.588752   .1423201    25.22   0.000      3.30981    3.867694
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         317.886
+                                                   Chi-sq(5) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              107.186
+Stock-Yogo weak ID test critical values:  5% maximal IV relative bias    18.37
+                                         10% maximal IV relative bias    10.83
+                                         20% maximal IV relative bias     6.77
+                                         30% maximal IV relative bias     5.25
+                                         10% maximal IV size             26.87
+                                         15% maximal IV size             15.09
+                                         20% maximal IV size             10.98
+                                         25% maximal IV size              8.84
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):          21.956
+                                                   Chi-sq(4) P-val =    0.0002
+-orthog- option:
+Sargan statistic (eqn. excluding suspect orthogonality conditions):     21.392
+                                                   Chi-sq(3) P-val =    0.0001
+C statistic (exogeneity/orthogonality of suspect instruments):           0.564
+                                                   Chi-sq(1) P-val =    0.4527
+Instruments tested:   kww
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq med kww age mrt
+------------------------------------------------------------------------------
+r; t=0.10 9:45:24
+
+.                         ivreg2 lw expr tenure rns smsa _I* (s = iq med kww age mrt), orthog(iq kww)
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    49.44
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3511
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9963
+Residual SS             =  90.38293644                Root MSE      =    .3453
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1350754   .0108807    12.41   0.000     .1137497    .1564011
+        expr |   .0493546   .0073077     6.75   0.000     .0350318    .0636774
+      tenure |   .0389969   .0079193     4.92   0.000     .0234754    .0545184
+         rns |   -.079873   .0291348    -2.74   0.006    -.1369762   -.0227699
+        smsa |   .1207155   .0281592     4.29   0.000     .0655244    .1759065
+   _Iyear_67 |  -.0634714   .0506378    -1.25   0.210    -.1627196    .0357768
+   _Iyear_68 |   .0566513     .04758     1.19   0.234    -.0366039    .1499064
+   _Iyear_69 |   .1514251   .0469921     3.22   0.001     .0593223     .243528
+   _Iyear_70 |   .1523477   .0526003     2.90   0.004      .049253    .2554423
+   _Iyear_71 |   .0945112   .0486048     1.94   0.052    -.0007525    .1897749
+   _Iyear_73 |   .1187356   .0503922     2.36   0.018     .0199687    .2175024
+       _cons |   3.588752   .1423201    25.22   0.000      3.30981    3.867694
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         317.886
+                                                   Chi-sq(5) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              107.186
+Stock-Yogo weak ID test critical values:  5% maximal IV relative bias    18.37
+                                         10% maximal IV relative bias    10.83
+                                         20% maximal IV relative bias     6.77
+                                         30% maximal IV relative bias     5.25
+                                         10% maximal IV size             26.87
+                                         15% maximal IV size             15.09
+                                         20% maximal IV size             10.98
+                                         25% maximal IV size              8.84
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):          21.956
+                                                   Chi-sq(4) P-val =    0.0002
+-orthog- option:
+Sargan statistic (eqn. excluding suspect orthogonality conditions):     18.027
+                                                   Chi-sq(2) P-val =    0.0001
+C statistic (exogeneity/orthogonality of suspect instruments):           3.929
+                                                   Chi-sq(2) P-val =    0.1402
+Instruments tested:   iq kww
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq med kww age mrt
+------------------------------------------------------------------------------
+r; t=0.12 9:45:24
+
+. 
+.                         ivreg2 lw expr tenure rns smsa _I* (s = iq kww)
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.37
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3747
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =  87.09358552                Root MSE      =     .339
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1235974   .0127795     9.67   0.000     .0985499    .1486448
+        expr |   .0459226    .007474     6.14   0.000     .0312738    .0605714
+      tenure |   .0397609   .0077879     5.11   0.000      .024497    .0550248
+         rns |  -.0841234   .0287175    -2.93   0.003    -.1404087   -.0278381
+        smsa |   .1232693   .0276861     4.45   0.000     .0690055    .1775331
+   _Iyear_67 |  -.0615437   .0497218    -1.24   0.216    -.1589965    .0359092
+   _Iyear_68 |   .0606422   .0467699     1.30   0.195    -.0310251    .1523095
+   _Iyear_69 |   .1619021   .0465716     3.48   0.001     .0706234    .2531808
+   _Iyear_70 |   .1676165   .0524712     3.19   0.001     .0647748    .2704582
+   _Iyear_71 |   .1180889   .0498418     2.37   0.018     .0204007    .2157771
+   _Iyear_73 |   .1551281   .0542395     2.86   0.004     .0488207    .2614356
+       _cons |   3.733029   .1652188    22.59   0.000     3.409206    4.056852
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         222.050
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           1.537
+                                                   Chi-sq(1) P-val =    0.2151
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.08 9:45:24
+
+. 
+.         // Sargan-Basmann tests of overidentifying restrictions for IV estimation
+.                         ivreg2 lw expr tenure rns smsa _I* (s = iq kww)
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.37
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3747
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =  87.09358552                Root MSE      =     .339
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1235974   .0127795     9.67   0.000     .0985499    .1486448
+        expr |   .0459226    .007474     6.14   0.000     .0312738    .0605714
+      tenure |   .0397609   .0077879     5.11   0.000      .024497    .0550248
+         rns |  -.0841234   .0287175    -2.93   0.003    -.1404087   -.0278381
+        smsa |   .1232693   .0276861     4.45   0.000     .0690055    .1775331
+   _Iyear_67 |  -.0615437   .0497218    -1.24   0.216    -.1589965    .0359092
+   _Iyear_68 |   .0606422   .0467699     1.30   0.195    -.0310251    .1523095
+   _Iyear_69 |   .1619021   .0465716     3.48   0.001     .0706234    .2531808
+   _Iyear_70 |   .1676165   .0524712     3.19   0.001     .0647748    .2704582
+   _Iyear_71 |   .1180889   .0498418     2.37   0.018     .0204007    .2157771
+   _Iyear_73 |   .1551281   .0542395     2.86   0.004     .0488207    .2614356
+       _cons |   3.733029   .1652188    22.59   0.000     3.409206    4.056852
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         222.050
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           1.537
+                                                   Chi-sq(1) P-val =    0.2151
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.07 9:45:24
+
+.                                 
+.                                 overid, all
+
+Tests of overidentifying restrictions:
+Sargan N*R-sq test        1.537  Chi-sq(1)    P-value = 0.2151
+Sargan (N-L)*R-sq test    1.512  Chi-sq(1)    P-value = 0.2188
+Basmann test              1.513  Chi-sq(1)    P-value = 0.2186
+Sargan pseudo-F test      1.512  F(1,746)     P-value = 0.2192
+Basmann pseudo-F test     1.513  F(1,745)     P-value = 0.2190
+r; t=0.03 9:45:24
+
+. 
+.         // Tests of exogeneity and endogeneity
+. 
+.                 // Test the exogeneity of one regressor
+.                         ivreg2 lw expr tenure rns smsa _I* (s = iq kww), gmm2s orthog(iq)
+
+2-Step GMM estimation
+---------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.37
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3747
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =  87.09358552                Root MSE      =     .339
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1235974   .0127795     9.67   0.000     .0985499    .1486448
+        expr |   .0459226    .007474     6.14   0.000     .0312738    .0605714
+      tenure |   .0397609   .0077879     5.11   0.000      .024497    .0550248
+         rns |  -.0841234   .0287175    -2.93   0.003    -.1404087   -.0278381
+        smsa |   .1232693   .0276861     4.45   0.000     .0690055    .1775331
+   _Iyear_67 |  -.0615437   .0497218    -1.24   0.216    -.1589965    .0359092
+   _Iyear_68 |   .0606422   .0467699     1.30   0.195    -.0310251    .1523095
+   _Iyear_69 |   .1619021   .0465716     3.48   0.001     .0706234    .2531808
+   _Iyear_70 |   .1676165   .0524712     3.19   0.001     .0647748    .2704582
+   _Iyear_71 |   .1180889   .0498418     2.37   0.018     .0204007    .2157771
+   _Iyear_73 |   .1551281   .0542395     2.86   0.004     .0488207    .2614356
+       _cons |   3.733029   .1652188    22.59   0.000     3.409206    4.056852
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         222.050
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           1.537
+                                                   Chi-sq(1) P-val =    0.2151
+-orthog- option:
+Sargan statistic (eqn. excluding suspect orthogonality conditions):      0.000
+                                                   Chi-sq(0) P-val =         .
+C statistic (exogeneity/orthogonality of suspect instruments):           1.537
+                                                   Chi-sq(1) P-val =    0.2151
+Instruments tested:   iq
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.09 9:45:24
+
+. 
+.                 // Test the exogeneity of two excluded instruments
+.                         ivreg2 lw expr tenure rns smsa _I* (s = iq med kww age mrt), gmm2s orthog(age mrt)
+
+2-Step GMM estimation
+---------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    49.44
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3511
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9963
+Residual SS             =  90.38293644                Root MSE      =    .3453
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1350754   .0108807    12.41   0.000     .1137497    .1564011
+        expr |   .0493546   .0073077     6.75   0.000     .0350318    .0636774
+      tenure |   .0389969   .0079193     4.92   0.000     .0234754    .0545184
+         rns |   -.079873   .0291348    -2.74   0.006    -.1369762   -.0227699
+        smsa |   .1207155   .0281592     4.29   0.000     .0655244    .1759065
+   _Iyear_67 |  -.0634714   .0506378    -1.25   0.210    -.1627196    .0357768
+   _Iyear_68 |   .0566513     .04758     1.19   0.234    -.0366039    .1499064
+   _Iyear_69 |   .1514251   .0469921     3.22   0.001     .0593223     .243528
+   _Iyear_70 |   .1523477   .0526003     2.90   0.004      .049253    .2554423
+   _Iyear_71 |   .0945112   .0486048     1.94   0.052    -.0007525    .1897749
+   _Iyear_73 |   .1187356   .0503922     2.36   0.018     .0199687    .2175024
+       _cons |   3.588752   .1423201    25.22   0.000      3.30981    3.867694
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         317.886
+                                                   Chi-sq(5) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              107.186
+Stock-Yogo weak ID test critical values:  5% maximal IV relative bias    18.37
+                                         10% maximal IV relative bias    10.83
+                                         20% maximal IV relative bias     6.77
+                                         30% maximal IV relative bias     5.25
+                                         10% maximal IV size             26.87
+                                         15% maximal IV size             15.09
+                                         20% maximal IV size             10.98
+                                         25% maximal IV size              8.84
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):          21.956
+                                                   Chi-sq(4) P-val =    0.0002
+-orthog- option:
+Sargan statistic (eqn. excluding suspect orthogonality conditions):      1.927
+                                                   Chi-sq(2) P-val =    0.3815
+C statistic (exogeneity/orthogonality of suspect instruments):          20.029
+                                                   Chi-sq(2) P-val =    0.0000
+Instruments tested:   age mrt
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq med kww age mrt
+------------------------------------------------------------------------------
+r; t=0.09 9:45:24
+
+.                         
+.                         ivreg2 lw expr tenure rns smsa _I* (s = iq kww), gmm2s
+
+2-Step GMM estimation
+---------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.37
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3747
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =  87.09358552                Root MSE      =     .339
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1235974   .0127795     9.67   0.000     .0985499    .1486448
+        expr |   .0459226    .007474     6.14   0.000     .0312738    .0605714
+      tenure |   .0397609   .0077879     5.11   0.000      .024497    .0550248
+         rns |  -.0841234   .0287175    -2.93   0.003    -.1404087   -.0278381
+        smsa |   .1232693   .0276861     4.45   0.000     .0690055    .1775331
+   _Iyear_67 |  -.0615437   .0497218    -1.24   0.216    -.1589965    .0359092
+   _Iyear_68 |   .0606422   .0467699     1.30   0.195    -.0310251    .1523095
+   _Iyear_69 |   .1619021   .0465716     3.48   0.001     .0706234    .2531808
+   _Iyear_70 |   .1676165   .0524712     3.19   0.001     .0647748    .2704582
+   _Iyear_71 |   .1180889   .0498418     2.37   0.018     .0204007    .2157771
+   _Iyear_73 |   .1551281   .0542395     2.86   0.004     .0488207    .2614356
+       _cons |   3.733029   .1652188    22.59   0.000     3.409206    4.056852
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         222.050
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           1.537
+                                                   Chi-sq(1) P-val =    0.2151
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.06 9:45:24
+
+. 
+. // control the regression output
+.                         
+.         // small: report small-sample statistics
+.         // first: display the full first-stage regression results
+.         // ffirst: display first-stage diagnostic and identification statistics
+. 
+.                 ivreg2 lw expr tenure rns smsa _I* (s = iq kww), small ffirst first
+
+First-stage regressions
+-----------------------
+
+
+First-stage regression of s:
+
+Statistics consistent for homoskedasticity only
+Number of obs =                    758
+------------------------------------------------------------------------------
+           s |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+          iq |   .0376187   .0046727     8.05   0.000     .0284454    .0467919
+         kww |   .0977162   .0083389    11.72   0.000     .0813456    .1140868
+        expr |  -.2446435   .0291452    -8.39   0.000    -.3018599   -.1874271
+      tenure |  -.0236001   .0348968    -0.68   0.499     -.092108    .0449077
+         rns |  -.1868714   .1273661    -1.47   0.143    -.4369105    .0631678
+        smsa |  -.0574273   .1239448    -0.46   0.643      -.30075    .1858954
+   _Iyear_67 |    .282563   .2218258     1.27   0.203     -.152915    .7180411
+   _Iyear_68 |   .6503298   .2093322     3.11   0.002     .2393787    1.061281
+   _Iyear_69 |   .8528981    .202014     4.22   0.000     .4563136    1.249483
+   _Iyear_70 |   1.140781   .2248707     5.07   0.000     .6993251    1.582236
+   _Iyear_71 |   1.818546   .1929923     9.42   0.000     1.439673     2.19742
+   _Iyear_73 |   2.846621   .1681361    16.93   0.000     2.516544    3.176698
+       _cons |   5.385441   .4870103    11.06   0.000     4.429366    6.341517
+------------------------------------------------------------------------------
+F test of excluded instruments:
+  F(  2,   745) =   154.33
+  Prob > F      =   0.0000
+Sanderson-Windmeijer multivariate F test of excluded instruments:
+  F(  2,   745) =   154.33
+  Prob > F      =   0.0000
+
+
+
+Summary results for first-stage regressions
+-------------------------------------------
+
+                                           (Underid)            (Weak id)
+Variable     | F(  2,   745)  P-val | SW Chi-sq(  2) P-val | SW F(  2,   745)
+s            |     154.33    0.0000 |      314.05   0.0000 |      154.33
+
+Stock-Yogo weak ID F test critical values for single endogenous regressor:
+                                   10% maximal IV size             19.93
+                                   15% maximal IV size             11.59
+                                   20% maximal IV size              8.75
+                                   25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Sanderson-Windmeijer F statistic.
+
+Underidentification test
+Ho: matrix of reduced form coefficients has rank=K1-1 (underidentified)
+Ha: matrix has rank=K1 (identified)
+Anderson canon. corr. LM statistic       Chi-sq(2)=222.05   P-val=0.0000
+
+Weak identification test
+Ho: equation is weakly identified
+Cragg-Donald Wald F statistic                                     154.33
+
+Stock-Yogo weak ID test critical values for K1=1 and L1=2:
+                                   10% maximal IV size             19.93
+                                   15% maximal IV size             11.59
+                                   20% maximal IV size              8.75
+                                   25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+
+Weak-instrument-robust inference
+Tests of joint significance of endogenous regressors B1 in main equation
+Ho: B1=0 and orthogonality conditions are valid
+Anderson-Rubin Wald test           F(2,745)=      50.33     P-val=0.0000
+Anderson-Rubin Wald test           Chi-sq(2)=    102.42     P-val=0.0000
+Stock-Wright LM S statistic        Chi-sq(2)=     90.23     P-val=0.0000
+
+Number of observations               N  =        758
+Number of regressors                 K  =         12
+Number of endogenous regressors      K1 =          1
+Number of instruments                L  =         13
+Number of excluded instruments       L1 =          2
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.37
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3747
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =  87.09358552                Root MSE      =    .3417
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1235974   .0128819     9.59   0.000     .0983082    .1488865
+        expr |   .0459226   .0075339     6.10   0.000     .0311325    .0607127
+      tenure |   .0397609   .0078502     5.06   0.000     .0243497    .0551721
+         rns |  -.0841234   .0289476    -2.91   0.004    -.1409518    -.027295
+        smsa |   .1232693   .0279079     4.42   0.000     .0684819    .1780567
+   _Iyear_67 |  -.0615437   .0501201    -1.23   0.220    -.1599368    .0368495
+   _Iyear_68 |   .0606422   .0471446     1.29   0.199    -.0319095     .153194
+   _Iyear_69 |   .1619021   .0469447     3.45   0.001     .0697427    .2540615
+   _Iyear_70 |   .1676165   .0528915     3.17   0.002     .0637825    .2714505
+   _Iyear_71 |   .1180889   .0502411     2.35   0.019     .0194581    .2167196
+   _Iyear_73 |   .1551281    .054674     2.84   0.005     .0477949    .2624613
+       _cons |   3.733029   .1665424    22.41   0.000     3.406082    4.059977
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         222.050
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           1.537
+                                                   Chi-sq(1) P-val =    0.2151
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.13 9:45:24
+
+. 
+.         // usualy we just use the option ffirst
+.                 
+.                 ivreg2 lw expr tenure rns smsa _I* (s = iq kww), small ffirst
+
+
+Summary results for first-stage regressions
+-------------------------------------------
+
+                                           (Underid)            (Weak id)
+Variable     | F(  2,   745)  P-val | SW Chi-sq(  2) P-val | SW F(  2,   745)
+s            |     154.33    0.0000 |      314.05   0.0000 |      154.33
+
+Stock-Yogo weak ID F test critical values for single endogenous regressor:
+                                   10% maximal IV size             19.93
+                                   15% maximal IV size             11.59
+                                   20% maximal IV size              8.75
+                                   25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Sanderson-Windmeijer F statistic.
+
+Underidentification test
+Ho: matrix of reduced form coefficients has rank=K1-1 (underidentified)
+Ha: matrix has rank=K1 (identified)
+Anderson canon. corr. LM statistic       Chi-sq(2)=222.05   P-val=0.0000
+
+Weak identification test
+Ho: equation is weakly identified
+Cragg-Donald Wald F statistic                                     154.33
+
+Stock-Yogo weak ID test critical values for K1=1 and L1=2:
+                                   10% maximal IV size             19.93
+                                   15% maximal IV size             11.59
+                                   20% maximal IV size              8.75
+                                   25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+
+Weak-instrument-robust inference
+Tests of joint significance of endogenous regressors B1 in main equation
+Ho: B1=0 and orthogonality conditions are valid
+Anderson-Rubin Wald test           F(2,745)=      50.33     P-val=0.0000
+Anderson-Rubin Wald test           Chi-sq(2)=    102.42     P-val=0.0000
+Stock-Wright LM S statistic        Chi-sq(2)=     90.23     P-val=0.0000
+
+Number of observations               N  =        758
+Number of regressors                 K  =         12
+Number of endogenous regressors      K1 =          1
+Number of instruments                L  =         13
+Number of excluded instruments       L1 =          2
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.37
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3747
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =  87.09358552                Root MSE      =    .3417
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1235974   .0128819     9.59   0.000     .0983082    .1488865
+        expr |   .0459226   .0075339     6.10   0.000     .0311325    .0607127
+      tenure |   .0397609   .0078502     5.06   0.000     .0243497    .0551721
+         rns |  -.0841234   .0289476    -2.91   0.004    -.1409518    -.027295
+        smsa |   .1232693   .0279079     4.42   0.000     .0684819    .1780567
+   _Iyear_67 |  -.0615437   .0501201    -1.23   0.220    -.1599368    .0368495
+   _Iyear_68 |   .0606422   .0471446     1.29   0.199    -.0319095     .153194
+   _Iyear_69 |   .1619021   .0469447     3.45   0.001     .0697427    .2540615
+   _Iyear_70 |   .1676165   .0528915     3.17   0.002     .0637825    .2714505
+   _Iyear_71 |   .1180889   .0502411     2.35   0.019     .0194581    .2167196
+   _Iyear_73 |   .1551281    .054674     2.84   0.005     .0477949    .2624613
+       _cons |   3.733029   .1665424    22.41   0.000     3.406082    4.059977
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         222.050
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           1.537
+                                                   Chi-sq(1) P-val =    0.2151
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.11 9:45:24
+
+. 
+. // testing for the presence of heteroskedasticity
+.                 ivreg2 lw expr tenure rns smsa _I* (s = iq kww), small ffirst
+
+
+Summary results for first-stage regressions
+-------------------------------------------
+
+                                           (Underid)            (Weak id)
+Variable     | F(  2,   745)  P-val | SW Chi-sq(  2) P-val | SW F(  2,   745)
+s            |     154.33    0.0000 |      314.05   0.0000 |      154.33
+
+Stock-Yogo weak ID F test critical values for single endogenous regressor:
+                                   10% maximal IV size             19.93
+                                   15% maximal IV size             11.59
+                                   20% maximal IV size              8.75
+                                   25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Sanderson-Windmeijer F statistic.
+
+Underidentification test
+Ho: matrix of reduced form coefficients has rank=K1-1 (underidentified)
+Ha: matrix has rank=K1 (identified)
+Anderson canon. corr. LM statistic       Chi-sq(2)=222.05   P-val=0.0000
+
+Weak identification test
+Ho: equation is weakly identified
+Cragg-Donald Wald F statistic                                     154.33
+
+Stock-Yogo weak ID test critical values for K1=1 and L1=2:
+                                   10% maximal IV size             19.93
+                                   15% maximal IV size             11.59
+                                   20% maximal IV size              8.75
+                                   25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+
+Weak-instrument-robust inference
+Tests of joint significance of endogenous regressors B1 in main equation
+Ho: B1=0 and orthogonality conditions are valid
+Anderson-Rubin Wald test           F(2,745)=      50.33     P-val=0.0000
+Anderson-Rubin Wald test           Chi-sq(2)=    102.42     P-val=0.0000
+Stock-Wright LM S statistic        Chi-sq(2)=     90.23     P-val=0.0000
+
+Number of observations               N  =        758
+Number of regressors                 K  =         12
+Number of endogenous regressors      K1 =          1
+Number of instruments                L  =         13
+Number of excluded instruments       L1 =          2
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.37
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3747
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =  87.09358552                Root MSE      =    .3417
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1235974   .0128819     9.59   0.000     .0983082    .1488865
+        expr |   .0459226   .0075339     6.10   0.000     .0311325    .0607127
+      tenure |   .0397609   .0078502     5.06   0.000     .0243497    .0551721
+         rns |  -.0841234   .0289476    -2.91   0.004    -.1409518    -.027295
+        smsa |   .1232693   .0279079     4.42   0.000     .0684819    .1780567
+   _Iyear_67 |  -.0615437   .0501201    -1.23   0.220    -.1599368    .0368495
+   _Iyear_68 |   .0606422   .0471446     1.29   0.199    -.0319095     .153194
+   _Iyear_69 |   .1619021   .0469447     3.45   0.001     .0697427    .2540615
+   _Iyear_70 |   .1676165   .0528915     3.17   0.002     .0637825    .2714505
+   _Iyear_71 |   .1180889   .0502411     2.35   0.019     .0194581    .2167196
+   _Iyear_73 |   .1551281    .054674     2.84   0.005     .0477949    .2624613
+       _cons |   3.733029   .1665424    22.41   0.000     3.406082    4.059977
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         222.050
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           1.537
+                                                   Chi-sq(1) P-val =    0.2151
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.13 9:45:25
+
+.                         ivhettest, fitlev
+IV heteroskedasticity test(s) using fitted value (X-hat*beta-hat)
+Ho: Disturbance is homoskedastic
+    Pagan-Hall general test statistic   :   1.623  Chi-sq(1) P-value = 0.2027
+r; t=0.01 9:45:25
+
+.         
+.                 // we do not reject the null hypothesis of homoskedasticity
+.         
+.                 // run file 'iv_heteroskedasticity.do' == extra discussion on heteroskedasticity == //
+.                 // 'do iv_heteroskedasticity'
+. 
+. // two-step GMM efficient in the presence of arbitrary heteroskedasticity
+.                 ivreg2 lw expr tenure rns smsa _I* (s = iq kww), gmm2s robust ffirst
+
+
+Summary results for first-stage regressions
+-------------------------------------------
+
+                                           (Underid)            (Weak id)
+Variable     | F(  2,   745)  P-val | SW Chi-sq(  2) P-val | SW F(  2,   745)
+s            |     151.90    0.0000 |      309.10   0.0000 |      151.90
+
+NB: first-stage test statistics heteroskedasticity-robust
+
+Stock-Yogo weak ID F test critical values for single endogenous regressor:
+                                   10% maximal IV size             19.93
+                                   15% maximal IV size             11.59
+                                   20% maximal IV size              8.75
+                                   25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for i.i.d. errors only.
+
+Underidentification test
+Ho: matrix of reduced form coefficients has rank=K1-1 (underidentified)
+Ha: matrix has rank=K1 (identified)
+Kleibergen-Paap rk LM statistic          Chi-sq(2)=140.76   P-val=0.0000
+
+Weak identification test
+Ho: equation is weakly identified
+Cragg-Donald Wald F statistic                                     154.33
+Kleibergen-Paap Wald rk F statistic                               151.90
+
+Stock-Yogo weak ID test critical values for K1=1 and L1=2:
+                                   10% maximal IV size             19.93
+                                   15% maximal IV size             11.59
+                                   20% maximal IV size              8.75
+                                   25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Cragg-Donald F statistic and i.i.d. errors.
+
+Weak-instrument-robust inference
+Tests of joint significance of endogenous regressors B1 in main equation
+Ho: B1=0 and orthogonality conditions are valid
+Anderson-Rubin Wald test           F(2,745)=      44.39     P-val=0.0000
+Anderson-Rubin Wald test           Chi-sq(2)=     90.33     P-val=0.0000
+Stock-Wright LM S statistic        Chi-sq(2)=     65.94     P-val=0.0000
+
+NB: Underidentification, weak identification and weak-identification-robust
+    test statistics heteroskedasticity-robust
+
+Number of observations               N  =        758
+Number of regressors                 K  =         12
+Number of endogenous regressors      K1 =          1
+Number of instruments                L  =         13
+Number of excluded instruments       L1 =          2
+
+2-Step GMM estimation
+---------------------
+
+Estimates efficient for arbitrary heteroskedasticity
+Statistics robust to heteroskedasticity
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.58
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3742
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =  87.17041483                Root MSE      =    .3391
+
+------------------------------------------------------------------------------
+             |               Robust
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1238384   .0139126     8.90   0.000     .0965702    .1511066
+        expr |   .0466394   .0075221     6.20   0.000     .0318963    .0613824
+      tenure |   .0392459   .0079348     4.95   0.000      .023694    .0547979
+         rns |  -.0773275   .0281328    -2.75   0.006    -.1324667   -.0221882
+        smsa |   .1264985   .0272296     4.65   0.000     .0731294    .1798676
+   _Iyear_67 |  -.0586921    .046738    -1.26   0.209    -.1502969    .0329128
+   _Iyear_68 |   .0592225   .0459059     1.29   0.197    -.0307515    .1491965
+   _Iyear_69 |   .1641733   .0432351     3.80   0.000     .0794342    .2489125
+   _Iyear_70 |   .1645594   .0547829     3.00   0.003     .0571869    .2719319
+   _Iyear_71 |   .1202088   .0494319     2.43   0.015      .023324    .2170935
+   _Iyear_73 |   .1587286   .0575857     2.76   0.006     .0458627    .2715944
+       _cons |   3.723573   .1778314    20.94   0.000      3.37503    4.072116
+------------------------------------------------------------------------------
+Underidentification test (Kleibergen-Paap rk LM statistic):            140.762
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+                         (Kleibergen-Paap rk Wald F statistic):        151.901
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Cragg-Donald F statistic and i.i.d. errors.
+------------------------------------------------------------------------------
+Hansen J statistic (overidentification test of all instruments):         1.474
+                                                   Chi-sq(1) P-val =    0.2247
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.11 9:45:25
+
+.                         eret li
+
+scalars:
+                  e(N) =  758
+          e(inexog_ct) =  10
+          e(exexog_ct) =  2
+           e(endog_ct) =  1
+         e(partial_ct) =  0
+               e(df_m) =  11
+          e(sdofminus) =  0
+           e(dofminus) =  0
+             e(center) =  0
+                 e(r2) =  .3741630813115755
+               e(rmse) =  .3391173060656478
+                e(rss) =  87.17041483310246
+                e(mss) =  52.1157350089151
+               e(r2_a) =  .3649349229931136
+                  e(F) =  45.58314216754329
+                 e(Fp) =  6.52196334853e-76
+               e(Fdf1) =  11
+               e(Fdf2) =  746
+                 e(yy) =  24652.24661741726
+                e(yyc) =  139.2861498420176
+               e(cons) =  1
+        e(partialcons) =  0
+           e(nocollin) =  0
+            e(sstatdf) =  2
+             e(sstatp) =  4.79908078127e-15
+              e(sstat) =  65.94070399847425
+             e(ardf_r) =  745
+               e(ardf) =  2
+            e(archi2p) =  2.42845514967e-20
+             e(archi2) =  90.32889309115039
+               e(arfp) =  6.11776356779e-19
+                e(arf) =  44.38985841220781
+                e(rkf) =  151.9008081815352
+                e(cdf) =  154.3313125687492
+            e(widstat) =  151.9008081815352
+                 e(cd) =  .4143122485067093
+                e(idp) =  2.71540560729e-31
+               e(iddf) =  2
+             e(idstat) =  140.7623930912785
+                 e(jp) =  .2247499974691659
+                e(jdf) =  1
+                  e(j) =  1.473781545733736
+                 e(ll) =  -255.8472377024766
+              e(rankV) =  12
+              e(rankS) =  13
+             e(rankxx) =  12
+             e(rankzz) =  13
+             e(condxx) =  12122.56238284001
+             e(condzz) =  994198.5930786036
+                e(r2c) =  .3741630813115755
+                e(r2u) =  .9964639971282976
+
+macros:
+            e(predict) : "ivreg2_p"
+            e(version) : "04.1.10"
+          e(ivreg2cmd) : "ivreg2"
+                e(cmd) : "ivreg2"
+       e(hacsubtitleV) : "Statistics robust to heteroskedasticity"
+       e(hacsubtitleB) : "Estimates efficient for arbitrary heteroskedasticity"
+              e(title) : "2-Step GMM estimation"
+            e(cmdline) : "ivreg2 lw expr tenure rns smsa _I* (s = iq kww), gmm2s robust ffirst"
+              e(model) : "gmm2s"
+            e(vcetype) : "Robust"
+                e(vce) : "robust"
+       e(partialsmall) : "small"
+             e(depvar) : "lw"
+            e(depvar0) : "lw"
+            e(depvar1) : "lw"
+              e(instd) : "s"
+             e(instd0) : "s"
+             e(instd1) : "s"
+              e(insts) : "iq kww expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+             e(insts0) : "iq kww expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+             e(insts1) : "iq kww expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+             e(exexog) : "iq kww"
+            e(exexog0) : "iq kww"
+            e(exexog1) : "iq kww"
+             e(inexog) : "expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+            e(inexog0) : "expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+            e(inexog1) : "expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+          e(marginsok) : "XB default"
+       e(marginsnotok) : "Residuals SCores"
+         e(properties) : "b V"
+
+matrices:
+                  e(b) :  1 x 12
+                  e(V) :  12 x 12
+              e(first) :  21 x 1
+               e(cdev) :  1 x 1
+               e(ccev) :  1 x 1
+                  e(W) :  13 x 13
+                  e(S) :  13 x 13
+
+functions:
+             e(sample)   
+r; t=0.00 9:45:25
+
+.         
+.         est store GMM1
+r; t=0.00 9:45:25
+
+.         outreg2 using logs/iv_regressions, dec(4) alpha(0.001, 0.01, 0.05) /*
+>                 */ keep(iq s expr tenure rns smsa) sortvar(iq s expr tenure rns smsa) nocons/*
+>                 */ word label addnote(Source: Own computations; Griliches 1976's data.) /*
+>                 */ append ctitle(GMM1) adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+logs/iv_regressions.rtf
+dir : seeout
+r; t=0.05 9:45:25
+
+. 
+. //////////////////////////////////////////////////////////////////////////////////////////////////////////
+> 
+. // GMM with user-specified first-step weighting matrix or matrix of orthogonality conditions)
+.                 ivreg2 lw expr tenure rns smsa _I* (s = iq kww), robust
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics robust to heteroskedasticity
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.41
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3747
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =  87.09358552                Root MSE      =     .339
+
+------------------------------------------------------------------------------
+             |               Robust
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1235974    .013914     8.88   0.000     .0963264    .1508683
+        expr |   .0459226   .0075452     6.09   0.000     .0311342     .060711
+      tenure |   .0397609   .0079462     5.00   0.000     .0241867    .0553351
+         rns |  -.0841234   .0286843    -2.93   0.003    -.1403436   -.0279032
+        smsa |   .1232693   .0273592     4.51   0.000     .0696462    .1768924
+   _Iyear_67 |  -.0615437    .046797    -1.32   0.188    -.1532641    .0301768
+   _Iyear_68 |   .0606422   .0459208     1.32   0.187    -.0293609    .1506454
+   _Iyear_69 |   .1619021   .0432755     3.74   0.000     .0770837    .2467206
+   _Iyear_70 |   .1676165   .0548408     3.06   0.002     .0601306    .2751024
+   _Iyear_71 |   .1180889   .0494627     2.39   0.017     .0211437    .2150341
+   _Iyear_73 |   .1551281    .057662     2.69   0.007     .0421127    .2681436
+       _cons |   3.733029   .1780019    20.97   0.000     3.384152    4.081907
+------------------------------------------------------------------------------
+Underidentification test (Kleibergen-Paap rk LM statistic):            140.762
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+                         (Kleibergen-Paap rk Wald F statistic):        151.901
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Cragg-Donald F statistic and i.i.d. errors.
+------------------------------------------------------------------------------
+Hansen J statistic (overidentification test of all instruments):         1.474
+                                                   Chi-sq(1) P-val =    0.2247
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.06 9:45:25
+
+. 
+.         predict double uhat if e(sample), resid
+r; t=0.00 9:45:25
+
+. 
+.         mat accum S = `e(insts)' [iw=uhat^2]
+(obs=87.09358552)
+r; t=0.00 9:45:25
+
+. 
+.         mat S = 1/`e(N)' * S
+r; t=0.00 9:45:25
+
+. 
+.         ivreg2 lw expr tenure rns smsa _I* (s = iq kww), gmm2s robust smatrix(S)
+
+2-Step GMM estimation
+---------------------
+
+Estimates efficient for arbitrary heteroskedasticity
+Statistics robust to heteroskedasticity
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.58
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3742
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =  87.17041483                Root MSE      =    .3391
+
+------------------------------------------------------------------------------
+             |               Robust
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1238384   .0139126     8.90   0.000     .0965702    .1511066
+        expr |   .0466394   .0075221     6.20   0.000     .0318963    .0613824
+      tenure |   .0392459   .0079348     4.95   0.000      .023694    .0547979
+         rns |  -.0773275   .0281328    -2.75   0.006    -.1324667   -.0221882
+        smsa |   .1264985   .0272296     4.65   0.000     .0731294    .1798676
+   _Iyear_67 |  -.0586921    .046738    -1.26   0.209    -.1502969    .0329128
+   _Iyear_68 |   .0592225   .0459059     1.29   0.197    -.0307515    .1491965
+   _Iyear_69 |   .1641733   .0432351     3.80   0.000     .0794342    .2489125
+   _Iyear_70 |   .1645594   .0547829     3.00   0.003     .0571869    .2719319
+   _Iyear_71 |   .1202088   .0494319     2.43   0.015      .023324    .2170935
+   _Iyear_73 |   .1587286   .0575857     2.76   0.006     .0458627    .2715944
+       _cons |   3.723573   .1778314    20.94   0.000      3.37503    4.072116
+------------------------------------------------------------------------------
+Underidentification test (Kleibergen-Paap rk LM statistic):            140.762
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+                         (Kleibergen-Paap rk Wald F statistic):        151.901
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Cragg-Donald F statistic and i.i.d. errors.
+------------------------------------------------------------------------------
+Hansen J statistic (overidentification test of all instruments):         1.474
+                                                   Chi-sq(1) P-val =    0.2247
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.06 9:45:25
+
+. 
+.         mat W = invsym(S)
+r; t=0.00 9:45:25
+
+. 
+.         ivreg2 lw expr tenure rns smsa _I* (s = iq kww), gmm2s robust wmatrix(W)
+
+2-Step GMM estimation with user-supplied first-step weighting matrix
+--------------------------------------------------------------------
+
+Estimates efficient for arbitrary heteroskedasticity
+Statistics robust to heteroskedasticity
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.47
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3741
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =   87.1765358                Root MSE      =    .3391
+
+------------------------------------------------------------------------------
+             |               Robust
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1238618   .0138982     8.91   0.000     .0966218    .1511017
+        expr |   .0466436   .0075158     6.21   0.000     .0319128    .0613743
+      tenure |   .0392371   .0079653     4.93   0.000     .0236254    .0548488
+         rns |  -.0773193   .0281341    -2.75   0.006    -.1324612   -.0221774
+        smsa |   .1264713    .027256     4.64   0.000     .0730505     .179892
+   _Iyear_67 |  -.0587464   .0467937    -1.26   0.209    -.1504603    .0329676
+   _Iyear_68 |    .059149   .0459431     1.29   0.198    -.0308977    .1491958
+   _Iyear_69 |   .1641196   .0432538     3.79   0.000     .0793436    .2488956
+   _Iyear_70 |   .1644448   .0547757     3.00   0.003     .0570865    .2718031
+   _Iyear_71 |   .1201824   .0493623     2.43   0.015      .023434    .2169307
+   _Iyear_73 |   .1586345   .0575619     2.76   0.006     .0458152    .2714538
+       _cons |    3.72334   .1776948    20.95   0.000     3.375064    4.071615
+------------------------------------------------------------------------------
+Underidentification test (Kleibergen-Paap rk LM statistic):            140.762
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+                         (Kleibergen-Paap rk Wald F statistic):        151.901
+Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
+                                         15% maximal IV size             11.59
+                                         20% maximal IV size              8.75
+                                         25% maximal IV size              7.25
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Cragg-Donald F statistic and i.i.d. errors.
+------------------------------------------------------------------------------
+Hansen J statistic (overidentification test of all instruments):         1.472
+                                                   Chi-sq(1) P-val =    0.2250
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.06 9:45:25
+
+. 
+.         est store GMM2
+r; t=0.00 9:45:25
+
+.         outreg2 using logs/iv_regressions, dec(4) alpha(0.001, 0.01, 0.05) /*
+>                 */ keep(iq s expr tenure rns smsa) sortvar(iq s expr tenure rns smsa) nocons/*
+>                 */ word label addnote(Source: Own computations; Griliches 1976's data.) /*
+>                 */ append ctitle(GMM2) adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+logs/iv_regressions.rtf
+dir : seeout
+r; t=0.04 9:45:25
+
+. 
+. 
+. // Equivalence of J statistic and Wald tests of included regressors,
+. // irrespective of instrument choice (Ahn, 1997)
+. 
+. ivreg2 lw (s = iq kww med age), gmm2s
+
+2-Step GMM estimation
+---------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =      758
+                                                      F(  1,   756) =   275.59
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.1288
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9951
+Residual SS             =  121.3466374                Root MSE      =    .4001
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1642901   .0098834    16.62   0.000     .1449191    .1836611
+       _cons |   3.484428   .1332813    26.14   0.000     3.223201    3.745654
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):         329.459
+                                                   Chi-sq(4) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              144.725
+Stock-Yogo weak ID test critical values:  5% maximal IV relative bias    16.85
+                                         10% maximal IV relative bias    10.27
+                                         20% maximal IV relative bias     6.71
+                                         30% maximal IV relative bias     5.34
+                                         10% maximal IV size             24.58
+                                         15% maximal IV size             13.96
+                                         20% maximal IV size             10.26
+                                         25% maximal IV size              8.31
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):          37.787
+                                                   Chi-sq(3) P-val =    0.0000
+------------------------------------------------------------------------------
+Instrumented:         s
+Excluded instruments: iq kww med age
+------------------------------------------------------------------------------
+r; t=0.04 9:45:25
+
+. 
+.         mat S0 = e(S)
+r; t=0.00 9:45:25
+
+.         qui ivreg2 lw (s = kww) iq med age, gmm2s smatrix(S0)
+r; t=0.04 9:45:25
+
+.         test iq med age
+
+ ( 1)  iq = 0
+ ( 2)  med = 0
+ ( 3)  age = 0
+
+           chi2(  3) =   37.79
+         Prob > chi2 =    0.0000
+r; t=0.00 9:45:25
+
+.         qui ivreg2 lw (s = med) iq kww age, gmm2s smatrix(S0)
+r; t=0.04 9:45:25
+
+.         test kww age
+
+ ( 1)  kww = 0
+ ( 2)  age = 0
+
+           chi2(  2) =   19.29
+         Prob > chi2 =    0.0001
+r; t=0.00 9:45:25
+
+.         qui ivreg2 lw (s = age) iq med kww, gmm2s smatrix(S0)
+r; t=0.04 9:45:25
+
+.         test iq med kww
+
+ ( 1)  iq = 0
+ ( 2)  med = 0
+ ( 3)  kww = 0
+
+           chi2(  3) =   37.79
+         Prob > chi2 =    0.0000
+r; t=0.00 9:45:25
+
+. 
+. // Continuously-updated GMM (CUE) efficient in the presence of arbitrary
+. // heteroskedasticity NB: may require 30+ iterations.
+. 
+. ivreg2 lw expr tenure rns smsa _I* (s = iq kww), cue robust
+Iteration 0:   f(p) =  1.5934438  
+Iteration 1:   f(p) =  1.4712634  
+Iteration 2:   f(p) =  1.4712551  
+Iteration 3:   f(p) =  1.4712551  
+
+CUE estimation
+--------------
+
+Estimates efficient for arbitrary heteroskedasticity
+Statistics robust to heteroskedasticity
+
+                                                      Number of obs =      758
+                                                      F( 11,   746) =    45.47
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  139.2861498                Centered R2   =   0.3733
+Total (uncentered) SS   =  24652.24662                Uncentered R2 =   0.9965
+Residual SS             =  87.28740953                Root MSE      =    .3393
+
+------------------------------------------------------------------------------
+             |               Robust
+          lw |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1242851   .0139053     8.94   0.000     .0970313     .151539
+        expr |     .04675   .0075204     6.22   0.000     .0320103    .0614896
+      tenure |    .039178    .007974     4.91   0.000     .0235493    .0548067
+         rns |  -.0771666   .0281479    -2.74   0.006    -.1323355   -.0219977
+        smsa |   .1263112   .0272737     4.63   0.000     .0728558    .1797666
+   _Iyear_67 |  -.0590711   .0468194    -1.26   0.207    -.1508355    .0326932
+   _Iyear_68 |    .058797   .0459847     1.28   0.201    -.0313314    .1489254
+   _Iyear_69 |   .1636659   .0432851     3.78   0.000     .0788287    .2485031
+   _Iyear_70 |   .1638189   .0548092     2.99   0.003     .0563947     .271243
+   _Iyear_71 |   .1192236   .0494047     2.41   0.016      .022392    .2160551
+   _Iyear_73 |   .1574888   .0576105     2.73   0.006     .0445742    .2704033
+       _cons |   3.718201   .1777715    20.92   0.000     3.369775    4.066627
+------------------------------------------------------------------------------
+Underidentification test (Kleibergen-Paap rk LM statistic):            140.762
+                                                   Chi-sq(2) P-val =    0.0000
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):              154.331
+                         (Kleibergen-Paap rk Wald F statistic):        151.901
+Stock-Yogo weak ID test critical values: 10% maximal LIML size            8.68
+                                         15% maximal LIML size            5.33
+                                         20% maximal LIML size            4.42
+                                         25% maximal LIML size            3.92
+Source: Stock-Yogo (2005).  Reproduced by permission.
+NB: Critical values are for Cragg-Donald F statistic and i.i.d. errors.
+------------------------------------------------------------------------------
+Hansen J statistic (overidentification test of all instruments):         1.471
+                                                   Chi-sq(1) P-val =    0.2251
+------------------------------------------------------------------------------
+Instrumented:         s
+Included instruments: expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69
+                      _Iyear_70 _Iyear_71 _Iyear_73
+Excluded instruments: iq kww
+------------------------------------------------------------------------------
+r; t=0.77 9:45:26
+
+.         eret li
+
+scalars:
+                  e(N) =  758
+          e(inexog_ct) =  10
+          e(exexog_ct) =  2
+           e(endog_ct) =  1
+         e(partial_ct) =  0
+               e(df_m) =  11
+          e(sdofminus) =  0
+           e(dofminus) =  0
+             e(center) =  0
+                 e(r2) =  .3733231219886632
+               e(rmse) =  .339344800819596
+                e(rss) =  87.2874095332148
+                e(mss) =  51.99874030880275
+               e(r2_a) =  .3640825782110162
+                  e(F) =  45.47286823733757
+                 e(Fp) =  9.31464275090e-76
+               e(Fdf1) =  11
+               e(Fdf2) =  746
+                 e(yy) =  24652.24661741726
+                e(yyc) =  139.2861498420176
+               e(cons) =  1
+        e(partialcons) =  0
+           e(nocollin) =  0
+                e(rkf) =  151.9008081815352
+                e(cdf) =  154.3313125687492
+            e(widstat) =  151.9008081815352
+                 e(cd) =  .4143122485067093
+                e(idp) =  2.71540560729e-31
+               e(iddf) =  2
+             e(idstat) =  140.7623930912785
+                 e(jp) =  .225147763762537
+                e(jdf) =  1
+                  e(j) =  1.47125514954025
+                 e(ll) =  -256.3555668433539
+              e(rankV) =  12
+              e(rankS) =  13
+             e(rankxx) =  12
+             e(rankzz) =  13
+             e(condxx) =  12122.56238284001
+             e(condzz) =  994198.5930786036
+                e(r2c) =  .3733231219886632
+                e(r2u) =  .9964592513255346
+
+macros:
+            e(predict) : "ivreg2_p"
+            e(version) : "04.1.10"
+          e(ivreg2cmd) : "ivreg2"
+                e(cmd) : "ivreg2"
+       e(hacsubtitleV) : "Statistics robust to heteroskedasticity"
+       e(hacsubtitleB) : "Estimates efficient for arbitrary heteroskedasticity"
+              e(title) : "CUE estimation"
+            e(cmdline) : "ivreg2 lw expr tenure rns smsa _I* (s = iq kww), cue robust"
+              e(model) : "cue"
+            e(vcetype) : "Robust"
+                e(vce) : "robust"
+       e(partialsmall) : "small"
+             e(depvar) : "lw"
+            e(depvar0) : "lw"
+            e(depvar1) : "lw"
+              e(instd) : "s"
+             e(instd0) : "s"
+             e(instd1) : "s"
+              e(insts) : "iq kww expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+             e(insts0) : "iq kww expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+             e(insts1) : "iq kww expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+             e(exexog) : "iq kww"
+            e(exexog0) : "iq kww"
+            e(exexog1) : "iq kww"
+             e(inexog) : "expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+            e(inexog0) : "expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+            e(inexog1) : "expr tenure rns smsa _Iyear_67 _Iyear_68 _Iyear_69 _Iyear_70 _Iyear_71 _Iyear_73"
+          e(marginsok) : "XB default"
+       e(marginsnotok) : "Residuals SCores"
+         e(properties) : "b V"
+
+matrices:
+                  e(b) :  1 x 12
+                  e(V) :  12 x 12
+               e(cdev) :  1 x 1
+               e(ccev) :  1 x 1
+                  e(W) :  13 x 13
+                  e(S) :  13 x 13
+
+functions:
+             e(sample)   
+r; t=0.00 9:45:26
+
+.         est store CUE
+r; t=0.00 9:45:26
+
+.         
+. //////////////////////////////////////////////////////////////////////////////////////////////////////////
+> 
+.         outreg2 using logs/iv_regressions, dec(4) alpha(0.001, 0.01, 0.05) /*
+>                 */ keep(iq s expr tenure rns smsa) sortvar(iq s expr tenure rns smsa) nocons/*
+>                 */ word label addnote(Source: Own computations; Griliches 1976's data.) /*
+>                 */ append ctitle(CUE) adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+logs/iv_regressions.rtf
+dir : seeout
+r; t=0.05 9:45:26
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Dropbox/statafep2018/day2/2.causal_analysis/2.3.iv/logs/iv_exercise.txt
+  log type:  text
+ closed on:   6 Feb 2018, 09:45:26
+------------------------------------------------------------------------------------------------------------------------------

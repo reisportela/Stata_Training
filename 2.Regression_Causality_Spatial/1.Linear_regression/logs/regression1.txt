@@ -1,0 +1,67 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causal
+> ity_Spatial/1.Linear_regression/logs/regression1.txt
+  log type:  text
+ opened on:  28 Dec 2021, 20:23:27
+r; t=0.00 20:23:27
+
+. 
+.         // SIMPLE ANALYSIS OF THE RELATION BETWEEN GDP pc & EDUCATION
+. 
+.                 use data/world_data, clear
+r; t=0.00 20:23:27
+
+.                         
+.                 scatter logGDPpc2000 educ_sec, graphregion(color(white)) legend(reg
+> ion(color(white))) scheme(sj) title("GDP per capita vs Education")           // MAK
+> E A SCATTER GRAPH
+r; t=0.74 20:23:28
+
+.                 scatter logGDPpc2000 educ_sec, title("GDP per capita vs Education")
+r; t=0.41 20:23:28
+
+.                         
+.                         graph export graphs/Graph1.png,replace                     
+>                                      // IF YOU CHANGE THE SUFFIX YOU CHANGE THE EXP
+> ORT FORMAT
+file
+    /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causality_Spa
+    > tial/1.Linear_regression/graphs/Graph1.png saved as PNG format
+r; t=0.15 20:23:28
+
+.                         capture graph export graphs/Graph1.wmf,replace             
+>                                              // IF YOU CHANGE THE SUFFIX YOU CHANGE
+>  THE EXPORT FORMAT
+r; t=0.00 20:23:28
+
+. 
+.                 twoway lfit logGDPpc2000 educ_sec || scatter logGDPpc2000 educ_sec,
+>  graphregion(color(white)) legend(region(color(white))) scheme(sj) title("GDP per c
+> apita vs Education")
+r; t=0.52 20:23:29
+
+.                 
+.                 twoway lfit logGDPpc2000 educ_sec || scatter logGDPpc2000 educ_sec,
+>  title("GDP per capita vs Education")
+r; t=0.46 20:23:29
+
+.                 
+.                         
+.                         graph export graphs/Graph2.png,replace
+file
+    /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causality_Spa
+    > tial/1.Linear_regression/graphs/Graph2.png saved as PNG format
+r; t=0.15 20:23:29
+
+.                         capture graph export graphs/Graph2.wmf,replace
+r; t=0.00 20:23:29
+
+. 
+.         log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causal
+> ity_Spatial/1.Linear_regression/logs/regression1.txt
+  log type:  text
+ closed on:  28 Dec 2021, 20:23:29
+-------------------------------------------------------------------------------------

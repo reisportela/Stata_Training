@@ -1,0 +1,1721 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/3.Panel_Data/panel_
+> assignment/logs/panel_assignment.txt
+  log type:  text
+ opened on:  28 Dec 2021, 20:16:10
+r; t=0.00 20:16:10
+
+. 
+. // ########################################################################### //
+. 
+. 
+. // # 0. prepare the data
+. 
+. use ../data/growth_data, clear  
+r; t=0.00 20:16:10
+
+.         keep country year isocode rgdpwok education ki kg kc openk
+r; t=0.00 20:16:10
+
+. 
+.         gen logrgdpwok=log(rgdpwok)
+(41 missing values generated)
+r; t=0.00 20:16:10
+
+.         
+.         // as country is a string variable we need to generate a numeric variable b
+> ased on it
+.         // the solution is to use the command 'encode'
+.         // it creates a new variable, ccode, which is numeric and has the labels of
+>  country on it
+.         encode country, gen(ccode)
+r; t=0.00 20:16:10
+
+.         
+.         // xtset & tsset perform an identical task
+.         tsset ccode year
+
+Panel variable: ccode (unbalanced)
+ Time variable: year, 1960 to 2000, but with gaps
+         Delta: 1 unit
+r; t=0.01 20:16:10
+
+.         xtset ccode year, delta(5)      // our data is on a 5 year interval, so we 
+> have to specify the delta
+
+Panel variable: ccode (unbalanced)
+ Time variable: year, 1960 to 2000, but with gaps
+         Delta: 5 units
+r; t=0.00 20:16:10
+
+. 
+.         save ../data/data, replace      // save the data as we are going to use it 
+> several times in the following tasks
+file ../data/data.dta saved
+r; t=0.00 20:16:10
+
+. 
+. 
+. // ########################################################################### //
+. 
+. 
+. // # 1. describe the data
+.         xtdes   // describe the panel data
+
+   ccode:  1, 2, ..., 114                                    n =        114
+    year:  1960, 1965, ..., 2000                             T =          9
+           Delta(year) = 5 units
+           Span(year)  = 9 periods
+           (ccode*year uniquely identifies each observation)
+
+Distribution of T_i:   min      5%     25%       50%       75%     95%     max
+                         1       1       9         9         9       9       9
+
+     Freq.  Percent    Cum. |  Pattern
+ ---------------------------+-----------
+       96     84.21   84.21 |  111111111
+        7      6.14   90.35 |  ......1..
+        2      1.75   92.11 |  ......111
+        1      0.88   92.98 |  .......1.
+        1      0.88   93.86 |  ....1....
+        1      0.88   94.74 |  ...1.....
+        1      0.88   95.61 |  ..1.1....
+        1      0.88   96.49 |  ..1.1.1..
+        1      0.88   97.37 |  .1.1.1...
+        3      2.63  100.00 | (other patterns)
+ ---------------------------+-----------
+      114    100.00         |  XXXXXXXXX
+r; t=0.00 20:16:10
+
+.         sum             // summarize the panel data
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+     country |          0
+        year |        896    1980.089    12.88075       1960       2000
+     isocode |          0
+          kc |        856    71.74116    17.77352   5.099385   189.4834
+          kg |        856    10.04281    5.713257   .2877948   43.33043
+-------------+---------------------------------------------------------
+          ki |        856     23.1607    11.73793   1.446131   111.2905
+       openk |        856    63.34099    52.06298   2.319838   395.9767
+     rgdpwok |        855    19846.39    21521.75   396.7613   271192.1
+   education |        880     4.73675    2.898113        .04      12.25
+  logrgdpwok |        855    9.290201    1.211423   5.983335   12.51058
+-------------+---------------------------------------------------------
+       ccode |        896    57.42634    33.21027          1        114
+r; t=0.00 20:16:10
+
+. 
+. 
+. // ########################################################################### //
+. 
+. 
+. // # 2. produce word and latex tables after tab and list
+. 
+.         use ../data/growth_data, clear
+r; t=0.00 20:16:10
+
+.         
+.                 preserve
+r; t=0.00 20:16:10
+
+.                 keep rgdpwok openk ki /*lnk education*/
+r; t=0.00 20:16:10
+
+.                 format %12.3f rgdpwok openk ki /*lnk education*/
+r; t=0.00 20:16:10
+
+. 
+.                         outreg2 using sum.doc, sum(detail) word eqkeep(N mean p50 s
+> d min max) replace
+
+      Investment Share of PPP Converted GDP Per Capita
+               at 2005 constant prices [rgdpl]
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     3.623163       1.446131
+ 5%     7.916571       1.547431
+10%     10.86709        1.66466       Obs                 856
+25%     16.16851       2.054982       Sum of wgt.         856
+
+50%     21.38498                      Mean            23.1607
+                        Largest       Std. dev.      11.73793
+75%     27.61269       78.66671
+90%     37.75682       79.89515       Variance        137.779
+95%     44.77809       107.7541       Skewness       1.856472
+99%     62.32471       111.2905       Kurtosis       11.12643
+
+            Openness at 2005 constant prices (%)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%      7.78552       2.319838
+ 5%     13.13677       2.330925
+10%     18.81702       2.514998       Obs                 856
+25%     30.25072       5.807106       Sum of wgt.         856
+
+50%     50.05203                      Mean           63.34099
+                        Largest       Std. dev.      52.06298
+75%     78.40037        335.939
+90%      124.411       346.3693       Variance       2710.554
+95%     159.1463       393.9669       Skewness       2.479568
+99%     290.2023       395.9767       Kurtosis       12.00654
+
+         PPP Converted GDP Chain per worker at 2005
+                       constant prices
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%      820.097       396.7613
+ 5%     1470.394       680.4185
+10%     1869.247       688.3165       Obs                 855
+25%     4144.063       689.6256       Sum of wgt.         855
+
+50%     12840.54                      Mean           19846.39
+                        Largest       Std. dev.      21521.75
+75%     30059.78       85669.11
+90%     49808.75       96111.57       Variance       4.63e+08
+95%     58815.88         188886       Skewness       3.166442
+99%     74706.38       271192.1       Kurtosis       28.26493
+
+
+sum.doc
+dir : seeout
+r; t=0.12 20:16:10
+
+.                 restore
+r; t=0.00 20:16:10
+
+. 
+.         recode education min/2 = 2 2.0001/4 = 4 4.0001/6 = 6 6.0001/9=9 9.0001/12=1
+> 2 12.0001/max=16
+(874 changes made to education)
+r; t=0.00 20:16:10
+
+.         format %2.0f education
+r; t=0.00 20:16:10
+
+.         drop if education < 10
+(797 observations deleted)
+r; t=0.00 20:16:10
+
+.         replace country = proper(country)
+(99 real changes made)
+r; t=0.00 20:16:10
+
+. 
+.         // ssc install tabout
+.         
+.         tabout country educ using country_educ.txt, cells(freq col cum) format(0 1)
+>  clab(No. Col_% Cum_%) replace
+
+Table output written to: country_educ.txt
+
+        education                                                               
+Country name    12      12      12      16      16      16      Total   Total   Total
+        No.     Col %   Cum %   No.     Col %   Cum %   No.     Col %   Cum %
+Australia       9       11.1    11.1    0       0.0     0.0     9       10.8    10.8
+Barbados        2       2.5     13.6    0       0.0     0.0     2       2.4     13.3
+Bulgaria        3       3.7     17.3    0       0.0     0.0     3       3.6     16.9
+Canada  6       7.4     24.7    0       0.0     0.0     6       7.2     24.1
+Denmark 5       6.2     30.9    0       0.0     0.0     5       6.0     30.1
+Estonia 1       1.2     32.1    0       0.0     0.0     1       1.2     31.3
+Finland 3       3.7     35.8    0       0.0     0.0     3       3.6     34.9
+Hong Kong       2       2.5     38.3    0       0.0     0.0     2       2.4     37.3
+Ireland 1       1.2     39.5    0       0.0     0.0     1       1.2     38.6
+Israel  5       6.2     45.7    0       0.0     0.0     5       6.0     44.6
+Japan   3       3.7     49.4    0       0.0     0.0     3       3.6     48.2
+Latvia  1       1.2     50.6    0       0.0     0.0     1       1.2     49.4
+Lithuania       1       1.2     51.9    0       0.0     0.0     1       1.2     50.6
+Moldova 1       1.2     53.1    0       0.0     0.0     1       1.2     51.8
+Netherlands     1       1.2     54.3    0       0.0     0.0     1       1.2     53.0
+New Zealand     9       11.1    65.4    0       0.0     0.0     9       10.8    63.9
+Norway  3       3.7     69.1    0       0.0     0.0     3       3.6     67.5
+Poland  3       3.7     72.8    0       0.0     0.0     3       3.6     71.1
+Romania 3       3.7     76.5    0       0.0     0.0     3       3.6     74.7
+Sweden  5       6.2     82.7    0       0.0     0.0     5       6.0     80.7
+Switzerland     5       6.2     88.9    0       0.0     0.0     5       6.0     86.7
+Tajikistan      1       1.2     90.1    0       0.0     0.0     1       1.2     88.0
+United Kingdom  2       2.5     92.6    0       0.0     0.0     2       2.4     90.4
+United States   6       7.4     100.0   2       100.0   100.0   8       9.6     100.0
+Total   81      100.0           2       100.0           83      100.0   
+r; t=0.06 20:16:10
+
+. 
+. 
+. // ########################################################################### //
+. 
+. 
+. // # 3. test for heteroskedasticity & serial correlation
+. 
+. // HETEROSKEDASTICITY
+. 
+. // assuming pooled data
+.         use ../data/data, clear
+r; t=0.00 20:16:10
+
+.                 reg logrgdpwok education ki kg kc openk
+
+      Source |       SS           df       MS      Number of obs   =       839
+-------------+----------------------------------   F(5, 833)       =    325.51
+       Model |  810.230579         5  162.046116   Prob > F        =    0.0000
+    Residual |  414.687891       833  .497824598   R-squared       =    0.6615
+-------------+----------------------------------   Adj R-squared   =    0.6594
+       Total |  1224.91847       838  1.46171655   Root MSE        =    .70557
+
+------------------------------------------------------------------------------
+  logrgdpwok | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   education |   .2831908    .008847    32.01   0.000     .2658257    .3005559
+          ki |  -.0059095   .0024299    -2.43   0.015     -.010679   -.0011401
+          kg |  -.0105514   .0044928    -2.35   0.019    -.0193698   -.0017329
+          kc |  -.0196914   .0014772   -13.33   0.000    -.0225909   -.0167918
+       openk |   .0020906   .0005268     3.97   0.000     .0010565    .0031247
+       _cons |   9.472758   .1569738    60.35   0.000     9.164647    9.780869
+------------------------------------------------------------------------------
+r; t=0.04 20:16:10
+
+.                 estat hettest
+
+Breusch–Pagan/Cook–Weisberg test for heteroskedasticity 
+Assumption: Normal error terms
+Variable: Fitted values of logrgdpwok
+
+H0: Constant variance
+
+    chi2(1) =  13.07
+Prob > chi2 = 0.0003
+r; t=0.00 20:16:10
+
+.                 estat imtest, white
+
+White's test
+H0: Homoskedasticity
+Ha: Unrestricted heteroskedasticity
+
+   chi2(20) =  93.50
+Prob > chi2 = 0.0000
+
+Cameron & Trivedi's decomposition of IM-test
+
+--------------------------------------------------
+              Source |       chi2     df         p
+---------------------+----------------------------
+  Heteroskedasticity |      93.50     20    0.0000
+            Skewness |      17.97      5    0.0030
+            Kurtosis |       1.87      1    0.1720
+---------------------+----------------------------
+               Total |     113.33     26    0.0000
+--------------------------------------------------
+r; t=0.01 20:16:10
+
+.         
+.         // we reject homoskedasticity
+. 
+. // assuming panel data
+. 
+.         // test for heteroskedasticity & correlation
+.         // optimal solution proposed by Greene, Econometric Analysis
+. 
+.         use ../data/data, clear
+r; t=0.00 20:16:10
+
+.         capture net install xttest3.pkg, replace
+r; t=0.22 20:16:11
+
+.         xtreg logrgdpwok education ki kg kc openk, fe
+
+Fixed-effects (within) regression               Number of obs     =        839
+Group variable: ccode                           Number of groups  =        106
+
+R-squared:                                      Obs per group:
+     Within  = 0.4635                                         min =          1
+     Between = 0.6552                                         avg =        7.9
+     Overall = 0.6062                                         max =          9
+
+                                                F(5,728)          =     125.80
+corr(u_i, Xb) = 0.4660                          Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+  logrgdpwok | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   education |    .143816   .0091339    15.75   0.000     .1258841    .1617479
+          ki |   .0053054    .001462     3.63   0.000     .0024351    .0081756
+          kg |  -.0073329   .0037227    -1.97   0.049    -.0146415   -.0000243
+          kc |  -.0114466   .0011615    -9.85   0.000     -.013727   -.0091663
+       openk |   .0027601   .0004648     5.94   0.000     .0018476    .0036727
+       _cons |   9.215138   .1110765    82.96   0.000      8.99707    9.433207
+-------------+----------------------------------------------------------------
+     sigma_u |  .84808511
+     sigma_e |  .25542255
+         rho |  .91683672   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(105, 728) = 53.60                   Prob > F = 0.0000
+r; t=0.01 20:16:11
+
+.                 xttest3
+
+Modified Wald test for groupwise heteroskedasticity
+in fixed effect regression model
+
+H0: sigma(i)^2 = sigma^2 for all i
+
+chi2 (106)  =  12852.94
+Prob>chi2 =      0.0000
+
+r; t=0.00 20:16:11
+
+. 
+. // test for serial correlation
+. 
+.         use ../data/data, clear
+r; t=0.00 20:16:11
+
+.         capture net install xtserial.pkg
+r; t=0.22 20:16:11
+
+.         xtserial logrgdpwok education ki kg kc openk
+
+Wooldridge test for autocorrelation in panel data
+H0: no first-order autocorrelation
+    F(  1,      97) =    160.126
+           Prob > F =      0.0000
+r; t=0.07 20:16:11
+
+.                 
+. // since we rejected homoskedasticity & no serial correlation, one should use the o
+> ption cluster() in our regressions           
+. 
+. 
+. // ########################################################################### //
+. 
+. 
+. // # 4. REGRESSIONS
+.         use ../data/data, clear
+r; t=0.00 20:16:11
+
+.         xtset ccode year, delta(5)      // our data is on a 5 year interval, so we 
+> have to specify the delta
+
+Panel variable: ccode (unbalanced)
+ Time variable: year, 1960 to 2000, but with gaps
+         Delta: 5 units
+r; t=0.00 20:16:11
+
+.         
+. 
+. // # 4.a OLS
+. 
+.                 label var logrgdpwok "Ln Real GDP per Worker"
+r; t=0.00 20:16:11
+
+.                 label var education "Av Education (years)"
+r; t=0.00 20:16:11
+
+.                 label var ki "Investment Share of PPP"
+r; t=0.00 20:16:11
+
+.                 label var kg "Government Consumption Share of PPP"
+r; t=0.00 20:16:11
+
+.                 label var kc "Consumption Share of PPP"
+r; t=0.00 20:16:11
+
+.                 label var openk "Degree of Openness"
+r; t=0.00 20:16:11
+
+. 
+.         reg logrgdpwok education ki kg kc openk, cluster(ccode)
+
+Linear regression                               Number of obs     =        839
+                                                F(5, 105)         =     102.03
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.6615
+                                                Root MSE          =     .70557
+
+                                (Std. err. adjusted for 106 clusters in ccode)
+------------------------------------------------------------------------------
+             |               Robust
+  logrgdpwok | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   education |   .2831908    .017911    15.81   0.000     .2476766     .318705
+          ki |  -.0059095   .0065116    -0.91   0.366    -.0188209    .0070019
+          kg |  -.0105514   .0086082    -1.23   0.223    -.0276198    .0065171
+          kc |  -.0196914   .0027615    -7.13   0.000    -.0251669   -.0142159
+       openk |   .0020906   .0011695     1.79   0.077    -.0002282    .0044095
+       _cons |   9.472758   .3047512    31.08   0.000     8.868493    10.07702
+------------------------------------------------------------------------------
+r; t=0.00 20:16:11
+
+.         est store OLS
+r; t=0.00 20:16:11
+
+.         
+.         // will be used for the test of fixed-effects
+.         ereturn list
+
+scalars:
+               e(rank) =  6
+               e(ll_0) =  -1349.236140596613
+                 e(ll) =  -894.8742647556737
+               e(r2_a) =  .6594246687090639
+                e(rss) =  414.6878905390008
+                e(mss) =  810.2305788937097
+               e(rmse) =  .7055668632285642
+                 e(r2) =  .661456741091468
+                  e(F) =  102.0336432995117
+               e(df_r) =  105
+               e(df_m) =  5
+                  e(N) =  839
+            e(N_clust) =  106
+
+macros:
+            e(cmdline) : "regress logrgdpwok education ki kg kc openk, cluster(cc.."
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "cluster"
+             e(depvar) : "logrgdpwok"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+            e(vcetype) : "Robust"
+           e(clustvar) : "ccode"
+
+matrices:
+                  e(b) :  1 x 6
+                  e(V) :  6 x 6
+       e(V_modelbased) :  6 x 6
+
+functions:
+             e(sample)   
+r; t=0.00 20:16:11
+
+.         scalar r2lsdv=e(r2)
+r; t=0.00 20:16:11
+
+.         scalar mflsdv=e(df_m)
+r; t=0.00 20:16:11
+
+.         scalar dflsdv=e(df_r)
+r; t=0.00 20:16:11
+
+.         
+.                 // TEST FOR RANDOM EFFECTS (Breush & Pagan, 1980)
+.                         predict res, resid
+(57 missing values generated)
+r; t=0.00 20:16:11
+
+.                         gen res2=res^2
+(57 missing values generated)
+r; t=0.00 20:16:11
+
+.                         egen mres=mean(res),by(ccode)
+(13 missing values generated)
+r; t=0.00 20:16:11
+
+.                         egen nobsT=count(ccode),by(ccode)
+r; t=0.00 20:16:11
+
+.                         bysort ccode (year): gen Tmres2=(nobsT*mres)^2 if _n==1
+(790 missing values generated)
+r; t=0.00 20:16:11
+
+.                         egen sTmres2=total(Tmres2)
+r; t=0.00 20:16:11
+
+.                         egen sres2=total(res2)
+r; t=0.00 20:16:11
+
+.                         count if i[_n]~=i[_n-1]
+  114
+r; t=0.00 20:16:11
+
+.                         gen n=r(N)
+r; t=0.00 20:16:11
+
+.                         di "LM = " ((n*nobsT)/(2*(nobsT-1)))*((sTmres2/sres2-1)^2)
+LM = 2771.0964
+r; t=0.00 20:16:11
+
+.                         scalar LM = ((n*nobsT)/(2*(nobsT-1)))*((sTmres2/sres2-1)^2)
+r; t=0.00 20:16:11
+
+.                 // COMPUTE THE p-value FOR THE TEST
+.                         di chi2tail(1,LM)
+0
+r; t=0.00 20:16:11
+
+. 
+.         outreg2 using mainregs, dec(4) sortvar(education ki kg kc openk) keep(educa
+> tion ki kg kc openk) nocons/*
+>                 */ word label addnote(Source: Own computations, 2015.) replace ctit
+> le(OLS) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+mainregs.rtf
+dir : seeout
+r; t=0.01 20:16:11
+
+. 
+. 
+. // # 4.b LSDV
+. 
+.         reg logrgdpwok education ki kg kc openk i.ccode, cluster(ccode)
+
+Linear regression                               Number of obs     =        839
+                                                F(4, 105)         =          .
+                                                Prob > F          =          .
+                                                R-squared         =     0.9612
+                                                Root MSE          =     .25542
+
+                                    (Std. err. adjusted for 106 clusters in ccode)
+----------------------------------------------------------------------------------
+                 |               Robust
+      logrgdpwok | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+       education |    .143816   .0223665     6.43   0.000     .0994674    .1881646
+              ki |   .0053054   .0025519     2.08   0.040     .0002455    .0103653
+              kg |  -.0073329   .0081653    -0.90   0.371    -.0235233    .0088574
+              kc |  -.0114466   .0028005    -4.09   0.000    -.0169994   -.0058939
+           openk |   .0027601   .0007872     3.51   0.001     .0011993     .004321
+                 |
+           ccode |
+        algeria  |   1.072938   .1575517     6.81   0.000     .7605424    1.385334
+      argentina  |    1.12614   .1474341     7.64   0.000     .8338056    1.418475
+      australia  |   1.535596   .2188239     7.02   0.000     1.101709    1.969483
+        austria  |   1.784453   .1651007    10.81   0.000     1.457089    2.111817
+        bahrain  |   1.932676   .1669168    11.58   0.000     1.601711    2.263641
+     bangladesh  |  -.1642639    .062215    -2.64   0.010    -.2876248   -.0409029
+       barbados  |   1.312139   .1726414     7.60   0.000     .9698231    1.654455
+        belgium  |   1.607214    .174097     9.23   0.000     1.262012    1.952416
+          benin  |  -.0790802   .0468661    -1.69   0.095     -.172007    .0138466
+        bolivia  |   .6265122   .0789214     7.94   0.000     .4700257    .7829987
+       botswana  |   .1038862   .1270566     0.82   0.415    -.1480435    .3558159
+         brazil  |   1.439424    .083388    17.26   0.000     1.274081    1.604768
+         brunei  |   3.063351    .250877    12.21   0.000     2.565908    3.560794
+       bulgaria  |   .1744382    .172355     1.01   0.314    -.1673099    .5161863
+        burundi  |  -.8584452    .110544    -7.77   0.000    -1.077634   -.6392569
+       cameroon  |   .4336845   .0449485     9.65   0.000     .3445599    .5228091
+         canada  |   1.605349   .2040374     7.87   0.000     1.200781    2.009918
+          chile  |   .8707491   .1407312     6.19   0.000     .5917053    1.149793
+          china  |  -.6680394    .178834    -3.74   0.000    -1.022634   -.3134446
+       colombia  |   1.161365   .0953857    12.18   0.000     .9722325    1.350497
+     costa rica  |   1.577119   .1127648    13.99   0.000     1.353527    1.800711
+        croatia  |   1.184549   .1209393     9.79   0.000     .9447486    1.424349
+           cuba  |   1.587052   .1602945     9.90   0.000     1.269218    1.904887
+         cyprus  |   .9360397    .157734     5.93   0.000     .6232823    1.248797
+        denmark  |   1.455931   .1964618     7.41   0.000     1.066384    1.845478
+       dominica  |   .2915581   .2098418     1.39   0.168    -.1245195    .7076357
+        ecuador  |   .8443313   .1259248     6.71   0.000     .5946457    1.094017
+          egypt  |   .8905766   .0677563    13.14   0.000     .7562283    1.024925
+    el salvador  |   1.499304   .0496852    30.18   0.000     1.400788    1.597821
+        estonia  |   .6294877   .2219003     2.84   0.005     .1895004    1.069475
+       ethiopia  |  -.9552761   .0274837   -34.76   0.000    -1.009771   -.9007811
+           fiji  |   .1923432   .1436477     1.34   0.183    -.0924837    .4771701
+        finland  |   1.460397   .1782708     8.19   0.000     1.106919    1.813875
+         france  |   1.964545   .1475641    13.31   0.000     1.671952    2.257137
+          ghana  |   -.551618    .134601    -4.10   0.000    -.8185068   -.2847291
+         greece  |   1.801521   .1464257    12.30   0.000     1.511186    2.091856
+      guatemala  |   1.478946   .0372444    39.71   0.000     1.405097    1.552795
+         guyana  |  -.4191032   .1894499    -2.21   0.029    -.7947474    -.043459
+          haiti  |   .6433402   .0711074     9.05   0.000     .5023473    .7843331
+       honduras  |   .6598416   .1159007     5.69   0.000     .4300319    .8896513
+      hong kong  |   .8515873   .1891077     4.50   0.000     .4766216    1.226553
+        hungary  |   1.098128     .17165     6.40   0.000     .7577772    1.438478
+        iceland  |   1.726338   .1635804    10.55   0.000     1.401988    2.050688
+          india  |   -.110353   .0699571    -1.58   0.118     -.249065     .028359
+      indonesia  |  -.1961102    .107863    -1.82   0.072    -.4099826    .0177623
+           iraq  |   1.311491   .2012851     6.52   0.000     .9123795    1.710602
+        ireland  |   1.540158    .157125     9.80   0.000     1.228608    1.851708
+         israel  |    1.55294   .1894838     8.20   0.000     1.177229    1.928651
+          italy  |   2.042341    .129668    15.75   0.000     1.785234    2.299449
+        jamaica  |   1.230115   .1008802    12.19   0.000     1.030088    1.430142
+          japan  |    1.46955   .1966926     7.47   0.000     1.079545    1.859555
+         jordan  |   1.110393   .1138375     9.75   0.000     .8846745    1.336112
+          kenya  |  -.1306675   .0471851    -2.77   0.007    -.2242268   -.0371083
+         kuwait  |   2.036744   .1850027    11.01   0.000     1.669918     2.40357
+        lesotho  |  -.2065378   .1878899    -1.10   0.274    -.5790888    .1660132
+        liberia  |  -.3615096   .0574896    -6.29   0.000    -.4755007   -.2475184
+         malawi  |  -1.273048   .1479018    -8.61   0.000     -1.56631   -.9797859
+       malaysia  |   .3867523   .1437558     2.69   0.008      .101711    .6717936
+           mali  |  -.0235985   .0369723    -0.64   0.525    -.0969077    .0497107
+          malta  |   1.070964   .1650425     6.49   0.000     .7437154    1.398213
+     mauritania  |   .0639512   .0767777     0.83   0.407    -.0882847    .2161872
+      mauritius  |   .4952543   .1152469     4.30   0.000     .2667409    .7237676
+         mexico  |   1.845813   .1101096    16.76   0.000     1.627486     2.06414
+     mozambique  |  -.6891646   .0598696   -11.51   0.000     -.807875   -.5704541
+          nepal  |  -.0991745   .0100857    -9.83   0.000    -.1191727   -.0791764
+    netherlands  |   1.939269   .1645031    11.79   0.000      1.61309    2.265448
+    new zealand  |   1.385358   .2249162     6.16   0.000     .9393911    1.831326
+      nicaragua  |   .9633631   .1208373     7.97   0.000     .7237652    1.202961
+          niger  |  -.0769461   .0630699    -1.22   0.225     -.202002    .0481099
+         norway  |   1.581102   .2037473     7.76   0.000     1.177109    1.985096
+       pakistan  |   .5523615   .0446868    12.36   0.000     .4637559    .6409671
+         panama  |   .4428368   .1639329     2.70   0.008     .1177881    .7678855
+       paraguay  |   .4733239   .0976497     4.85   0.000     .2797027    .6669452
+           peru  |   .9592896   .1251002     7.67   0.000     .7112389     1.20734
+    philippines  |   -.136162   .1223566    -1.11   0.268    -.3787724    .1064485
+         poland  |    .793096   .1889337     4.20   0.000     .4184754    1.167717
+       portugal  |    1.73044   .0886926    19.51   0.000     1.554579    1.906301
+        romania  |   .1486903   .1802451     0.82   0.411    -.2087025     .506083
+         rwanda  |  -.0957172    .190054    -0.50   0.616    -.4725591    .2811247
+        senegal  |   .1312513    .026965     4.87   0.000     .0777847     .184718
+     seychelles  |   .9113126   .2250135     4.05   0.000     .4651524    1.357473
+   sierra leone  |   .0457917   .0375708     1.22   0.226    -.0287041    .1202876
+      singapore  |   .7290457   .2555071     2.85   0.005     .2224223    1.235669
+       slovenia  |   1.433525   .1559689     9.19   0.000     1.124267    1.742782
+solomon islands  |   .6405426   .2113891     3.03   0.003     .2213971    1.059688
+   south africa  |   1.148908   .1285379     8.94   0.000     .8940409    1.403775
+          spain  |   1.987298   .1238544    16.05   0.000     1.741718    2.232879
+      sri lanka  |   -.307962   .1044942    -2.95   0.004    -.5151547   -.1007694
+          sudan  |   .8319784   .0247464    33.62   0.000     .7829109    .8810459
+      swaziland  |   .4191817   .0968259     4.33   0.000     .2271937    .6111696
+         sweden  |   1.585743   .1886238     8.41   0.000     1.211737    1.959749
+    switzerland  |   1.628257   .2114608     7.70   0.000     1.208969    2.047544
+          syria  |   .9602772   .0637925    15.05   0.000     .8337885    1.086766
+         taiwan  |   1.082393   .1439297     7.52   0.000     .7970066    1.367779
+       thailand  |  -.0801659   .1190294    -0.67   0.502    -.3161791    .1558474
+           togo  |  -.0909259   .0503377    -1.81   0.074    -.1907363    .0088845
+        tunisia  |   .7310789   .1327475     5.51   0.000     .4678652    .9942926
+         turkey  |   1.468455   .0717716    20.46   0.000     1.326145    1.610764
+         uganda  |  -.4943668   .0499079    -9.91   0.000     -.593325   -.3954085
+ united kingdom  |   1.772199   .1665677    10.64   0.000     1.441926    2.102472
+  united states  |    1.71125   .2348652     7.29   0.000     1.245556    2.176945
+        uruguay  |   .9575777   .1253499     7.64   0.000      .709032    1.206123
+      venezuela  |    1.45226   .1409635    10.30   0.000     1.172755    1.731764
+         zambia  |   .1924499   .0813345     2.37   0.020     .0311785    .3537212
+       zimbabwe  |   -1.40782    .068842   -20.45   0.000    -1.544321   -1.271319
+                 |
+           _cons |    8.41951   .2549745    33.02   0.000     7.913943    8.925077
+----------------------------------------------------------------------------------
+r; t=0.03 20:16:11
+
+.         est store LSDV
+r; t=0.00 20:16:11
+
+.         testparm i.ccode
+
+ ( 1)  2.ccode = 0
+ ( 2)  3.ccode = 0
+ ( 3)  4.ccode = 0
+ ( 4)  5.ccode = 0
+ ( 5)  6.ccode = 0
+ ( 6)  7.ccode = 0
+ ( 7)  8.ccode = 0
+ ( 8)  9.ccode = 0
+ ( 9)  11.ccode = 0
+ (10)  12.ccode = 0
+ (11)  13.ccode = 0
+ (12)  14.ccode = 0
+ (13)  15.ccode = 0
+ (14)  16.ccode = 0
+ (15)  17.ccode = 0
+ (16)  18.ccode = 0
+ (17)  19.ccode = 0
+ (18)  20.ccode = 0
+ (19)  21.ccode = 0
+ (20)  22.ccode = 0
+ (21)  23.ccode = 0
+ (22)  24.ccode = 0
+ (23)  25.ccode = 0
+ (24)  26.ccode = 0
+ (25)  27.ccode = 0
+ (26)  28.ccode = 0
+ (27)  29.ccode = 0
+ (28)  30.ccode = 0
+ (29)  31.ccode = 0
+ (30)  32.ccode = 0
+ (31)  33.ccode = 0
+ (32)  34.ccode = 0
+ (33)  35.ccode = 0
+ (34)  36.ccode = 0
+ (35)  37.ccode = 0
+ (36)  38.ccode = 0
+ (37)  39.ccode = 0
+ (38)  40.ccode = 0
+ (39)  41.ccode = 0
+ (40)  42.ccode = 0
+ (41)  43.ccode = 0
+ (42)  44.ccode = 0
+ (43)  45.ccode = 0
+ (44)  46.ccode = 0
+ (45)  47.ccode = 0
+ (46)  48.ccode = 0
+ (47)  49.ccode = 0
+ (48)  50.ccode = 0
+ (49)  51.ccode = 0
+ (50)  52.ccode = 0
+ (51)  53.ccode = 0
+ (52)  54.ccode = 0
+ (53)  55.ccode = 0
+ (54)  56.ccode = 0
+ (55)  58.ccode = 0
+ (56)  59.ccode = 0
+ (57)  62.ccode = 0
+ (58)  63.ccode = 0
+ (59)  64.ccode = 0
+ (60)  65.ccode = 0
+ (61)  66.ccode = 0
+ (62)  67.ccode = 0
+ (63)  68.ccode = 0
+ (64)  70.ccode = 0
+ (65)  72.ccode = 0
+ (66)  73.ccode = 0
+ (67)  74.ccode = 0
+ (68)  75.ccode = 0
+ (69)  76.ccode = 0
+ (70)  77.ccode = 0
+ (71)  78.ccode = 0
+ (72)  79.ccode = 0
+ (73)  80.ccode = 0
+ (74)  81.ccode = 0
+ (75)  82.ccode = 0
+ (76)  83.ccode = 0
+ (77)  84.ccode = 0
+ (78)  85.ccode = 0
+ (79)  86.ccode = 0
+ (80)  87.ccode = 0
+ (81)  88.ccode = 0
+ (82)  89.ccode = 0
+ (83)  90.ccode = 0
+ (84)  91.ccode = 0
+ (85)  92.ccode = 0
+ (86)  93.ccode = 0
+ (87)  94.ccode = 0
+ (88)  95.ccode = 0
+ (89)  96.ccode = 0
+ (90)  97.ccode = 0
+ (91)  98.ccode = 0
+ (92)  99.ccode = 0
+ (93)  100.ccode = 0
+ (94)  101.ccode = 0
+ (95)  103.ccode = 0
+ (96)  104.ccode = 0
+ (97)  105.ccode = 0
+ (98)  106.ccode = 0
+ (99)  107.ccode = 0
+ (100)  108.ccode = 0
+ (101)  109.ccode = 0
+ (102)  110.ccode = 0
+ (103)  112.ccode = 0
+ (104)  113.ccode = 0
+ (105)  114.ccode = 0
+       Constraint 1 dropped
+       Constraint 2 dropped
+       Constraint 3 dropped
+       Constraint 4 dropped
+       Constraint 5 dropped
+       Constraint 6 dropped
+       Constraint 7 dropped
+       Constraint 8 dropped
+       Constraint 9 dropped
+       Constraint 10 dropped
+       Constraint 11 dropped
+       Constraint 12 dropped
+       Constraint 14 dropped
+       Constraint 15 dropped
+       Constraint 16 dropped
+       Constraint 17 dropped
+       Constraint 18 dropped
+       Constraint 19 dropped
+       Constraint 20 dropped
+       Constraint 21 dropped
+       Constraint 22 dropped
+       Constraint 23 dropped
+       Constraint 24 dropped
+       Constraint 25 dropped
+       Constraint 26 dropped
+       Constraint 27 dropped
+       Constraint 28 dropped
+       Constraint 29 dropped
+       Constraint 30 dropped
+       Constraint 31 dropped
+       Constraint 32 dropped
+       Constraint 33 dropped
+       Constraint 34 dropped
+       Constraint 35 dropped
+       Constraint 36 dropped
+       Constraint 37 dropped
+       Constraint 38 dropped
+       Constraint 39 dropped
+       Constraint 40 dropped
+       Constraint 41 dropped
+       Constraint 42 dropped
+       Constraint 43 dropped
+       Constraint 44 dropped
+       Constraint 45 dropped
+       Constraint 46 dropped
+       Constraint 47 dropped
+       Constraint 48 dropped
+       Constraint 49 dropped
+       Constraint 50 dropped
+       Constraint 51 dropped
+       Constraint 52 dropped
+       Constraint 53 dropped
+       Constraint 54 dropped
+       Constraint 55 dropped
+       Constraint 56 dropped
+       Constraint 58 dropped
+       Constraint 59 dropped
+       Constraint 60 dropped
+       Constraint 61 dropped
+       Constraint 62 dropped
+       Constraint 63 dropped
+       Constraint 64 dropped
+       Constraint 65 dropped
+       Constraint 66 dropped
+       Constraint 67 dropped
+       Constraint 68 dropped
+       Constraint 69 dropped
+       Constraint 70 dropped
+       Constraint 71 dropped
+       Constraint 72 dropped
+       Constraint 73 dropped
+       Constraint 74 dropped
+       Constraint 75 dropped
+       Constraint 76 dropped
+       Constraint 77 dropped
+       Constraint 78 dropped
+       Constraint 79 dropped
+       Constraint 80 dropped
+       Constraint 82 dropped
+       Constraint 84 dropped
+       Constraint 85 dropped
+       Constraint 86 dropped
+       Constraint 87 dropped
+       Constraint 88 dropped
+       Constraint 89 dropped
+       Constraint 90 dropped
+       Constraint 91 dropped
+       Constraint 92 dropped
+       Constraint 93 dropped
+       Constraint 94 dropped
+       Constraint 95 dropped
+       Constraint 96 dropped
+       Constraint 97 dropped
+       Constraint 98 dropped
+       Constraint 99 dropped
+       Constraint 100 dropped
+       Constraint 102 dropped
+       Constraint 103 dropped
+       Constraint 104 dropped
+       Constraint 105 dropped
+
+       F(  5,   105) =  198.38
+            Prob > F =    0.0000
+r; t=0.02 20:16:11
+
+.         
+.         // by rejecting the null hypothesis that country dummies are jointly equal 
+> to zero we conclude in favour of the specific effects model
+.         
+.         ereturn list
+
+scalars:
+               e(rank) =  5
+               e(ll_0) =  -1349.236140596613
+                 e(ll) =  14.13910306519087
+               e(r2_a) =  .9553670778984571
+                e(rss) =  47.4952157236349
+                e(mss) =  1177.423253709076
+               e(rmse) =  .2554225537008408
+                 e(r2) =  .961225814689829
+                  e(F) =  .
+               e(df_r) =  105
+               e(df_m) =  4
+                  e(N) =  839
+            e(N_clust) =  106
+
+macros:
+            e(cmdline) : "regress logrgdpwok education ki kg kc openk i.ccode, cl.."
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "cluster"
+             e(depvar) : "logrgdpwok"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+            e(vcetype) : "Robust"
+           e(clustvar) : "ccode"
+
+matrices:
+                  e(b) :  1 x 112
+                  e(V) :  112 x 112
+       e(V_modelbased) :  112 x 112
+
+functions:
+             e(sample)   
+r; t=0.00 20:16:11
+
+.         scalar r2pooled=e(r2)
+r; t=0.00 20:16:11
+
+.         scalar mfpooled=e(df_m)
+r; t=0.00 20:16:11
+
+. 
+.                 di "Test for the presence of fixed effects; F statistic:   " ((r2ls
+> dv-r2pooled)/(mflsdv-mfpooled))/((1-r2lsdv)/(dflsdv))
+Test for the presence of fixed effects; F statistic:   -92.974094
+r; t=0.00 20:16:11
+
+.                 scalar fstatistic=((r2lsdv-r2pooled)/(mflsdv-mfpooled))/((1-r2lsdv)
+> /(dflsdv))
+r; t=0.00 20:16:11
+
+.                 di "Test for the presence of fixed effects; p-valor:   " Ftail(mfls
+> dv-mfpooled,dflsdv,fstatistic)
+Test for the presence of fixed effects; p-valor:   1
+r; t=0.00 20:16:11
+
+.         
+.         outreg2 using mainregs, dec(4) sortvar(education ki kg kc openk) keep(educa
+> tion ki kg kc openk) nocons/*
+>                 */      word label addnote(ourse: Own computations, 2015.) append c
+> title(LSDV) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+mainregs.rtf
+dir : seeout
+r; t=0.06 20:16:11
+
+. 
+.         // produce different output tables combining 2 or more regressions
+.         // look for the example on how to output the results using outreg2
+.         
+.         estimates table OLS LSDV, keep(education ki kg kc openk) b(%7.4f) se(%7.4f)
+>  stats(N r2_a)
+
+----------------------------------
+    Variable |   OLS      LSDV    
+-------------+--------------------
+   education |  0.2832    0.1438  
+             |  0.0179    0.0224  
+          ki | -0.0059    0.0053  
+             |  0.0065    0.0026  
+          kg | -0.0106   -0.0073  
+             |  0.0086    0.0082  
+          kc | -0.0197   -0.0114  
+             |  0.0028    0.0028  
+       openk |  0.0021    0.0028  
+             |  0.0012    0.0008  
+-------------+--------------------
+           N |     839       839  
+        r2_a |  0.6594    0.9554  
+----------------------------------
+                      Legend: b/se
+r; t=0.03 20:16:11
+
+.         estimates table OLS LSDV, keep(education ki kg kc openk) b(%7.4f) star stat
+> s(N r2_a)
+
+----------------------------------------
+    Variable |    OLS          LSDV     
+-------------+--------------------------
+   education |  0.2832***    0.1438***  
+          ki | -0.0059       0.0053*    
+          kg | -0.0106      -0.0073     
+          kc | -0.0197***   -0.0114***  
+       openk |  0.0021       0.0028***  
+-------------+--------------------------
+           N |     839          839     
+        r2_a |  0.6594       0.9554     
+----------------------------------------
+Legend: * p<0.05; ** p<0.01; *** p<0.001
+r; t=0.02 20:16:11
+
+. 
+. 
+. // # 4.c LSDV with time dummies
+. 
+.         reg logrgdpwok education ki kg kc openk i.ccode i.year, cluster(ccode)
+
+Linear regression                               Number of obs     =        839
+                                                F(12, 105)        =          .
+                                                Prob > F          =          .
+                                                R-squared         =     0.9671
+                                                Root MSE          =     .23667
+
+                                    (Std. err. adjusted for 106 clusters in ccode)
+----------------------------------------------------------------------------------
+                 |               Robust
+      logrgdpwok | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-----------------+----------------------------------------------------------------
+       education |   .0899645   .0381586     2.36   0.020     .0143029     .165626
+              ki |   .0022311   .0023298     0.96   0.340    -.0023885    .0068508
+              kg |  -.0154184   .0069574    -2.22   0.029    -.0292137   -.0016232
+              kc |  -.0106373   .0024857    -4.28   0.000     -.015566   -.0057086
+           openk |   .0031838   .0007965     4.00   0.000     .0016045    .0047631
+                 |
+           ccode |
+        algeria  |   1.303766   .1820601     7.16   0.000     .9427747    1.664758
+      argentina  |   1.542079   .2534856     6.08   0.000     1.039464    2.044694
+      australia  |   2.142263   .3825771     5.60   0.000     1.383684    2.900843
+        austria  |   2.261522   .2993759     7.55   0.000     1.667915     2.85513
+        bahrain  |   2.085651   .2194707     9.50   0.000     1.650481    2.520821
+     bangladesh  |  -.1130259   .0599804    -1.88   0.062    -.2319558    .0059041
+       barbados  |   1.817315   .3194169     5.69   0.000      1.18397    2.450659
+        belgium  |    2.11169   .3257245     6.48   0.000     1.465839    2.757542
+          benin  |  -.0196762   .0499989    -0.39   0.695    -.1188147    .0794623
+        bolivia  |   .8677791   .1516184     5.72   0.000     .5671479     1.16841
+       botswana  |   .3541089   .1692846     2.09   0.039     .0184489    .6897689
+         brazil  |   1.691909   .1318441    12.83   0.000     1.430486    1.953331
+         brunei  |   3.244141   .3050338    10.64   0.000     2.639316    3.848967
+       bulgaria  |   .5913044   .3051662     1.94   0.055    -.0137839    1.196393
+        burundi  |  -.7310875   .0947245    -7.72   0.000    -.9189087   -.5432664
+       cameroon  |   .5469666   .0670082     8.16   0.000     .4141017    .6798314
+         canada  |   2.181002   .3715136     5.87   0.000     1.444359    2.917645
+          chile  |    1.24719   .2414908     5.16   0.000     .7683587    1.726022
+          china  |  -.2919812   .2312978    -1.26   0.210    -.7506019    .1666395
+       colombia  |   1.379988   .1457056     9.47   0.000     1.091081    1.668895
+     costa rica  |   1.942531   .1894562    10.25   0.000     1.566875    2.318188
+        croatia  |   1.518578   .2015053     7.54   0.000      1.11903    1.918125
+           cuba  |    2.00644   .2341988     8.57   0.000     1.542067    2.470813
+         cyprus  |   1.374845   .2762815     4.98   0.000       .82703     1.92266
+        denmark  |   2.018538   .3584942     5.63   0.000      1.30771    2.729366
+       dominica  |   .6538062   .2416676     2.71   0.008     .1746241    1.132988
+        ecuador  |   1.174491   .1996996     5.88   0.000     .7785241    1.570459
+          egypt  |   1.036346   .0977622    10.60   0.000      .842502    1.230191
+    el salvador  |   1.695046   .0953661    17.77   0.000     1.505953    1.884139
+        estonia  |    1.14485   .3418327     3.35   0.001     .4670588    1.822641
+       ethiopia  |  -.8828777   .0469354   -18.81   0.000    -.9759419   -.7898134
+           fiji  |   .5850422   .2598151     2.25   0.026      .069877    1.100208
+        finland  |   1.968333   .3112217     6.32   0.000     1.351238    2.585428
+         france  |   2.400441   .2608029     9.20   0.000     1.883317    2.917565
+          ghana  |  -.3336798   .1403641    -2.38   0.019    -.6119959   -.0553637
+         greece  |   2.220294   .2503164     8.87   0.000     1.723962    2.716625
+      guatemala  |    1.62251   .0745928    21.75   0.000     1.474606    1.770413
+         guyana  |  -.0552008    .266153    -0.21   0.836    -.5829331    .4725315
+          haiti  |   .8119158   .0762608    10.65   0.000     .6607049    .9631268
+       honduras  |   .8916334   .1528941     5.83   0.000     .5884725    1.194794
+      hong kong  |   1.238276    .311889     3.97   0.000     .6198573    1.856694
+        hungary  |   1.559373   .3050253     5.11   0.000     .9545638    2.164181
+        iceland  |   2.170777   .2858111     7.60   0.000     1.604066    2.737487
+          india  |   .1146783   .1120546     1.02   0.308    -.1075052    .3368618
+      indonesia  |   .0281901   .1488114     0.19   0.850    -.2668753    .3232555
+           iraq  |   1.432331   .2160614     6.63   0.000     1.003921    1.860741
+        ireland  |   1.972357   .2871004     6.87   0.000      1.40309    2.541625
+         israel  |   2.135892   .3353053     6.37   0.000     1.471043     2.80074
+          italy  |   2.418681   .2236391    10.82   0.000     1.975246    2.862116
+        jamaica  |   1.512545   .1674026     9.04   0.000     1.180616    1.844473
+          japan  |   2.008931   .3265163     6.15   0.000      1.36151    2.656353
+         jordan  |    1.41213    .171482     8.23   0.000     1.072113    1.752147
+          kenya  |  -.0246129   .0760702    -0.32   0.747    -.1754461    .1262203
+         kuwait  |   2.423491    .263495     9.20   0.000     1.901029    2.945953
+        lesotho  |  -.0826031   .1708867    -0.48   0.630      -.42144    .2562337
+        liberia  |  -.3431449   .0684097    -5.02   0.000    -.4787886   -.2075011
+         malawi  |  -.9873251   .1740597    -5.67   0.000    -1.332453   -.6421968
+       malaysia  |   .6656165   .2240101     2.97   0.004     .2214459    1.109787
+           mali  |   .0384693   .0298082     1.29   0.200    -.0206349    .0975735
+          malta  |   1.343691   .2738749     4.91   0.000     .8006474    1.886734
+     mauritania  |   .1563498   .0818113     1.91   0.059    -.0058669    .3185665
+      mauritius  |   .7646402   .1886406     4.05   0.000     .3906007     1.13868
+         mexico  |   2.083996   .1636629    12.73   0.000     1.759483    2.408509
+     mozambique  |  -.6802957   .0520613   -13.07   0.000    -.7835238   -.5770677
+          nepal  |  -.0389992   .0154588    -2.52   0.013    -.0696511   -.0083473
+    netherlands  |   2.451272   .3055527     8.02   0.000     1.845418    3.057127
+    new zealand  |   2.009057   .4023612     4.99   0.000     1.211249    2.806865
+      nicaragua  |   1.284479   .1545793     8.31   0.000     .9779774    1.590982
+          niger  |   .0136991   .0571194     0.24   0.811    -.0995581    .1269563
+         norway  |   2.121552   .3556564     5.97   0.000     1.416351    2.826753
+       pakistan  |   .7056755   .0671793    10.50   0.000     .5724714    .8388797
+         panama  |    .837805   .2735239     3.06   0.003     .2954576    1.380152
+       paraguay  |   .7115069   .1715502     4.15   0.000     .3713546    1.051659
+           peru  |   1.265102   .1983647     6.38   0.000     .8717811    1.658422
+    philippines  |   .1871001   .2198929     0.85   0.397    -.2489069     .623107
+         poland  |   1.255958   .3205627     3.92   0.000     .6203415    1.891575
+       portugal  |   1.936074   .1336486    14.49   0.000     1.671074    2.201074
+        romania  |    .632007   .2968078     2.13   0.036     .0434919    1.220522
+         rwanda  |   .0866858    .159469     0.54   0.588    -.2295118    .4028833
+        senegal  |   .2152096   .0548103     3.93   0.000     .1065308    .3238884
+     seychelles  |   1.436438   .2809358     5.11   0.000     .8793941    1.993482
+   sierra leone  |   .0292905   .0346179     0.85   0.399    -.0393505    .0979314
+      singapore  |   1.033266   .3396774     3.04   0.003      .359749    1.706784
+       slovenia  |   1.796819   .2489475     7.22   0.000     1.303202    2.290436
+solomon islands  |   .9636305   .2250094     4.28   0.000     .5174785    1.409783
+   south africa  |   1.468479   .2141459     6.86   0.000     1.043867    1.893091
+          spain  |   2.320603    .204004    11.38   0.000       1.9161    2.725105
+      sri lanka  |  -.0043624   .1869988    -0.02   0.981    -.3751466    .3664218
+          sudan  |    .821306   .0230508    35.63   0.000     .7756005    .8670115
+      swaziland  |   .5618322   .1575071     3.57   0.001     .2495247    .8741397
+         sweden  |   2.142423   .3460007     6.19   0.000     1.456368    2.828479
+    switzerland  |   2.153621   .3593051     5.99   0.000     1.441185    2.866056
+          syria  |   1.145112   .1197642     9.56   0.000     .9076413    1.382582
+         taiwan  |   1.528776   .2481986     6.16   0.000     1.036644    2.020908
+       thailand  |   .2202631    .190271     1.16   0.250    -.1570091    .5975353
+           togo  |   .0485361   .0688016     0.71   0.482    -.0878848    .1849569
+        tunisia  |   .8996147   .1539805     5.84   0.000     .5942998    1.204929
+         turkey  |   1.634361   .1066436    15.33   0.000     1.422907    1.845816
+         uganda  |  -.3401548   .0659717    -5.16   0.000    -.4709644   -.2093452
+ united kingdom  |   2.257889   .3033651     7.44   0.000     1.656372    2.859406
+  united states  |   2.350613   .4058817     5.79   0.000     1.545824    3.155401
+        uruguay  |   1.288889   .2164818     5.95   0.000     .8596457    1.718133
+      venezuela  |   1.710312      .1989     8.60   0.000      1.31593    2.104694
+         zambia  |   .4622751   .1285757     3.60   0.000     .2073332     .717217
+       zimbabwe  |   -1.23114   .1114987   -11.04   0.000    -1.452221   -1.010059
+                 |
+            year |
+           1965  |   .1348488   .0167789     8.04   0.000     .1015793    .1681183
+           1970  |   .2539272     .03664     6.93   0.000     .1812768    .3265777
+           1975  |   .3363551   .0479755     7.01   0.000     .2412286    .4314817
+           1980  |   .3947167   .0651749     6.06   0.000     .2654869    .5239464
+           1985  |   .3809623   .0708724     5.38   0.000     .2404354    .5214891
+           1990  |   .3386291    .086887     3.90   0.000     .1663482    .5109101
+           1995  |    .285656   .1070249     2.67   0.009     .0734454    .4978666
+           2000  |   .3024447   .1133583     2.67   0.009     .0776762    .5272132
+                 |
+           _cons |   8.162029   .2299711    35.49   0.000     7.706039    8.618019
+----------------------------------------------------------------------------------
+r; t=0.03 20:16:11
+
+.         est store LSDVtime
+r; t=0.00 20:16:11
+
+.         testparm i.year         // by rejecting the null hypothesis we conclude tha
+> t there are time specificities
+
+ ( 1)  1965.year = 0
+ ( 2)  1970.year = 0
+ ( 3)  1975.year = 0
+ ( 4)  1980.year = 0
+ ( 5)  1985.year = 0
+ ( 6)  1990.year = 0
+ ( 7)  1995.year = 0
+ ( 8)  2000.year = 0
+
+       F(  8,   105) =   10.70
+            Prob > F =    0.0000
+r; t=0.00 20:16:11
+
+.         
+.         outreg2 using mainregs, dec(4) sortvar(education ki kg kc openk) keep(educa
+> tion ki kg kc openk) nocons/*
+>                 */ word label addnote(ourse: Own computations, 2015.) append ctitle
+> (LSDV,Time) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+mainregs.rtf
+dir : seeout
+r; t=0.05 20:16:11
+
+. 
+. 
+. // # 4.d FE with time dummies
+. 
+.         xtreg logrgdpwok education ki kg kc openk i.year, fe
+
+Fixed-effects (within) regression               Number of obs     =        839
+Group variable: ccode                           Number of groups  =        106
+
+R-squared:                                      Obs per group:
+     Within  = 0.5445                                         min =          1
+     Between = 0.5877                                         avg =        7.9
+     Overall = 0.5088                                         max =          9
+
+                                                F(13,720)         =      66.19
+corr(u_i, Xb) = 0.4436                          Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+  logrgdpwok | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   education |   .0899645   .0167981     5.36   0.000     .0569854    .1229435
+          ki |   .0022311   .0013908     1.60   0.109    -.0004993    .0049616
+          kg |  -.0154184   .0035665    -4.32   0.000    -.0224204   -.0084165
+          kc |  -.0106373   .0010814    -9.84   0.000    -.0127603   -.0085142
+       openk |   .0031838   .0004357     7.31   0.000     .0023284    .0040392
+             |
+        year |
+       1965  |   .1348488   .0379721     3.55   0.000     .0602995    .2093982
+       1970  |   .2539272   .0377497     6.73   0.000     .1798146    .3280398
+       1975  |   .3363551   .0395752     8.50   0.000     .2586586    .4140516
+       1980  |   .3947167   .0436397     9.04   0.000     .3090404     .480393
+       1985  |   .3809623   .0462651     8.23   0.000     .2901316    .4717929
+       1990  |   .3386291   .0517287     6.55   0.000      .237072    .4401863
+       1995  |    .285656   .0569678     5.01   0.000     .1738132    .3974988
+       2000  |   .3024447   .0607399     4.98   0.000     .1831963    .4216931
+             |
+       _cons |   9.260557   .1171484    79.05   0.000     9.030564    9.490551
+-------------+----------------------------------------------------------------
+     sigma_u |  .94230853
+     sigma_e |  .23667059
+         rho |  .94066161   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(105, 720) = 59.05                   Prob > F = 0.0000
+r; t=0.01 20:16:11
+
+.         est store FEnorobust
+r; t=0.00 20:16:11
+
+.         // see the line under the output table for the specific effects test
+. 
+.         xtreg logrgdpwok education ki kg kc openk i.year, fe cluster(ccode)
+
+Fixed-effects (within) regression               Number of obs     =        839
+Group variable: ccode                           Number of groups  =        106
+
+R-squared:                                      Obs per group:
+     Within  = 0.5445                                         min =          1
+     Between = 0.5877                                         avg =        7.9
+     Overall = 0.5088                                         max =          9
+
+                                                F(13,105)         =      27.46
+corr(u_i, Xb) = 0.4436                          Prob > F          =     0.0000
+
+                                (Std. err. adjusted for 106 clusters in ccode)
+------------------------------------------------------------------------------
+             |               Robust
+  logrgdpwok | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   education |   .0899645   .0356478     2.52   0.013     .0192816    .1606474
+          ki |   .0022311   .0021765     1.03   0.308    -.0020845    .0065468
+          kg |  -.0154184   .0064996    -2.37   0.020    -.0283059   -.0025309
+          kc |  -.0106373   .0023221    -4.58   0.000    -.0152417   -.0060329
+       openk |   .0031838   .0007441     4.28   0.000     .0017084    .0046592
+             |
+        year |
+       1965  |   .1348488   .0156748     8.60   0.000     .1037685    .1659291
+       1970  |   .2539272   .0342291     7.42   0.000     .1860573    .3217972
+       1975  |   .3363551   .0448187     7.50   0.000      .247488    .4252222
+       1980  |   .3947167   .0608863     6.48   0.000     .2739904     .515443
+       1985  |   .3809623   .0662089     5.75   0.000     .2496823    .5122422
+       1990  |   .3386291   .0811698     4.17   0.000     .1776845    .4995738
+       1995  |    .285656   .0999825     2.86   0.005     .0874092    .4839028
+       2000  |   .3024447   .1058991     2.86   0.005     .0924662    .5124231
+             |
+       _cons |   9.260557   .2031297    45.59   0.000     8.857789    9.663326
+-------------+----------------------------------------------------------------
+     sigma_u |  .94230853
+     sigma_e |  .23667059
+         rho |  .94066161   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+r; t=0.01 20:16:11
+
+.         est store FE
+r; t=0.00 20:16:11
+
+.         
+.         outreg2 using mainregs, dec(4) sortvar(education ki kg kc openk) keep(educa
+> tion ki kg kc openk) nocons/*
+>                 */ word label addnote(ourse: Own computations, 2015.) append ctitle
+> (FE,Time) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+mainregs.rtf
+dir : seeout
+r; t=0.02 20:16:11
+
+. 
+. 
+. // # 4.e RE with time dummies
+. 
+.         xtreg logrgdpwok education ki kg kc openk i.year, re
+
+Random-effects GLS regression                   Number of obs     =        839
+Group variable: ccode                           Number of groups  =        106
+
+R-squared:                                      Obs per group:
+     Within  = 0.5309                                         min =          1
+     Between = 0.6776                                         avg =        7.9
+     Overall = 0.6304                                         max =          9
+
+                                                Wald chi2(13)     =     950.00
+corr(u_i, X) = 0 (assumed)                      Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+  logrgdpwok | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   education |   .1710084   .0142698    11.98   0.000     .1430402    .1989767
+          ki |     .00275   .0014226     1.93   0.053    -.0000381    .0055382
+          kg |  -.0134622   .0035521    -3.79   0.000    -.0204242   -.0065002
+          kc |  -.0115819   .0010883   -10.64   0.000     -.013715   -.0094488
+       openk |   .0030585   .0004356     7.02   0.000     .0022048    .0039121
+             |
+        year |
+       1965  |   .1262202   .0400059     3.16   0.002     .0478101    .2046302
+       1970  |   .2110993   .0393782     5.36   0.000     .1339193    .2882792
+       1975  |   .2644592    .040674     6.50   0.000     .1847396    .3441788
+       1980  |   .2804904   .0435719     6.44   0.000     .1950911    .3658897
+       1985  |   .2404217    .045477     5.29   0.000     .1512884    .3295551
+       1990  |   .1538613   .0494781     3.11   0.002     .0568861    .2508365
+       1995  |   .0676129   .0535386     1.26   0.207    -.0373209    .1725467
+       2000  |   .0628904   .0566661     1.11   0.267    -.0481732    .1739539
+             |
+       _cons |   9.021074   .1295562    69.63   0.000     8.767149       9.275
+-------------+----------------------------------------------------------------
+     sigma_u |  .61915744
+     sigma_e |  .23667059
+         rho |  .87251495   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+r; t=0.03 20:16:11
+
+.         est store REnorobust
+r; t=0.00 20:16:11
+
+.         
+.         xtreg logrgdpwok education ki kg kc openk i.year, re cluster(ccode)
+
+Random-effects GLS regression                   Number of obs     =        839
+Group variable: ccode                           Number of groups  =        106
+
+R-squared:                                      Obs per group:
+     Within  = 0.5309                                         min =          1
+     Between = 0.6776                                         avg =        7.9
+     Overall = 0.6304                                         max =          9
+
+                                                Wald chi2(13)     =     378.70
+corr(u_i, X) = 0 (assumed)                      Prob > chi2       =     0.0000
+
+                                (Std. err. adjusted for 106 clusters in ccode)
+------------------------------------------------------------------------------
+             |               Robust
+  logrgdpwok | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   education |   .1710084   .0259581     6.59   0.000     .1201315    .2218853
+          ki |     .00275   .0021685     1.27   0.205    -.0015002    .0070003
+          kg |  -.0134622   .0057938    -2.32   0.020    -.0248178   -.0021066
+          kc |  -.0115819   .0020871    -5.55   0.000    -.0156725   -.0074913
+       openk |   .0030585   .0006513     4.70   0.000      .001782     .004335
+             |
+        year |
+       1965  |   .1262202   .0152367     8.28   0.000     .0963568    .1560835
+       1970  |   .2110993   .0317226     6.65   0.000     .1489241    .2732744
+       1975  |   .2644592   .0404394     6.54   0.000     .1851995     .343719
+       1980  |   .2804904    .052422     5.35   0.000     .1777451    .3832357
+       1985  |   .2404217    .055338     4.34   0.000     .1319613    .3488822
+       1990  |   .1538613    .064707     2.38   0.017     .0270379    .2806847
+       1995  |   .0676129   .0804302     0.84   0.401    -.0900274    .2252532
+       2000  |   .0628904   .0821945     0.77   0.444    -.0982078    .2239886
+             |
+       _cons |   9.021074   .2189084    41.21   0.000     8.592022    9.450127
+-------------+----------------------------------------------------------------
+     sigma_u |  .61915744
+     sigma_e |  .23667059
+         rho |  .87251495   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+r; t=0.03 20:16:11
+
+.         est store RE
+r; t=0.00 20:16:11
+
+.         xtreg logrgdpwok education ki kg kc openk i.year, re cluster(ccode)
+
+Random-effects GLS regression                   Number of obs     =        839
+Group variable: ccode                           Number of groups  =        106
+
+R-squared:                                      Obs per group:
+     Within  = 0.5309                                         min =          1
+     Between = 0.6776                                         avg =        7.9
+     Overall = 0.6304                                         max =          9
+
+                                                Wald chi2(13)     =     378.70
+corr(u_i, X) = 0 (assumed)                      Prob > chi2       =     0.0000
+
+                                (Std. err. adjusted for 106 clusters in ccode)
+------------------------------------------------------------------------------
+             |               Robust
+  logrgdpwok | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   education |   .1710084   .0259581     6.59   0.000     .1201315    .2218853
+          ki |     .00275   .0021685     1.27   0.205    -.0015002    .0070003
+          kg |  -.0134622   .0057938    -2.32   0.020    -.0248178   -.0021066
+          kc |  -.0115819   .0020871    -5.55   0.000    -.0156725   -.0074913
+       openk |   .0030585   .0006513     4.70   0.000      .001782     .004335
+             |
+        year |
+       1965  |   .1262202   .0152367     8.28   0.000     .0963568    .1560835
+       1970  |   .2110993   .0317226     6.65   0.000     .1489241    .2732744
+       1975  |   .2644592   .0404394     6.54   0.000     .1851995     .343719
+       1980  |   .2804904    .052422     5.35   0.000     .1777451    .3832357
+       1985  |   .2404217    .055338     4.34   0.000     .1319613    .3488822
+       1990  |   .1538613    .064707     2.38   0.017     .0270379    .2806847
+       1995  |   .0676129   .0804302     0.84   0.401    -.0900274    .2252532
+       2000  |   .0628904   .0821945     0.77   0.444    -.0982078    .2239886
+             |
+       _cons |   9.021074   .2189084    41.21   0.000     8.592022    9.450127
+-------------+----------------------------------------------------------------
+     sigma_u |  .61915744
+     sigma_e |  .23667059
+         rho |  .87251495   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+r; t=0.03 20:16:11
+
+.         est store RE
+r; t=0.00 20:16:11
+
+.         
+.         outreg2 using mainregs, dec(4) sortvar(education ki kg kc openk) keep(educa
+> tion ki kg kc openk) nocons/*
+>                 */ word label addnote(ourse: Own computations, 2015.) append ctitle
+> (RE,Time) /*
+>                 */ adds(RMSE, e(rmse))
+warning: addnote ignored in appended columns
+mainregs.rtf
+dir : seeout
+r; t=0.02 20:16:11
+
+. 
+. 
+. // # 4.e BE
+. 
+.         xtreg logrgdpwok education ki kg kc openk i.year, be
+
+Between regression (regression on group means)  Number of obs     =        839
+Group variable: ccode                           Number of groups  =        106
+
+R-squared:                                      Obs per group:
+     Within  = 0.0013                                         min =          1
+     Between = 0.7666                                         avg =        7.9
+     Overall = 0.2177                                         max =          9
+
+                                                F(13,92)          =      23.25
+sd(u_i + avg(e_i.)) = .6272012                  Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+  logrgdpwok | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   education |   .3019881    .025191    11.99   0.000     .2519567    .3520196
+          ki |  -.0231748   .0090191    -2.57   0.012    -.0410876    -.005262
+          kg |  -.0101831   .0135443    -0.75   0.454    -.0370831     .016717
+          kc |  -.0242056   .0045378    -5.33   0.000    -.0332181    -.015193
+       openk |    .003864   .0016451     2.35   0.021     .0005967    .0071313
+             |
+        year |
+       1965  |   1.257644   4.684571     0.27   0.789    -8.046319    10.56161
+       1970  |   .8909316   3.124293     0.29   0.776    -5.314183    7.096047
+       1975  |  -.0778605   2.268088    -0.03   0.973    -4.582479    4.426758
+       1980  |   .2160185   2.298037     0.09   0.925     -4.34808    4.780117
+       1985  |  -3.348098   3.688269    -0.91   0.366    -10.67332    3.977123
+       1990  |  -.9302325   2.407993    -0.39   0.700    -5.712715     3.85225
+       1995  |  -1.237015   2.519352    -0.49   0.625    -6.240665    3.766636
+       2000  |   1.840713   2.453647     0.75   0.455    -3.032443    6.713869
+             |
+       _cons |   10.18537   2.500178     4.07   0.000     5.219795    15.15094
+------------------------------------------------------------------------------
+r; t=0.02 20:16:12
+
+.         est store BE
+r; t=0.00 20:16:12
+
+.         
+.         // test the validity of the RE estimator
+.         // the null hypothesis implies that the RE is not rejected
+.         // in the hausman command you first wright the consistent model, FE, and la
+> tter the efficient, lower variance, model, RE
+.         
+.         hausman FEnorobust REnorobust
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |   FEnorobust   REnorobust     Difference       Std. err.
+-------------+----------------------------------------------------------------
+   education |    .0899645     .1710084       -.0810439        .0088628
+          ki |    .0022311       .00275       -.0005189               .
+          kg |   -.0154184    -.0134622       -.0019562          .00032
+          kc |   -.0106373    -.0115819        .0009446               .
+       openk |    .0031838     .0030585        .0001253         .000011
+        year |
+       1965  |    .1348488     .1262202        .0086287               .
+       1970  |    .2539272     .2110993         .042828               .
+       1975  |    .3363551     .2644592        .0718959               .
+       1980  |    .3947167     .2804904        .1142263        .0024321
+       1985  |    .3809623     .2404217        .1405405        .0085029
+       1990  |    .3386291     .1538613        .1847678        .0150925
+       1995  |     .285656     .0676129        .2180431        .0194664
+       2000  |    .3024447     .0628904        .2395543        .0218696
+------------------------------------------------------------------------------
+                          b = Consistent under H0 and Ha; obtained from xtreg.
+           B = Inconsistent under Ha, efficient under H0; obtained from xtreg.
+
+Test of H0: Difference in coefficients not systematic
+
+chi2(13) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+         = -182.59
+
+Warning: chi2 < 0 ==> model fitted on these data
+         fails to meet the asymptotic assumptions
+         of the Hausman test; see suest for a
+         generalized test.
+r; t=0.00 20:16:12
+
+. 
+.         estimates table OLS LSDV LSDVtime FE RE BE, keep(education ki kg kc openk) 
+> b(%7.4f) se(%7.4f) stats(N r2_a)
+
+--------------------------------------------------------------------------
+    Variable |   OLS      LSDV     LSDVt~e     FE        RE        BE     
+-------------+------------------------------------------------------------
+   education |  0.2832    0.1438    0.0900    0.0900    0.1710    0.3020  
+             |  0.0179    0.0224    0.0382    0.0356    0.0260    0.0252  
+          ki | -0.0059    0.0053    0.0022    0.0022    0.0028   -0.0232  
+             |  0.0065    0.0026    0.0023    0.0022    0.0022    0.0090  
+          kg | -0.0106   -0.0073   -0.0154   -0.0154   -0.0135   -0.0102  
+             |  0.0086    0.0082    0.0070    0.0065    0.0058    0.0135  
+          kc | -0.0197   -0.0114   -0.0106   -0.0106   -0.0116   -0.0242  
+             |  0.0028    0.0028    0.0025    0.0023    0.0021    0.0045  
+       openk |  0.0021    0.0028    0.0032    0.0032    0.0031    0.0039  
+             |  0.0012    0.0008    0.0008    0.0007    0.0007    0.0016  
+-------------+------------------------------------------------------------
+           N |     839       839       839       839       839       839  
+        r2_a |  0.6594    0.9554    0.9617    0.5373              0.7337  
+--------------------------------------------------------------------------
+                                                              Legend: b/se
+r; t=0.04 20:16:12
+
+.         estimates table OLS LSDV LSDVtime FE RE BE, keep(education ki kg kc openk) 
+> b(%7.4f) star stats(N r2_a)
+
+-------------------------------------------------------------------------------
+    Variable |    OLS          LSDV       LSDVtime        FE           RE      
+-------------+-----------------------------------------------------------------
+   education |  0.2832***    0.1438***    0.0900*      0.0900*      0.1710***  
+          ki | -0.0059       0.0053*      0.0022       0.0022       0.0028     
+          kg | -0.0106      -0.0073      -0.0154*     -0.0154*     -0.0135*    
+          kc | -0.0197***   -0.0114***   -0.0106***   -0.0106***   -0.0116***  
+       openk |  0.0021       0.0028***    0.0032***    0.0032***    0.0031***  
+-------------+-----------------------------------------------------------------
+           N |     839          839          839          839          839     
+        r2_a |  0.6594       0.9554       0.9617       0.5373                  
+-------------------------------------------------------------------------------
+                                       Legend: * p<0.05; ** p<0.01; *** p<0.001
+
+
+---------------------------
+    Variable |     BE      
+-------------+-------------
+   education |  0.3020***  
+          ki | -0.0232*    
+          kg | -0.0102     
+          kc | -0.0242***  
+       openk |  0.0039*    
+-------------+-------------
+           N |     839     
+        r2_a |  0.7337     
+---------------------------
+Legend: * p<0.05; ** p<0.01; *** p<0.001
+r; t=0.04 20:16:12
+
+. 
+. 
+. // ########################################################################### //
+. 
+. 
+. // # 5. hypothesis testing
+. 
+.         est replay FE
+
+-------------------------------------------------------------------------------------
+Model FE
+-------------------------------------------------------------------------------------
+
+Fixed-effects (within) regression               Number of obs     =        839
+Group variable: ccode                           Number of groups  =        106
+
+R-squared:                                      Obs per group:
+     Within  = 0.5445                                         min =          1
+     Between = 0.5877                                         avg =        7.9
+     Overall = 0.5088                                         max =          9
+
+                                                F(13,105)         =      27.46
+corr(u_i, Xb) = 0.4436                          Prob > F          =     0.0000
+
+                                (Std. err. adjusted for 106 clusters in ccode)
+------------------------------------------------------------------------------
+             |               Robust
+  logrgdpwok | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   education |   .0899645   .0356478     2.52   0.013     .0192816    .1606474
+          ki |   .0022311   .0021765     1.03   0.308    -.0020845    .0065468
+          kg |  -.0154184   .0064996    -2.37   0.020    -.0283059   -.0025309
+          kc |  -.0106373   .0023221    -4.58   0.000    -.0152417   -.0060329
+       openk |   .0031838   .0007441     4.28   0.000     .0017084    .0046592
+             |
+        year |
+       1965  |   .1348488   .0156748     8.60   0.000     .1037685    .1659291
+       1970  |   .2539272   .0342291     7.42   0.000     .1860573    .3217972
+       1975  |   .3363551   .0448187     7.50   0.000      .247488    .4252222
+       1980  |   .3947167   .0608863     6.48   0.000     .2739904     .515443
+       1985  |   .3809623   .0662089     5.75   0.000     .2496823    .5122422
+       1990  |   .3386291   .0811698     4.17   0.000     .1776845    .4995738
+       1995  |    .285656   .0999825     2.86   0.005     .0874092    .4839028
+       2000  |   .3024447   .1058991     2.86   0.005     .0924662    .5124231
+             |
+       _cons |   9.260557   .2031297    45.59   0.000     8.857789    9.663326
+-------------+----------------------------------------------------------------
+     sigma_u |  .94230853
+     sigma_e |  .23667059
+         rho |  .94066161   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+r; t=0.00 20:16:12
+
+.         
+. //      use data, clear
+. //      xtreg logrgdpwok education ki kg kc openk i.year, fe cluster(ccode)
+.         
+.                 test education
+
+ ( 1)  education = 0
+
+       F(  1,    92) =  143.71
+            Prob > F =    0.0000
+r; t=0.00 20:16:12
+
+.                 test kg=kc
+
+ ( 1)  kg - kc = 0
+
+       F(  1,    92) =    1.03
+            Prob > F =    0.3126
+r; t=0.00 20:16:12
+
+.                 test ki kg kc
+
+ ( 1)  ki = 0
+ ( 2)  kg = 0
+ ( 3)  kc = 0
+
+       F(  3,    92) =    9.62
+            Prob > F =    0.0000
+r; t=0.00 20:16:12
+
+.                 testparm k*                     // it gives the same results as in 
+> the previous line, but you may use the wildcard, *
+
+ ( 1)  ki = 0
+ ( 2)  kg = 0
+ ( 3)  kc = 0
+
+       F(  3,    92) =    9.62
+            Prob > F =    0.0000
+r; t=0.00 20:16:12
+
+.                 testparm kc-ki          // a different form of writing the test, be
+>  haware of the order of the variables in the data
+
+ ( 1)  ki = 0
+ ( 2)  kg = 0
+ ( 3)  kc = 0
+
+       F(  3,    92) =    9.62
+            Prob > F =    0.0000
+r; t=0.00 20:16:12
+
+.                                                         // describe the data before
+>  you type 'kc-ki'
+. timer off 1
+r; t=0.00 20:16:12
+
+. timer list 1
+   1:      1.43 /        1 =       1.4250
+r; t=0.00 20:16:12
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/3.Panel_Data/panel_
+> assignment/logs/panel_assignment.txt
+  log type:  text
+ closed on:  28 Dec 2021, 20:16:12
+-------------------------------------------------------------------------------------

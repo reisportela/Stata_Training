@@ -1,0 +1,19 @@
+{\rtf1\fs24
+\trowd\trgaph75\trleft-75\intbl\trqc\clbrdrt\brdrs\cellx1440\clbrdrt\brdrs\cellx2304\clbrdrt\brdrs\cellx3312\clbrdrt\brdrs\cellx4320\clbrdrt\brdrs\cellx5616\clbrdrt\brdrs\cellx6480\clbrdrt\brdrs\cellx7920
+\ql \cell\qc (1)\cell\qc (2)\cell\qc (3)\cell\qc (4)\cell\qc (5)\cell\qc (6)\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx1440\cellx2304\cellx3312\cellx4320\cellx5616\cellx6480\cellx7920
+\trowd\trgaph75\trleft-75\trqc\clbrdrb\brdrs\cellx1440\clbrdrb\brdrs\cellx2304\clbrdrb\brdrs\cellx3312\clbrdrb\brdrs\cellx4320\clbrdrb\brdrs\cellx5616\clbrdrb\brdrs\cellx6480\clbrdrb\brdrs\cellx7920
+\ql VARIABLES\cell\qc N\cell\qc mean\cell\qc p50\cell\qc sd\cell\qc min\cell\qc max\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx1440\cellx2304\cellx3312\cellx4320\cellx5616\cellx6480\cellx7920
+\ql \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\row
+\ql rgdpwok\cell\qc 47.00\cell\qc 27.94\cell\qc 18.40\cell\qc 20.61\cell\qc 0.93\cell\qc 63.99\cell\row
+\ql education\cell\qc 47.00\cell\qc 6.45\cell\qc 6.16\cell\qc 2.74\cell\qc 2.29\cell\qc 12.00\cell\row
+\ql k\cell\qc 47.00\cell\qc 821.85\cell\qc 118.70\cell\qc 2,115.22\cell\qc 2.44\cell\qc 11,205.43\cell\row
+\ql openk\cell\qc 47.00\cell\qc 57.22\cell\qc 44.48\cell\qc 39.54\cell\qc 16.10\cell\qc 199.29\cell\row
+\ql lnk\cell\qc 47.00\cell\qc 25.61\cell\qc 25.50\cell\qc 2.01\cell\qc 21.62\cell\qc 30.05\cell\row
+\ql kc\cell\qc 47.00\cell\qc 68.58\cell\qc 69.55\cell\qc 10.28\cell\qc 23.65\cell\qc 91.17\cell\row
+\ql kg\cell\qc 47.00\cell\qc 9.49\cell\qc 9.16\cell\qc 3.68\cell\qc 4.30\cell\qc 19.76\cell\row
+\ql lngdp\cell\qc 47.00\cell\qc 9.84\cell\qc 9.82\cell\qc 1.04\cell\qc 6.83\cell\qc 11.07\cell\row
+\trowd\trgaph75\trleft-75\trqc\trbrdrb\brdrs\clbrdrb\brdrs\cellx1440\clbrdrb\brdrs\cellx2304\clbrdrb\brdrs\cellx3312\clbrdrb\brdrs\cellx4320\clbrdrb\brdrs\cellx5616\clbrdrb\brdrs\cellx6480\clbrdrb\brdrs\cellx7920
+\ql \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\row
+}

@@ -1,0 +1,217 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  D:\miguel\Dropbox\3.aulas\2021\mestrado\econometria_aplicada\1.aulas\1.panel_static\export_xtsum_ttesttable\xtsum_ttesttable.txt
+  log type:  text
+ opened on:   9 Dec 2021, 15:53:48
+r; t=0.02 15:53:48
+
+. 
+. // command: ttesttable
+. 
+. // use the command ttesttable and export the output to word
+. capture net install ttesttable.pkg
+r; t=1.08 15:53:49
+
+. //h ttesttable
+. 
+. // # 1. example using a system dataset
+. sysuse auto, clear
+(1978 Automobile Data)
+r; t=0.03 15:53:49
+
+.         ttesttable price rep78, f(%6.1f) ref(1 2)
+
+Cross-table of differences among groups with t-Test
+                     1              2
+------------------------------------------
+1                  0         1403.1
+2             -1403.1             0
+3             -1864.7        -461.6
+4             -1507.0        -103.9
+5             -1348.5          54.6
+------------------------------------------
+Note: Differences defined as column-line
+      * p<.1; ** p<.05; *** p<.01
+------------------------------------------
+r; t=0.13 15:53:50
+
+. 
+. // # 2. another example
+. use data
+r; t=0.02 15:53:50
+
+. xtset ccode year,delta(5)
+       panel variable:  ccode (strongly balanced)
+        time variable:  year, 1960 to 2000
+                delta:  5 units
+r; t=0.01 15:53:50
+
+. xtserial logrgdpwok education ki
+
+Wooldridge test for autocorrelation in panel data
+H0: no first order autocorrelation
+    F(  1,      97) =    166.608
+           Prob > F =      0.0000
+r; t=0.66 15:53:50
+
+.         ttesttable education ki, f(%6.1f) ref(1 2)
+Too many categories (max allowed = 10 (in the reference option) and 100 in the variable of interest).
+Make sure you use a categorical variable for the groups or use the option 'force'
+r; t=0.06 15:53:50
+
+. 
+. // in Stata the unequal sign is defined as ~= or !=
+. ttesttable education year if year != 1960, f(%6.1f)
+
+Cross-table of differences among groups with t-Test
+                     1965           1970           1975           1980           1985           1990           1995           2000
+------------------------------------------------------------------------------------------------------------------------------------
+1965               0
+1970            -0.3              0
+1975            -0.6           -0.2              0
+1980            -1.2***        -0.8**         -0.6              0
+1985            -1.5***        -1.1***        -0.9**         -0.3              0
+1990            -2.1***        -1.8***        -1.6***        -1.0**         -0.7*             0
+1995            -2.4***        -2.1***        -1.9***        -1.3***        -1.0**         -0.3              0
+2000            -2.8***        -2.4***        -2.2***        -1.6***        -1.3***        -0.6           -0.4              0
+------------------------------------------------------------------------------------------------------------------------------------
+Note: Differences defined as column-line
+      * p<.1; ** p<.05; *** p<.01
+------------------------------------------------------------------------------------------------------------------------------------
+r; t=0.12 15:53:50
+
+. ttesttable education year if year ~= 1960, f(%6.1f)
+
+Cross-table of differences among groups with t-Test
+                     1965           1970           1975           1980           1985           1990           1995           2000
+------------------------------------------------------------------------------------------------------------------------------------
+1965               0
+1970            -0.3              0
+1975            -0.6           -0.2              0
+1980            -1.2***        -0.8**         -0.6              0
+1985            -1.5***        -1.1***        -0.9**         -0.3              0
+1990            -2.1***        -1.8***        -1.6***        -1.0**         -0.7*             0
+1995            -2.4***        -2.1***        -1.9***        -1.3***        -1.0**         -0.3              0
+2000            -2.8***        -2.4***        -2.2***        -1.6***        -1.3***        -0.6           -0.4              0
+------------------------------------------------------------------------------------------------------------------------------------
+Note: Differences defined as column-line
+      * p<.1; ** p<.05; *** p<.01
+------------------------------------------------------------------------------------------------------------------------------------
+r; t=0.12 15:53:51
+
+.         return list     // return stored results
+
+matrices:
+               r(diff) :  8 x 8
+                  r(t) :  8 x 8
+                  r(p) :  8 x 8
+r; t=0.00 15:53:51
+
+.         
+.         putexcel set ttesttable.xls, replace
+Note: file will be replaced when the first putexcel command is issued
+r; t=0.22 15:53:51
+
+.         putexcel C3=matrix(r(diff),  r(t),  r(p)), colwise
+file ttesttable.xls saved
+r; t=0.06 15:53:51
+
+. 
+. // as we are working with different variable, we also change in the starting cell (ex. C3, C8... 5 em 5);
+. // in excel we will get the formats conditional on p-values
+. 
+. 
+. // command: xtsum
+. xtsum education ki
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+educat~n overall |   4.73675   2.898113        .04      12.25 |     N =     880
+         between |             2.767271   .4088889   10.86222 |     n =     111
+         within  |             1.129183   2.080083   8.290083 | T-bar = 7.92793
+                 |                                            |
+ki       overall |   23.1607   11.73793   1.446131   111.2905 |     N =     856
+         between |             9.350288   1.801206   51.85231 |     n =     109
+         within  |               7.2004  -5.546581   86.15111 | T-bar = 7.85321
+r; t=0.00 15:53:51
+
+.         ret li // equivalent to return list
+
+scalars:
+              r(max_w) =  86.15110961668898
+              r(min_w) =  -5.546581029164706
+               r(sd_w) =  7.200400386187665
+              r(max_b) =  51.85230573018392
+              r(min_b) =  1.801206290721893
+               r(sd_b) =  9.350287979556578
+                r(max) =  111.2905044555664
+                r(min) =  1.446131110191345
+                 r(sd) =  11.73793133304713
+               r(mean) =  23.16069743441087
+               r(Tbar) =  7.853211009174312
+                  r(n) =  109
+                  r(N) =  856
+r; t=0.00 15:53:51
+
+. 
+. tempname tmp // tempname assigns names to the specified local macro names that may be used as temporary scalar or matrix names
+r; t=0.00 15:53:51
+
+. postfile `tmp' str32(var category)/* Post results in Stata dataset
+> */  mean sd min max obs using xtsum.dta, replace // use v5_xtsum to save output
+r; t=0.03 15:53:51
+
+. 
+. foreach var of varlist education ki{ // variables
+  2.         qui xtsum  `var'
+  3.         post `tmp' ("`var'") ("overall") /*
+>                 */ (`r(mean)') (r(sd)) (r(min)) /*
+>                 */ (r(max)) (r(N))
+  4.         post `tmp' ("`var'") ("between") /*
+>                 */ (.) (r(sd_b)) (r(min_b)) /*
+>                 */ (r(max_b)) (r(n))
+  5.         post `tmp' ("`var'") ("within") /*
+>                 */ (.) (r(sd_w)) (r(min_w)) /*
+>                 */ (r(max_w)) (r(Tbar)) 
+  6. }
+r; t=0.00 15:53:51
+
+. 
+. postclose `tmp'
+r; t=0.01 15:53:51
+
+. 
+. use xtsum.dta, clear
+r; t=0.00 15:53:51
+
+.         list, abbrev(12) noobs sepby(var)
+
+  +-----------------------------------------------------------------------------+
+  |       var   category      mean         sd         min        max        obs |
+  |-----------------------------------------------------------------------------|
+  | education    overall   4.73675   2.898113         .04      12.25        880 |
+  | education    between         .   2.767272    .4088889   10.86222        111 |
+  | education     within         .   1.129183    2.080083   8.290083   7.927928 |
+  |-----------------------------------------------------------------------------|
+  |        ki    overall   23.1607   11.73793    1.446131   111.2905        856 |
+  |        ki    between         .   9.350288    1.801206   51.85231        109 |
+  |        ki     within         .     7.2004   -5.546581   86.15111   7.853211 |
+  +-----------------------------------------------------------------------------+
+r; t=0.00 15:53:51
+
+. 
+. //to spreadsheet!
+. xmlsave "xtsumfile", doctype(excel) replace
+file xtsumfile.xml saved
+r; t=0.04 15:53:51
+
+. !start xtsumfile.xml    // execute a DOS command == sh start xtsumfile.xml
+r; t=0.65 15:53:52
+
+. 
+. log close
+      name:  <unnamed>
+       log:  D:\miguel\Dropbox\3.aulas\2021\mestrado\econometria_aplicada\1.aulas\1.panel_static\export_xtsum_ttesttable\xtsum_ttesttable.txt
+  log type:  text
+ closed on:   9 Dec 2021, 15:53:52
+--------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,269 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causal
+> ity_Spatial/2.Causal_analysis/2.2.DiD/exercise_dd/dd_exer.txt
+  log type:  text
+ opened on:  28 Dec 2021, 20:24:45
+r; t=0.00 20:24:45
+
+. 
+. ****DD IMPLEMENTATION;
+. 
+. 
+. use hh_9198
+r; t=0.00 20:24:45
+
+. 
+. * #1
+. ***Simplest implementation;
+. 
+. gen exptot0=exptot if year==0
+(826 missing values generated)
+r; t=0.00 20:24:45
+
+. egen exptot91=max(exptot0), by(nh)
+r; t=0.00 20:24:45
+
+. keep if year==1
+(826 observations deleted)
+r; t=0.00 20:24:45
+
+. 
+. gen lexptot91=ln(1+exptot91)
+r; t=0.00 20:24:45
+
+. gen lexptot98=ln(1+exptot) 
+r; t=0.00 20:24:45
+
+. gen lexptot9891=lexptot98-lexptot91
+r; t=0.00 20:24:45
+
+. 
+. ttest lexptot9891 , by(dmmfd)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. err.   Std. dev.   [95% conf. interval]
+---------+--------------------------------------------------------------------
+       0 |     648    .2116321    .0209654    .5336911    .1704637    .2528004
+       1 |     178    .1853734    .0355355    .4741034    .1152455    .2555013
+---------+--------------------------------------------------------------------
+Combined |     826    .2059734     .018137    .5212616    .1703733    .2415735
+---------+--------------------------------------------------------------------
+    diff |            .0262587    .0441284               -.0603587     .112876
+------------------------------------------------------------------------------
+    diff = mean(0) - mean(1)                                      t =   0.5951
+H0: diff = 0                                     Degrees of freedom =      824
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.7240         Pr(|T| > |t|) = 0.5520          Pr(T > t) = 0.2760
+r; t=0.00 20:24:45
+
+. ttest lexptot9891 , by(dfmfd)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. err.   Std. dev.   [95% conf. interval]
+---------+--------------------------------------------------------------------
+       0 |     391    .1473188    .0269923    .5337372    .0942502    .2003873
+       1 |     435    .2586952     .024194    .5046057    .2111432    .3062472
+---------+--------------------------------------------------------------------
+Combined |     826    .2059734     .018137    .5212616    .1703733    .2415735
+---------+--------------------------------------------------------------------
+    diff |           -.1113764      .03614               -.1823136   -.0404392
+------------------------------------------------------------------------------
+    diff = mean(0) - mean(1)                                      t =  -3.0818
+H0: diff = 0                                     Degrees of freedom =      824
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.0011         Pr(|T| > |t|) = 0.0021          Pr(T > t) = 0.9989
+r; t=0.00 20:24:45
+
+. 
+. * #2
+. ***Regression implementation;
+. 
+. use hh_9198,clear
+r; t=0.00 20:24:45
+
+. gen lexptot=ln(1+exptot)
+r; t=0.00 20:24:45
+
+. 
+. gen dfmfd1=dfmfd==1 & year==1
+r; t=0.00 20:24:45
+
+. egen dfmfd98=max(dfmfd1), by(nh)
+r; t=0.00 20:24:45
+
+. 
+. gen treated = dfmfd98
+r; t=0.00 20:24:45
+
+. 
+. gen after = year
+r; t=0.00 20:24:45
+
+. compress
+  variable year was float now byte
+  variable agehead was float now byte
+  variable sexhead was float now byte
+  variable educhead was float now byte
+  variable famsize was float now byte
+  variable vaccess was float now byte
+  variable dfmfd1 was float now byte
+  variable dfmfd98 was float now byte
+  variable treated was float now byte
+  variable after was float now byte
+  variable nh was double now long
+  variable villid was double now byte
+  variable thanaid was double now byte
+  (79,296 bytes saved)
+r; t=0.00 20:24:45
+
+. save /Users/miguelportela/Documents/GitHub/R_Training/regression/hh_9198_v2, replac
+> e
+(file /Users/miguelportela/Documents/GitHub/R_Training/regression/hh_9198_v2.dta
+    not found)
+file /Users/miguelportela/Documents/GitHub/R_Training/regression/hh_9198_v2.dta
+    saved
+r; t=0.00 20:24:45
+
+. 
+. 
+. gen dfmfdyr=dfmfd98*year
+r; t=0.00 20:24:45
+
+. 
+. ***Basic model;
+. reg lexptot year dfmfd98 dfmfdyr
+
+      Source |       SS           df       MS      Number of obs   =     1,652
+-------------+----------------------------------   F(3, 1648)      =     32.18
+       Model |  20.2263902         3  6.74213005   Prob > F        =    0.0000
+    Residual |  345.321048     1,648  .209539471   R-squared       =    0.0553
+-------------+----------------------------------   Adj R-squared   =    0.0536
+       Total |  365.547438     1,651  .221409714   Root MSE        =    .45775
+
+------------------------------------------------------------------------------
+     lexptot | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        year |   .1473188   .0327386     4.50   0.000     .0831052    .2115323
+     dfmfd98 |  -.1145671   .0318999    -3.59   0.000    -.1771358   -.0519984
+     dfmfdyr |   .1113764   .0451133     2.47   0.014     .0228909    .1998619
+       _cons |   8.310481   .0231497   358.99   0.000     8.265075    8.355887
+------------------------------------------------------------------------------
+r; t=0.05 20:24:45
+
+. 
+. ** alternatively
+. 
+. reg lexptot i.dfmfd98##i.year
+
+      Source |       SS           df       MS      Number of obs   =     1,652
+-------------+----------------------------------   F(3, 1648)      =     32.18
+       Model |  20.2263902         3  6.74213005   Prob > F        =    0.0000
+    Residual |  345.321048     1,648  .209539471   R-squared       =    0.0553
+-------------+----------------------------------   Adj R-squared   =    0.0536
+       Total |  365.547438     1,651  .221409714   Root MSE        =    .45775
+
+------------------------------------------------------------------------------
+     lexptot | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   1.dfmfd98 |  -.1145671   .0318999    -3.59   0.000    -.1771358   -.0519984
+      1.year |   .1473188   .0327386     4.50   0.000     .0831052    .2115323
+             |
+dfmfd98#year |
+        1 1  |   .1113764   .0451133     2.47   0.014     .0228909    .1998619
+             |
+       _cons |   8.310481   .0231497   358.99   0.000     8.265075    8.355887
+------------------------------------------------------------------------------
+r; t=0.01 20:24:46
+
+. 
+. 
+. * #3
+. ****Full model;
+. 
+. gen lnland=ln(1+hhland/100)
+r; t=0.00 20:24:46
+
+. 
+. reg lexptot i.dfmfd98##i.year sexhead agehead educhead lnland vaccess pcirr rice wh
+> eat milk oil egg 
+
+      Source |       SS           df       MS      Number of obs   =     1,652
+-------------+----------------------------------   F(14, 1637)     =     35.32
+       Model |  84.8115605        14  6.05796861   Prob > F        =    0.0000
+    Residual |  280.735878     1,637  .171494122   R-squared       =    0.2320
+-------------+----------------------------------   Adj R-squared   =    0.2254
+       Total |  365.547438     1,651  .221409714   Root MSE        =    .41412
+
+------------------------------------------------------------------------------
+     lexptot | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   1.dfmfd98 |  -.0056524   .0296586    -0.19   0.849    -.0638253    .0525204
+      1.year |   .2492511   .0544887     4.57   0.000     .1423762    .3561259
+             |
+dfmfd98#year |
+        1 1  |   .0902307   .0411774     2.19   0.029     .0094647    .1709967
+             |
+     sexhead |  -.0799609   .0400484    -2.00   0.046    -.1585124   -.0014093
+     agehead |   .0014507   .0008442     1.72   0.086    -.0002052    .0031066
+    educhead |   .0375293   .0032732    11.47   0.000     .0311092    .0439494
+      lnland |   .2083185   .0219265     9.50   0.000     .1653114    .2513255
+     vaccess |  -.0232829    .035347    -0.66   0.510    -.0926129    .0460471
+       pcirr |   .1116618   .0352672     3.17   0.002     .0424883    .1808353
+        rice |  -.0025518   .0080894    -0.32   0.752    -.0184185    .0133148
+       wheat |    .003983   .0096078     0.41   0.679    -.0148619    .0228279
+        milk |   .0164985   .0040377     4.09   0.000     .0085788    .0244182
+         oil |   .0018047   .0025388     0.71   0.477     -.003175    .0067844
+         egg |   .1205599   .0370374     3.26   0.001     .0479143    .1932055
+       _cons |   7.482703   .1973802    37.91   0.000     7.095559    7.869848
+------------------------------------------------------------------------------
+r; t=0.00 20:24:46
+
+. 
+. reg lexptot i.dfmfd98##i.year sexhead agehead educhead lnland vaccess pcirr rice wh
+> eat milk oil egg [pw=weight] // taking into account the survey weights
+(sum of wgt is 1,644.45936635137)
+
+Linear regression                               Number of obs     =      1,652
+                                                F(14, 1637)       =      24.90
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2826
+                                                Root MSE          =     .42765
+
+------------------------------------------------------------------------------
+             |               Robust
+     lexptot | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   1.dfmfd98 |   .0012122   .0326585     0.04   0.970    -.0628446    .0652691
+      1.year |   .2768099   .0679939     4.07   0.000     .1434456    .4101741
+             |
+dfmfd98#year |
+        1 1  |   .0514655   .0530814     0.97   0.332    -.0526491    .1555802
+             |
+     sexhead |  -.0455035    .053903    -0.84   0.399    -.1512296    .0602227
+     agehead |   .0017445   .0011041     1.58   0.114    -.0004212    .0039102
+    educhead |   .0385333   .0049841     7.73   0.000     .0287575    .0483092
+      lnland |    .226467   .0309236     7.32   0.000      .165813    .2871209
+     vaccess |   -.011292   .0498495    -0.23   0.821    -.1090674    .0864835
+       pcirr |   .0628715   .0453625     1.39   0.166    -.0261031    .1518461
+        rice |  -.0023961   .0109958    -0.22   0.828    -.0239634    .0191712
+       wheat |   .0071376   .0120905     0.59   0.555    -.0165769    .0308521
+        milk |   .0158481    .005106     3.10   0.002     .0058332     .025863
+         oil |   .0011434   .0031013     0.37   0.712    -.0049395    .0072263
+         egg |   .1458875   .0475718     3.07   0.002     .0525794    .2391956
+       _cons |   7.399387   .2715525    27.25   0.000      6.86676    7.932014
+------------------------------------------------------------------------------
+r; t=0.00 20:24:46
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causal
+> ity_Spatial/2.Causal_analysis/2.2.DiD/exercise_dd/dd_exer.txt
+  log type:  text
+ closed on:  28 Dec 2021, 20:24:46
+-------------------------------------------------------------------------------------

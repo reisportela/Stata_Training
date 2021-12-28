@@ -1,0 +1,920 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causal
+> ity_Spatial/1.Linear_regression/logs/regression2.txt
+  log type:  text
+ opened on:  28 Dec 2021, 20:23:29
+r; t=0.00 20:23:29
+
+. 
+.                 use data/world_data, clear
+r; t=0.00 20:23:29
+
+.                         
+. 
+.                 reg growthGDPpc logGDPpc2000  educ_sec invest_growth trade2000 gov2
+> 000  
+
+      Source |       SS           df       MS      Number of obs   =        71
+-------------+----------------------------------   F(5, 65)        =     18.78
+       Model |  140.653494         5  28.1306987   Prob > F        =    0.0000
+    Residual |  97.3780009        65  1.49812309   R-squared       =    0.5909
+-------------+----------------------------------   Adj R-squared   =    0.5594
+       Total |  238.031495        70  3.40044992   Root MSE        =     1.224
+
+-------------------------------------------------------------------------------
+  growthGDPpc | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+ logGDPpc2000 |  -.7264758   .2168511    -3.35   0.001    -1.159557   -.2933942
+     educ_sec |   .0325741    .006704     4.86   0.000     .0191853    .0459629
+invest_growth |   .2329561   .0435632     5.35   0.000     .1459543    .3199578
+    trade2000 |   .0051979   .0025667     2.03   0.047     .0000719    .0103238
+      gov2000 |    -.09683   .3132654    -0.31   0.758    -.7224643    .5288043
+        _cons |   5.557012   1.843849     3.01   0.004     1.874592    9.239432
+-------------------------------------------------------------------------------
+r; t=0.02 20:23:29
+
+.                         ereturn list                                               
+>                      // retrive all computations associated with the regression
+
+scalars:
+                  e(N) =  71
+               e(df_m) =  5
+               e(df_r) =  65
+                  e(F) =  18.77729466636205
+                 e(r2) =  .5909028714844884
+               e(rmse) =  1.223978386657268
+                e(mss) =  140.6534936313283
+                e(rss) =  97.37800091526837
+               e(r2_a) =  .5594338615986798
+                 e(ll) =  -111.9598116480484
+               e(ll_0) =  -143.6898065430894
+               e(rank) =  6
+
+macros:
+            e(cmdline) : "regress growthGDPpc logGDPpc2000  educ_sec invest_growt.."
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "ols"
+             e(depvar) : "growthGDPpc"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+
+matrices:
+                  e(b) :  1 x 6
+                  e(V) :  6 x 6
+
+functions:
+             e(sample)   
+r; t=0.00 20:23:29
+
+.                         estat summarize                                            
+>                      // summarizes the variables used by the command 
+
+  Estimation sample regress                Number of obs =         71
+
+  -------------------------------------------------------------------
+      Variable |         Mean      Std. dev.         Min          Max
+  -------------+-----------------------------------------------------
+   growthGDPpc |     2.452488      1.844031    -.9154447     8.664331
+  logGDPpc2000 |     8.977008      1.322697     6.037818     11.44532
+      educ_sec |     62.12266       25.4562      5.98647     99.86594
+  invest_gro~h |     4.200525       3.84617    -5.363957      13.0478
+     trade2000 |     88.11854      61.80095     22.62244     364.3645
+       gov2000 |      .445105      .9009591    -1.180812     2.199069
+  -------------------------------------------------------------------
+r; t=0.00 20:23:29
+
+.                         matrix list e(b)                                           
+>                      // creates a vector with estimated coefficients
+
+e(b)[1,6]
+    logGDPpc2000      educ_sec  invest_gro~h     trade2000       gov2000
+y1    -.72647578     .03257408     .23295606     .00519786    -.09682997
+
+           _cons
+y1     5.5570116
+r; t=0.00 20:23:29
+
+.                         mat betas = e(b)'                                          
+>                      // transpose the matrix
+r; t=0.00 20:23:29
+
+.                         mat l betas                                                
+>                              // list matrix b
+
+betas[6,1]
+                      y1
+logGDPpc2000  -.72647578
+    educ_sec   .03257408
+invest_gro~h   .23295606
+   trade2000   .00519786
+     gov2000  -.09682997
+       _cons   5.5570116
+r; t=0.00 20:23:29
+
+.                         estat vce                                                  
+>                              // Variance-Covariance matrix
+
+Covariance matrix of coefficients of regress model
+
+        e(V) | logGD~2000    educ_sec  invest_g~h   trade2000     gov2000 
+-------------+------------------------------------------------------------
+logGDPpc2000 |   .0470244                                                 
+    educ_sec | -.00035488   .00004494                                     
+invest_gro~h |   .0015976   .00002345   .00189775                         
+   trade2000 | -5.557e-06   7.068e-07  -7.114e-06   6.588e-06             
+     gov2000 | -.05055677  -.00010745    .0015163  -.00018711   .09813524 
+       _cons | -.38381007   .00028083  -.02381767  -.00046136   .42696198 
+
+        e(V) |      _cons 
+-------------+------------
+       _cons |  3.3997779 
+r; t=0.00 20:23:29
+
+.                         estat ic                                                   
+>                              // Akaike's information criterion and Bayesian informa
+> tion criterion: the preferred model is the one with the minimum AIC or BIC value
+
+Akaike's information criterion and Bayesian information criterion
+
+-----------------------------------------------------------------------------
+       Model |          N   ll(null)  ll(model)      df        AIC        BIC
+-------------+---------------------------------------------------------------
+           . |         71  -143.6898  -111.9598       6   235.9196   249.4957
+-----------------------------------------------------------------------------
+Note: BIC uses N = number of observations. See [R] BIC note.
+r; t=0.00 20:23:29
+
+.                         estat vif                                                  
+>                              // Variance inflation factor: the mean should be small
+> er than unity and the largest < 10
+
+    Variable |       VIF       1/VIF  
+-------------+----------------------
+logGDPpc2000 |      3.84    0.260139
+     gov2000 |      3.72    0.268667
+    educ_sec |      1.36    0.734841
+invest_gro~h |      1.31    0.762347
+   trade2000 |      1.18    0.850596
+-------------+----------------------
+    Mean VIF |      2.28
+r; t=0.02 20:23:29
+
+. 
+.                         di invttail(65,.025)                                       
+>              // critical values for confidence intervals with alpha=5% and N-k=65
+1.9971379
+r; t=0.00 20:23:29
+
+.                         di 2*ttail(65,(.0325741/ .006704))                         
+>      // p-value for b(educ_sec)
+7.786e-06
+r; t=0.00 20:23:29
+
+. 
+.                         test educ_sec                                              
+>                      // test the sgnificance of one coefficient
+
+ ( 1)  educ_sec = 0
+
+       F(  1,    65) =   23.61
+            Prob > F =    0.0000
+r; t=0.00 20:23:29
+
+.                         testparm *2000                                             
+>                  // test the joint significance of a set of coefficients (logGDPpc2
+> 000,  trade2000, gov2000)
+
+ ( 1)  logGDPpc2000 = 0
+ ( 2)  trade2000 = 0
+ ( 3)  gov2000 = 0
+
+       F(  3,    65) =    9.70
+            Prob > F =    0.0000
+r; t=0.00 20:23:29
+
+.                         test educ_sec=trade2000                                    
+>      // test linear combinations of parameters
+
+ ( 1)  educ_sec - trade2000 = 0
+
+       F(  1,    65) =   14.95
+            Prob > F =    0.0003
+r; t=0.00 20:23:29
+
+.                         testnl _b[educ_sec]/_b[trade2000]=10                // Test
+> s involving nonlinear combinations of parameters
+
+  (1)  _b[educ_sec]/_b[trade2000] = 10
+
+               chi2(1) =        1.28
+           Prob > chi2 =        0.2584
+r; t=0.00 20:23:29
+
+. 
+.                 ***** predicted values
+. 
+.                 predict growthGDPpc_hat, xb                                        
+>              // predicted values
+(147 missing values generated)
+r; t=0.00 20:23:29
+
+.                 
+.                         label var growthGDPpc_hat "Predicted Growth log GDP per cap
+> ita"
+r; t=0.00 20:23:29
+
+.                         
+.                         sort educ_sec
+r; t=0.00 20:23:29
+
+.                         
+.                         scatter growthGDPpc_hat educ_sec, graphregion(color(white))
+>  legend(region(color(white))) scheme(sj) ///
+>                         title("Predicted Growth log GDP per capita vs Education") 
+r; t=0.42 20:23:30
+
+.                                 
+.                         scatter growthGDPpc_hat educ_sec,  ///
+>                         title("Predicted Growth log GDP per capita vs Education") 
+r; t=0.41 20:23:30
+
+.                                         
+.                                 graph export graphs/Graph3.png,replace
+file
+    /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causality_Spa
+    > tial/1.Linear_regression/graphs/Graph3.png saved as PNG format
+r; t=0.15 20:23:30
+
+.                                 capture graph export graphs/Graph3.wmf,replace
+r; t=0.00 20:23:30
+
+. 
+.                         twoway scatter growthGDPpc_hat educ_sec || scatter growthGD
+> Ppc educ_sec, graphregion(color(white)) legend(region(color(white))) scheme(sj) tit
+> le("Predicted and actual Growth log GDP p.c. vs Education") 
+r; t=0.47 20:23:31
+
+.                         
+.                         twoway scatter growthGDPpc_hat educ_sec || scatter growthGD
+> Ppc educ_sec,  title("Predicted and actual Growth log GDP p.c. vs Education") 
+r; t=0.46 20:23:31
+
+.                                 
+.                                 graph export graphs/Graph3b.png,replace 
+file
+    /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causality_Spa
+    > tial/1.Linear_regression/graphs/Graph3b.png saved as PNG format
+r; t=0.17 20:23:31
+
+.                                 capture graph export graphs/Graph3b.wmf,replace 
+r; t=0.00 20:23:31
+
+. 
+.                         predict residuals_hat, residual                            
+>                                      // predicted residuals
+(147 missing values generated)
+r; t=0.00 20:23:31
+
+.                                 label var residuals_hat "Predicted residuals"
+r; t=0.00 20:23:31
+
+.                         
+.                         scatter  residuals_hat growthGDPpc, graphregion(color(white
+> )) legend(region(color(white))) scheme(sj) ///
+>                         title("Predicted residuals") 
+r; t=0.41 20:23:32
+
+. 
+.                         scatter  residuals_hat growthGDPpc,  ///
+>                         title("Predicted residuals") 
+r; t=0.40 20:23:32
+
+.                         
+.                                 graph export graphs/Graph4.png,replace
+file
+    /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causality_Spa
+    > tial/1.Linear_regression/graphs/Graph4.png saved as PNG format
+r; t=0.15 20:23:32
+
+.                                 capture graph export graphs/Graph4.wmf,replace
+r; t=0.00 20:23:32
+
+. 
+.                         
+.                         graph matrix growthGDPpc logGDPpc2000  educ_sec invest_grow
+> th trade2000 gov2000, graphregion(color(white)) legend(region(color(white))) scheme
+> (sj) msize(large)         // graph of regression variables
+r; t=2.60 20:23:35
+
+.                         
+.                         graph matrix growthGDPpc logGDPpc2000  educ_sec invest_grow
+> th trade2000 gov2000,  msize(small)          // graph of regression variables
+r; t=2.31 20:23:37
+
+.                         
+.                                 graph export graphs/Graph_matrix.png,replace
+file
+    /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causality_Spa
+    > tial/1.Linear_regression/graphs/Graph_matrix.png saved as PNG format
+r; t=0.50 20:23:38
+
+.                                 capture graph export graphs/Graph_matrix.wmf,replac
+> e
+r; t=0.00 20:23:38
+
+. 
+.                         corr growthGDPpc logGDPpc2000 educ_sec invest_growth trade2
+> 000 gov2000
+(obs=71)
+
+             | growth~c log~2000 educ_sec invest~h tra~2000  gov2000
+-------------+------------------------------------------------------
+ growthGDPpc |   1.0000
+logGDPpc2000 |  -0.5069   1.0000
+    educ_sec |   0.0389   0.5068   1.0000
+invest_gro~h |   0.5951  -0.4700  -0.3051   1.0000
+   trade2000 |  -0.0026   0.3135   0.1314  -0.1123   1.0000
+     gov2000 |  -0.4345   0.8440   0.4515  -0.4456   0.3794   1.0000
+
+r; t=0.00 20:23:38
+
+.                                 
+.                         avplots, graphregion(color(white)) legend(region(color(whit
+> e))) scheme(sj) msize(small) col(2)          // graph with added variable plots
+r; t=2.78 20:23:41
+
+.                         
+.                         avplots,  msize(small) col(2)           // graph with added
+>  variable plots
+r; t=2.63 20:23:43
+
+. 
+.                                 
+.                                 graph export graphs/Graph_avplot.png, replace
+file
+    /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causality_Spa
+    > tial/1.Linear_regression/graphs/Graph_avplot.png saved as PNG format
+r; t=0.20 20:23:43
+
+.                                 capture graph export graphs/Graph_avplot.wmf, repla
+> ce
+r; t=0.00 20:23:43
+
+. 
+. 
+.                 lvr2plot, graphregion(color(white)) legend(region(color(white))) sc
+> heme(sj) mlabel(countrycode)                 // detecting outliers
+r; t=0.45 20:23:44
+
+.                 
+.                 lvr2plot, msize(small)  mlabel(countrycode)                     // 
+> detecting outliers
+r; t=0.41 20:23:44
+
+.                 
+.                         predict lev if e(sample), leverage
+(147 missing values generated)
+r; t=0.00 20:23:44
+
+.                 
+.                         predict dfits if e(sample), dfits
+(147 missing values generated)
+r; t=0.00 20:23:44
+
+.                         
+.                         
+.                 // adding an interaction between investment and education
+. 
+.         reg growthGDPpc logGDPpc2000  c.educ_sec##c.invest_growth gov2000 trade2000
+
+      Source |       SS           df       MS      Number of obs   =        71
+-------------+----------------------------------   F(6, 64)        =     16.38
+       Model |  144.160146         6  24.0266911   Prob > F        =    0.0000
+    Residual |   93.871348        64  1.46673981   R-squared       =    0.6056
+-------------+----------------------------------   Adj R-squared   =    0.5687
+       Total |  238.031495        70  3.40044992   Root MSE        =    1.2111
+
+---------------------------------------------------------------------------------
+    growthGDPpc | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+   logGDPpc2000 |  -.7878451   .2182077    -3.61   0.001    -1.223765    -.351925
+       educ_sec |   .0215016   .0097613     2.20   0.031     .0020012     .041002
+  invest_growth |   .0906339   .1016385     0.89   0.376    -.1124123    .2936801
+                |
+     c.educ_sec#|
+c.invest_growth |   .0026013   .0016824     1.55   0.127    -.0007596    .0059623
+                |
+        gov2000 |   .0591447   .3259682     0.18   0.857    -.5920516     .710341
+      trade2000 |   .0044369   .0025869     1.72   0.091    -.0007309    .0096048
+          _cons |   6.789022   1.990838     3.41   0.001     2.811867    10.76618
+---------------------------------------------------------------------------------
+r; t=0.01 20:23:44
+
+.         
+.         
+.                 reg growthGDPpc logGDPpc2000  c.educ_sec#c.invest_growth gov2000 tr
+> ade2000
+
+      Source |       SS           df       MS      Number of obs   =        71
+-------------+----------------------------------   F(4, 66)        =     21.98
+       Model |  135.964922         4  33.9912305   Prob > F        =    0.0000
+    Residual |  102.066573        66  1.54646322   R-squared       =    0.5712
+-------------+----------------------------------   Adj R-squared   =    0.5452
+       Total |  238.031495        70  3.40044992   Root MSE        =    1.2436
+
+---------------------------------------------------------------------------------
+    growthGDPpc | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+   logGDPpc2000 |  -.7077027   .2096091    -3.38   0.001    -1.126201   -.2892047
+                |
+     c.educ_sec#|
+c.invest_growth |   .0045229   .0006834     6.62   0.000     .0031585    .0058874
+                |
+        gov2000 |   .2240979   .3221347     0.70   0.489    -.4190648    .8672606
+      trade2000 |   .0035802   .0026165     1.37   0.176    -.0016438    .0088042
+          _cons |    7.34326   1.790609     4.10   0.000     3.768194    10.91833
+---------------------------------------------------------------------------------
+r; t=0.00 20:23:44
+
+.                 
+.                                 reg growthGDPpc logGDPpc2000 educ_sec c.educ_sec#c.
+> invest_growth gov2000 trade2000
+
+      Source |       SS           df       MS      Number of obs   =        71
+-------------+----------------------------------   F(5, 65)        =     19.56
+       Model |  142.993826         5  28.5987652   Prob > F        =    0.0000
+    Residual |  95.0376685        65  1.46211798   R-squared       =    0.6007
+-------------+----------------------------------   Adj R-squared   =    0.5700
+       Total |  238.031495        70  3.40044992   Root MSE        =    1.2092
+
+---------------------------------------------------------------------------------
+    growthGDPpc | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+   logGDPpc2000 |  -.8336202   .2117493    -3.94   0.000    -1.256513   -.4107276
+       educ_sec |   .0155172   .0070772     2.19   0.032     .0013831    .0296514
+                |
+     c.educ_sec#|
+c.invest_growth |     .00396   .0007124     5.56   0.000     .0025373    .0053827
+                |
+        gov2000 |   .1275832   .3163048     0.40   0.688     -.504121    .7592875
+      trade2000 |   .0041006   .0025552     1.60   0.113    -.0010025    .0092037
+          _cons |    7.63707   1.746243     4.37   0.000     4.149582    11.12456
+---------------------------------------------------------------------------------
+r; t=0.00 20:23:44
+
+. 
+.                 
+.                         margins, dydx(*)                                           
+>                      // the marginal effects evaluated at the mean of each variable
+
+Average marginal effects                                    Number of obs = 71
+Model VCE: OLS
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  logGDPpc2000 educ_sec invest_growth gov2000 trade2000
+
+-------------------------------------------------------------------------------
+              |            Delta-method
+              |      dy/dx   std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+ logGDPpc2000 |  -.8336202   .2117493    -3.94   0.000    -1.256513   -.4107276
+     educ_sec |   .0321513   .0066163     4.86   0.000     .0189375     .045365
+invest_growth |    .246005   .0442545     5.56   0.000     .1576226    .3343874
+      gov2000 |   .1275832   .3163048     0.40   0.688     -.504121    .7592875
+    trade2000 |   .0041006   .0025552     1.60   0.113    -.0010025    .0092037
+-------------------------------------------------------------------------------
+r; t=0.04 20:23:44
+
+. 
+.                 margins, dydx(educ_sec) at(invest_growth=(0 (1) 25))               
+>      // marginal effects of education for different values of invest_growth
+
+Average marginal effects                                    Number of obs = 71
+Model VCE: OLS
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  educ_sec
+1._at:  invest_growth =  0
+2._at:  invest_growth =  1
+3._at:  invest_growth =  2
+4._at:  invest_growth =  3
+5._at:  invest_growth =  4
+6._at:  invest_growth =  5
+7._at:  invest_growth =  6
+8._at:  invest_growth =  7
+9._at:  invest_growth =  8
+10._at: invest_growth =  9
+11._at: invest_growth = 10
+12._at: invest_growth = 11
+13._at: invest_growth = 12
+14._at: invest_growth = 13
+15._at: invest_growth = 14
+16._at: invest_growth = 15
+17._at: invest_growth = 16
+18._at: invest_growth = 17
+19._at: invest_growth = 18
+20._at: invest_growth = 19
+21._at: invest_growth = 20
+22._at: invest_growth = 21
+23._at: invest_growth = 22
+24._at: invest_growth = 23
+25._at: invest_growth = 24
+26._at: invest_growth = 25
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+educ_sec     |
+         _at |
+          1  |   .0155172   .0070772     2.19   0.032     .0013831    .0296514
+          2  |   .0194772   .0068528     2.84   0.006     .0057913    .0331631
+          3  |   .0234372   .0066969     3.50   0.001     .0100626    .0368119
+          4  |   .0273972   .0066145     4.14   0.000     .0141871    .0406073
+          5  |   .0313572   .0066083     4.75   0.000     .0181594     .044555
+          6  |   .0353172   .0066786     5.29   0.000     .0219791    .0486552
+          7  |   .0392772   .0068229     5.76   0.000      .025651    .0529034
+          8  |   .0432372   .0070367     6.14   0.000      .029184    .0572903
+          9  |   .0471971   .0073139     6.45   0.000     .0325903     .061804
+         10  |   .0511571   .0076476     6.69   0.000     .0358838    .0664304
+         11  |   .0551171   .0080308     6.86   0.000     .0390785    .0711557
+         12  |   .0590771   .0084568     6.99   0.000     .0421878    .0759664
+         13  |   .0630371   .0089193     7.07   0.000      .045224    .0808502
+         14  |   .0669971   .0094131     7.12   0.000     .0481977    .0857964
+         15  |   .0709571   .0099335     7.14   0.000     .0511184    .0907957
+         16  |   .0749171   .0104765     7.15   0.000      .053994    .0958402
+         17  |   .0788771   .0110388     7.15   0.000      .056831    .1009231
+         18  |    .082837   .0116176     7.13   0.000     .0596351     .106039
+         19  |    .086797   .0122105     7.11   0.000      .062411     .111183
+         20  |    .090757   .0128155     7.08   0.000     .0651626    .1163514
+         21  |    .094717   .0134312     7.05   0.000     .0678931    .1215409
+         22  |    .098677   .0140559     7.02   0.000     .0706054    .1267486
+         23  |    .102637   .0146886     6.99   0.000     .0733018    .1319722
+         24  |    .106597   .0153283     6.95   0.000     .0759842    .1372098
+         25  |    .110557   .0159742     6.92   0.000     .0786543    .1424597
+         26  |   .1145169   .0166255     6.89   0.000     .0813135    .1477204
+------------------------------------------------------------------------------
+r; t=0.11 20:23:44
+
+.                         marginsplot, graphregion(color(white)) legend(region(color(
+> white))) scheme(sj)
+
+Variables that uniquely identify margins: invest_growth
+r; t=0.53 20:23:45
+
+.                         
+.                         marginsplot
+
+Variables that uniquely identify margins: invest_growth
+r; t=0.47 20:23:45
+
+.                         graph export graphs/margins.png,replace
+file
+    /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causality_Spa
+    > tial/1.Linear_regression/graphs/margins.png saved as PNG format
+r; t=0.16 20:23:46
+
+.                         capture graph export graphs/margins.wmf,replace
+r; t=0.00 20:23:46
+
+. 
+.                         
+.                 
+.                 gen open = (trade2000 > 100)                                       
+>                      // generate a dummy variable equal to one for countries with o
+> penk>70
+r; t=0.00 20:23:46
+
+.                 
+.                 reg growthGDPpc logGDPpc2000  educ_sec invest_growth trade2000 gov2
+> 000 i.open
+
+      Source |       SS           df       MS      Number of obs   =        71
+-------------+----------------------------------   F(6, 64)        =     15.43
+       Model |  140.754247         6  23.4590411   Prob > F        =    0.0000
+    Residual |  97.2772479        64    1.519957   R-squared       =    0.5913
+-------------+----------------------------------   Adj R-squared   =    0.5530
+       Total |  238.031495        70  3.40044992   Root MSE        =    1.2329
+
+-------------------------------------------------------------------------------
+  growthGDPpc | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+ logGDPpc2000 |  -.7226861    .218921    -3.30   0.002    -1.160031   -.2853411
+     educ_sec |   .0324665   .0067656     4.80   0.000     .0189507    .0459823
+invest_growth |   .2340751   .0440943     5.31   0.000     .1459867    .3221636
+    trade2000 |   .0044798   .0038029     1.18   0.243    -.0031174     .012077
+      gov2000 |  -.0921522   .3160626    -0.29   0.772    -.7235599    .5392554
+       1.open |   .1224649    .475662     0.26   0.798    -.8277791    1.072709
+        _cons |   5.548218    1.85755     2.99   0.004     1.837334    9.259101
+-------------------------------------------------------------------------------
+r; t=0.00 20:23:46
+
+.                 
+.                 
+.                 margins open, post
+
+Predictive margins                                          Number of obs = 71
+Model VCE: OLS
+
+Expression: Linear prediction, predict()
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        open |
+          0  |   2.414541   .2076804    11.63   0.000     1.999652     2.82943
+          1  |   2.537006   .3594044     7.06   0.000     1.819013    3.254998
+------------------------------------------------------------------------------
+r; t=0.02 20:23:46
+
+.                         display _b[1.open] - _b[0.open]
+.12246494
+r; t=0.00 20:23:46
+
+.                         test 1.open = 0.open
+
+ ( 1)  - 0bn.open + 1.open = 0
+
+       F(  1,    64) =    0.07
+            Prob > F =    0.7976
+r; t=0.00 20:23:46
+
+.                 
+.                         *ssc install coefplot, replace// net install coefplot" if n
+> eeded
+.                         
+.                         coefplot, keep(*open) vertical  // plot the coefficient of 
+> open when open=1 or open=0
+r; t=0.40 20:23:46
+
+.                 
+.         
+.                 drop open
+r; t=0.00 20:23:46
+
+. 
+.                 
+.                 // heteroskedasticity test
+.                 reg growthGDPpc logGDPpc2000 educ_sec invest_growth gov2000 trade20
+> 00 
+
+      Source |       SS           df       MS      Number of obs   =        71
+-------------+----------------------------------   F(5, 65)        =     18.78
+       Model |  140.653494         5  28.1306987   Prob > F        =    0.0000
+    Residual |  97.3780009        65  1.49812309   R-squared       =    0.5909
+-------------+----------------------------------   Adj R-squared   =    0.5594
+       Total |  238.031495        70  3.40044992   Root MSE        =     1.224
+
+-------------------------------------------------------------------------------
+  growthGDPpc | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+ logGDPpc2000 |  -.7264758   .2168511    -3.35   0.001    -1.159557   -.2933942
+     educ_sec |   .0325741    .006704     4.86   0.000     .0191853    .0459629
+invest_growth |   .2329561   .0435632     5.35   0.000     .1459543    .3199578
+      gov2000 |    -.09683   .3132654    -0.31   0.758    -.7224643    .5288043
+    trade2000 |   .0051979   .0025667     2.03   0.047     .0000719    .0103238
+        _cons |   5.557012   1.843849     3.01   0.004     1.874592    9.239432
+-------------------------------------------------------------------------------
+r; t=0.00 20:23:46
+
+.                         estat hettest, iid                                         
+>                      //Breusch Pagan test
+
+Breusch–Pagan/Cook–Weisberg test for heteroskedasticity 
+Assumption: i.i.d. error terms
+Variable: Fitted values of growthGDPpc
+
+H0: Constant variance
+
+    chi2(1) =   6.63
+Prob > chi2 = 0.0100
+r; t=0.00 20:23:46
+
+.                         estat imtest, white                                        
+>                  //White's original heteroskedasticity test  
+
+White's test
+H0: Homoskedasticity
+Ha: Unrestricted heteroskedasticity
+
+   chi2(20) =  31.54
+Prob > chi2 = 0.0484
+
+Cameron & Trivedi's decomposition of IM-test
+
+--------------------------------------------------
+              Source |       chi2     df         p
+---------------------+----------------------------
+  Heteroskedasticity |      31.54     20    0.0484
+            Skewness |       3.62      5    0.6046
+            Kurtosis |       5.23      1    0.0221
+---------------------+----------------------------
+               Total |      40.40     26    0.0356
+--------------------------------------------------
+r; t=0.01 20:23:46
+
+. 
+.                 // "Manual" Breusch-Pagan test
+. 
+.                         predict u, resid
+(147 missing values generated)
+r; t=0.00 20:23:46
+
+.                         predict y_hat, xb
+(147 missing values generated)
+r; t=0.00 20:23:46
+
+.                         gen u2=u*u
+(147 missing values generated)
+r; t=0.00 20:23:46
+
+. 
+.                         reg u2 y_hat 
+
+      Source |       SS           df       MS      Number of obs   =        71
+-------------+----------------------------------   F(1, 69)        =      7.11
+       Model |  43.5001007         1  43.5001007   Prob > F        =    0.0096
+    Residual |  422.281782        69  6.12002583   R-squared       =    0.0934
+-------------+----------------------------------   Adj R-squared   =    0.0803
+       Total |  465.781883        70   6.6540269   Root MSE        =    2.4739
+
+------------------------------------------------------------------------------
+          u2 | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       y_hat |   .5561217   .2085938     2.67   0.010     .1399885     .972255
+       _cons |   .0076394   .5898349     0.01   0.990    -1.169049    1.184328
+------------------------------------------------------------------------------
+r; t=0.00 20:23:46
+
+. 
+.                                 eret li
+
+scalars:
+                  e(N) =  71
+               e(df_m) =  1
+               e(df_r) =  69
+                  e(F) =  7.107829591275141
+                 e(r2) =  .0933915686394764
+               e(rmse) =  2.473868596275986
+                e(mss) =  43.50010070550275
+                e(rss) =  422.2817823831959
+               e(r2_a) =  .0802523160110631
+                 e(ll) =  -164.0408854024603
+               e(ll_0) =  -167.5214701416344
+               e(rank) =  2
+
+macros:
+            e(cmdline) : "regress u2 y_hat"
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "ols"
+             e(depvar) : "u2"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+
+matrices:
+                  e(b) :  1 x 2
+                  e(V) :  2 x 2
+
+functions:
+             e(sample)   
+r; t=0.00 20:23:46
+
+.                                 scalar N=e(N)
+r; t=0.00 20:23:46
+
+.                                                 scalar R2=e(r2)
+r; t=0.00 20:23:46
+
+.                                                 scalar nregressors=e(df_m)
+r; t=0.00 20:23:46
+
+.                                                 di "Test statistic:     " N*R2
+Test statistic:     6.6308014
+r; t=0.00 20:23:46
+
+.                                                 di "P-value: " chi2tail(nregressors
+> ,N*R2)
+P-value: .01002302
+r; t=0.00 20:23:46
+
+. 
+.                                                 drop u u2 y_hat
+r; t=0.00 20:23:46
+
+. 
+.                 // robust and cluster regression
+.                 reg growthGDPpc logGDPpc2000 educ_sec invest_growth gov2000 trade20
+> 00 
+
+      Source |       SS           df       MS      Number of obs   =        71
+-------------+----------------------------------   F(5, 65)        =     18.78
+       Model |  140.653494         5  28.1306987   Prob > F        =    0.0000
+    Residual |  97.3780009        65  1.49812309   R-squared       =    0.5909
+-------------+----------------------------------   Adj R-squared   =    0.5594
+       Total |  238.031495        70  3.40044992   Root MSE        =     1.224
+
+-------------------------------------------------------------------------------
+  growthGDPpc | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+ logGDPpc2000 |  -.7264758   .2168511    -3.35   0.001    -1.159557   -.2933942
+     educ_sec |   .0325741    .006704     4.86   0.000     .0191853    .0459629
+invest_growth |   .2329561   .0435632     5.35   0.000     .1459543    .3199578
+      gov2000 |    -.09683   .3132654    -0.31   0.758    -.7224643    .5288043
+    trade2000 |   .0051979   .0025667     2.03   0.047     .0000719    .0103238
+        _cons |   5.557012   1.843849     3.01   0.004     1.874592    9.239432
+-------------------------------------------------------------------------------
+r; t=0.00 20:23:46
+
+.                 reg growthGDPpc logGDPpc2000 educ_sec invest_growth gov2000 trade20
+> 00 , robust
+
+Linear regression                               Number of obs     =         71
+                                                F(5, 65)          =      15.65
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.5909
+                                                Root MSE          =      1.224
+
+-------------------------------------------------------------------------------
+              |               Robust
+  growthGDPpc | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+ logGDPpc2000 |  -.7264758   .3028061    -2.40   0.019    -1.331221   -.1217302
+     educ_sec |   .0325741   .0078012     4.18   0.000     .0169941    .0481541
+invest_growth |   .2329561   .0590756     3.94   0.000     .1149739    .3509382
+      gov2000 |    -.09683   .2738717    -0.35   0.725    -.6437895    .4501295
+    trade2000 |   .0051979   .0017712     2.93   0.005     .0016605    .0087352
+        _cons |   5.557012    2.43173     2.29   0.026     .7005123    10.41351
+-------------------------------------------------------------------------------
+r; t=0.00 20:23:46
+
+. 
+.                 gen open=(trade2000>100)
+r; t=0.00 20:23:46
+
+.                 reg growthGDPpc logGDPpc2000 educ_sec invest_growth gov2000 trade20
+> 00 , cluster(open)
+
+Linear regression                               Number of obs     =         71
+                                                F(0, 1)           =          .
+                                                Prob > F          =          .
+                                                R-squared         =     0.5909
+                                                Root MSE          =      1.224
+
+                                    (Std. err. adjusted for 2 clusters in open)
+-------------------------------------------------------------------------------
+              |               Robust
+  growthGDPpc | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+ logGDPpc2000 |  -.7264758   .0023795  -305.30   0.002    -.7567105    -.696241
+     educ_sec |   .0325741   .0048834     6.67   0.095    -.0294757    .0946239
+invest_growth |   .2329561   .0138601    16.81   0.038     .0568462    .4090659
+      gov2000 |    -.09683   .0668896    -1.45   0.385    -.9467428    .7530828
+    trade2000 |   .0051979    .002455     2.12   0.281    -.0259961    .0363918
+        _cons |   5.557012   .0017347  3203.35   0.000      5.53497    5.579054
+-------------------------------------------------------------------------------
+r; t=0.00 20:23:46
+
+. 
+.                 *** FGLS Regression
+. 
+.                 reg growthGDPpc logGDPpc2000 educ_sec invest_growth gov2000 trade20
+> 00   [aw=logGDPpc2000] 
+(sum of wgt is 637.3675427436829)
+
+      Source |       SS           df       MS      Number of obs   =        71
+-------------+----------------------------------   F(5, 65)        =     19.62
+       Model |  141.162865         5  28.2325729   Prob > F        =    0.0000
+    Residual |  93.5488232        65  1.43921267   R-squared       =    0.6014
+-------------+----------------------------------   Adj R-squared   =    0.5708
+       Total |  234.711688        70  3.35302411   Root MSE        =    1.1997
+
+-------------------------------------------------------------------------------
+  growthGDPpc | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+ logGDPpc2000 |  -.8265182   .2221875    -3.72   0.000    -1.270257   -.3827791
+     educ_sec |   .0319849   .0067694     4.72   0.000     .0184654    .0455043
+invest_growth |   .2225148   .0427304     5.21   0.000     .1371764    .3078532
+      gov2000 |  -.0307584   .3143048    -0.10   0.922    -.6584685    .5969516
+    trade2000 |   .0055221   .0024137     2.29   0.025     .0007017    .0103425
+        _cons |   6.486946   1.914695     3.39   0.001     2.663037    10.31086
+-------------------------------------------------------------------------------
+r; t=0.00 20:23:46
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/2.Regression_Causal
+> ity_Spatial/1.Linear_regression/logs/regression2.txt
+  log type:  text
+ closed on:  28 Dec 2021, 20:23:46
+-------------------------------------------------------------------------------------

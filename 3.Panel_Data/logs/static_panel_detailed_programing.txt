@@ -1,0 +1,1902 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/3.Panel_Data/logs/s
+> tatic_panel_detailed_programing.txt
+  log type:  text
+ opened on:  28 Dec 2021, 20:11:18
+r; t=0.00 20:11:18
+
+. 
+. // # 0. SOME INTRODUCTORY COMMANDS
+. 
+.         /*
+>                 use http://www.stata-press.com/data/r12/nlswork, clear
+>                 save ../data/nlswork, replace
+>         */
+. 
+.         use ../data/nlswork, clear
+(National Longitudinal Survey.  Young Women 14-26 years of age in 1968)
+r; t=0.00 20:11:18
+
+.                 xtset
+
+Panel variable: idcode (unbalanced)
+ Time variable: year, 68 to 88, but with gaps
+         Delta: 1 unit
+r; t=0.02 20:11:18
+
+.                 des
+
+Contains data from ../data/nlswork.dta
+ Observations:        28,534                  National Longitudinal Survey.  Young
+                                                Women 14-26 years of age in 1968
+    Variables:            21                  10 May 2019 14:19
+-------------------------------------------------------------------------------------
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+-------------------------------------------------------------------------------------
+idcode          int     %8.0g                 NLS ID
+year            byte    %8.0g                 interview year
+birth_yr        byte    %8.0g                 birth year
+age             byte    %8.0g                 age in current year
+race            byte    %8.0g      racelbl    race
+msp             byte    %8.0g                 1 if married, spouse present
+nev_mar         byte    %8.0g                 1 if never married
+grade           byte    %8.0g                 current grade completed
+collgrad        byte    %8.0g                 1 if college graduate
+not_smsa        byte    %8.0g                 1 if not SMSA
+c_city          byte    %8.0g                 1 if central city
+south           byte    %8.0g                 1 if south
+ind_code        byte    %8.0g                 industry of employment
+occ_code        byte    %8.0g                 occupation
+union           byte    %8.0g                 1 if union
+wks_ue          byte    %8.0g                 weeks unemployed last year
+ttl_exp         float   %9.0g                 total work experience
+tenure          float   %9.0g                 job tenure, in years
+hours           int     %8.0g                 usual hours worked
+wks_work        int     %8.0g                 weeks worked last year
+ln_wage         float   %9.0g                 ln(wage/GNP deflator)
+-------------------------------------------------------------------------------------
+Sorted by: idcode  year
+r; t=0.00 20:11:18
+
+.                 xtdes
+
+  idcode:  1, 2, ..., 5159                                   n =       4711
+    year:  68, 69, ..., 88                                   T =         15
+           Delta(year) = 1 unit
+           Span(year)  = 21 periods
+           (idcode*year uniquely identifies each observation)
+
+Distribution of T_i:   min      5%     25%       50%       75%     95%     max
+                         1       1       3         5         9      13      15
+
+     Freq.  Percent    Cum. |  Pattern
+ ---------------------------+-----------------------
+      136      2.89    2.89 |  1....................
+      114      2.42    5.31 |  ....................1
+       89      1.89    7.20 |  .................1.11
+       87      1.85    9.04 |  ...................11
+       86      1.83   10.87 |  111111.1.11.1.11.1.11
+       61      1.29   12.16 |  ..............11.1.11
+       56      1.19   13.35 |  11...................
+       54      1.15   14.50 |  ...............1.1.11
+       54      1.15   15.64 |  .......1.11.1.11.1.11
+     3974     84.36  100.00 | (other patterns)
+ ---------------------------+-----------------------
+     4711    100.00         |  XXXXXX.X.XX.X.XX.X.XX
+r; t=0.18 20:11:19
+
+.                 xtdes, pa(20)
+
+  idcode:  1, 2, ..., 5159                                   n =       4711
+    year:  68, 69, ..., 88                                   T =         15
+           Delta(year) = 1 unit
+           Span(year)  = 21 periods
+           (idcode*year uniquely identifies each observation)
+
+Distribution of T_i:   min      5%     25%       50%       75%     95%     max
+                         1       1       3         5         9      13      15
+
+     Freq.  Percent    Cum. |  Pattern
+ ---------------------------+-----------------------
+      136      2.89    2.89 |  1....................
+      114      2.42    5.31 |  ....................1
+       89      1.89    7.20 |  .................1.11
+       87      1.85    9.04 |  ...................11
+       86      1.83   10.87 |  111111.1.11.1.11.1.11
+       61      1.29   12.16 |  ..............11.1.11
+       56      1.19   13.35 |  11...................
+       54      1.15   14.50 |  ...............1.1.11
+       54      1.15   15.64 |  .......1.11.1.11.1.11
+       49      1.04   16.68 |  .........11.1.11.1.11
+       45      0.96   17.64 |  ............1.11.1.11
+       43      0.91   18.55 |  1111.................
+       42      0.89   19.44 |  ...1.................
+       40      0.85   20.29 |  .....1.1.11.1.11.1.11
+       38      0.81   21.10 |  ....11.1.11.1.11.1.11
+       38      0.81   21.91 |  111..................
+       34      0.72   22.63 |  ..1111.1.11.1.11.1.11
+       31      0.66   23.29 |  .................1...
+       30      0.64   23.92 |  ..........1.1.11.1.11
+       29      0.62   24.54 |  ...111.1.11.1.11.1.11
+     3555     75.46  100.00 | (other patterns)
+ ---------------------------+-----------------------
+     4711    100.00         |  XXXXXX.X.XX.X.XX.X.XX
+r; t=0.18 20:11:19
+
+.                 xtsum hours
+
+Variable         |      Mean   Std. dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+hours    overall |  36.55956   9.869623          1        168 |     N =   28467
+         between |             7.846585          1       83.5 |     n =    4710
+         within  |             7.520712  -2.154726   130.0596 | T-bar = 6.04395
+r; t=0.00 20:11:19
+
+.                 sum hours
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+       hours |     28,467    36.55956    9.869623          1        168
+r; t=0.00 20:11:19
+
+.         clear all
+r; t=0.01 20:11:19
+
+. 
+. 
+. // # 1. PANEL DATA ANALYSIS, STATIC
+. // ssc install listtab
+. 
+. use ../data/tablef7_1, clear
+(Cost Data for U.S. Airlines, 90 Oservations On 6 Firms For 15 Years, 1970-1984)
+r; t=0.00 20:11:19
+
+. 
+.         listtab c q pf using table.txt, rstyle(tabdelim) replace        // lists th
+> e variables in the varlist
+(file table.txt not found)
+r; t=0.00 20:11:19
+
+. 
+.         xtset i t
+
+Panel variable: i (strongly balanced)
+ Time variable: t, 1 to 15
+         Delta: 1 unit
+r; t=0.00 20:11:19
+
+.                 des
+
+Contains data from ../data/tablef7_1.dta
+ Observations:            90                  Cost Data for U.S. Airlines, 90
+                                                Oservations On 6 Firms For 15 Years,
+                                                1970-1984
+    Variables:             6                  18 Sep 2012 15:28
+-------------------------------------------------------------------------------------
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+-------------------------------------------------------------------------------------
+i               byte    %8.0g                 Airline
+t               byte    %8.0g                 Year
+c               long    %12.0g                Total cost, in $1000
+q               float   %9.0g                 Output, in revenue passenger miles,
+                                                index number
+pf              long    %12.0g                Fuel price
+lf              float   %9.0g                 Load factor, the average capacity
+                                                utilization of the fleet
+-------------------------------------------------------------------------------------
+Sorted by: i  t
+r; t=0.00 20:11:19
+
+.                 xtdes
+
+       i:  1, 2, ..., 6                                      n =          6
+       t:  1, 2, ..., 15                                     T =         15
+           Delta(t) = 1 unit
+           Span(t)  = 15 periods
+           (i*t uniquely identifies each observation)
+
+Distribution of T_i:   min      5%     25%       50%       75%     95%     max
+                        15      15      15        15        15      15      15
+
+     Freq.  Percent    Cum. |  Pattern
+ ---------------------------+-----------------
+        6    100.00  100.00 |  111111111111111
+ ---------------------------+-----------------
+        6    100.00         |  XXXXXXXXXXXXXXX
+r; t=0.00 20:11:19
+
+.                 xtsum
+
+Variable         |      Mean   Std. dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+i        overall |       3.5   1.717393          1          6 |     N =      90
+         between |             1.870829          1          6 |     n =       6
+         within  |                    0        3.5        3.5 |     T =      15
+                 |                                            |
+t        overall |         8   4.344698          1         15 |     N =      90
+         between |                    0          8          8 |     n =       6
+         within  |             4.344698          1         15 |     T =      15
+                 |                                            |
+c        overall |   1122524    1192075      68978    4748320 |     N =      90
+         between |              1004634   293275.9    2639003 |     n =       6
+         within  |             755325.8  -436067.8    3231841 |     T =      15
+                 |                                            |
+q        overall |  .5449946   .5335865    .037682    1.93646 |     N =      90
+         between |             .5439437   .1042605   1.410231 |     n =       6
+         within  |             .1881008   .0489351   1.071224 |     T =      15
+                 |                                            |
+pf       overall |    471683   329502.9     103795    1015610 |     N =      90
+         between |             6104.874   462320.2   478078.8 |     n =       6
+         within  |             329455.2   109191.3    1011158 |     T =      15
+                 |                                            |
+lf       overall |  .5604602   .0527934    .432066    .676287 |     N =      90
+         between |             .0281511   .5197756   .5971917 |     n =       6
+         within  |             .0460361   .4368492   .6581019 |     T =      15
+r; t=0.00 20:11:19
+
+. 
+.         gen lncost=ln(c)
+r; t=0.00 20:11:19
+
+.         gen lnoutput=ln(q)
+r; t=0.00 20:11:19
+
+.         gen lnoutput2=lnoutput^2
+r; t=0.00 20:11:19
+
+.         gen lnfuelprice=ln(pf)
+r; t=0.00 20:11:19
+
+. 
+.         label var lnoutput "Output"
+r; t=0.00 20:11:19
+
+.         label var lnfuelprice "Fuel Price"
+r; t=0.00 20:11:19
+
+.         label var lf "Load Factor"
+r; t=0.00 20:11:19
+
+. 
+. // A. OLS (see 'OLS MANUAL PROGRAMMING' at the end of the file)
+. 
+. reg lncost lnoutput lnfuelprice lf
+
+      Source |       SS           df       MS      Number of obs   =        90
+-------------+----------------------------------   F(3, 86)        =   2419.34
+       Model |  112.705452         3  37.5684839   Prob > F        =    0.0000
+    Residual |  1.33544153        86   .01552839   R-squared       =    0.9883
+-------------+----------------------------------   Adj R-squared   =    0.9879
+       Total |  114.040893        89  1.28135835   Root MSE        =    .12461
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .8827385   .0132545    66.60   0.000     .8563895    .9090876
+ lnfuelprice |    .453977   .0203042    22.36   0.000     .4136136    .4943404
+          lf |   -1.62751    .345302    -4.71   0.000    -2.313948   -.9410727
+       _cons |   9.516923   .2292445    41.51   0.000       9.0612    9.972645
+------------------------------------------------------------------------------
+r; t=0.04 20:11:19
+
+.         est store OLS
+r; t=0.00 20:11:19
+
+.         outreg2 using mainregs, dec(4) sortvar(lnoutput lnfuelprice lf) keep(lnoutp
+> ut lnfuelprice lf) nocons/*
+>                 */      word label addnote(Source: Own computations; Greene, 2008) 
+> replace ctitle(OLS) /*
+>                 */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+mainregs.rtf
+dir : seeout
+r; t=0.06 20:11:19
+
+.         
+.         scalar beta_ols = _b[lnoutput]
+r; t=0.00 20:11:19
+
+.         
+. // B. ESTIMATION STEP-BY-STEP: FE ESTIMATOR based on demeaned variables
+. 
+.         // TRANSFORM THE VARIABLES
+. 
+.                 egen double mlncost=mean(lncost),by(i)
+r; t=0.00 20:11:19
+
+.                 egen double mlnoutput=mean(lnoutput),by(i)
+r; t=0.00 20:11:19
+
+.                 egen double mlnfuelprice=mean(lnfuelprice),by(i)
+r; t=0.00 20:11:19
+
+.                 egen double mlf=mean(lf),by(i)
+r; t=0.00 20:11:19
+
+. 
+.                 gen double dlncost=lncost-mlncost
+r; t=0.00 20:11:19
+
+.                 gen double dlnoutput=lnoutput-mlnoutput
+r; t=0.00 20:11:19
+
+.                 gen double dlnfuelprice=lnfuelprice-mlnfuelprice
+r; t=0.00 20:11:19
+
+.                 gen double dlf=lf-mlf
+r; t=0.00 20:11:19
+
+.                 
+.                 // demean using a loop and the command 'center'
+.                 
+.                 capture ssc install center
+r; t=1.18 20:11:20
+
+.                 
+.                 local vars = "lncost lnoutput lnfuelprice lf"
+r; t=0.00 20:11:20
+
+.                 foreach v of local vars {
+  2.                         di _new _new "VARIABLE: `v'" _new
+  3.                         bysort i: center `v', generate(dd`v')
+  4.                         compare d`v' dd`v'      // compare the variables created
+>  using the two methods
+  5.                 }
+
+
+VARIABLE: lncost
+
+(generated variables: ddlncost)
+
+                                        ---------- Difference ----------
+                            Count       Minimum      Average     Maximum
+------------------------------------------------------------------------
+dlncost<ddlncost               30     -3.81e-07    -3.50e-07   -3.18e-07
+dlncost>ddlncost               60      1.27e-07     2.38e-07    3.81e-07
+                       ----------
+Jointly defined                90     -3.81e-07     4.24e-08    3.81e-07
+                       ----------
+Total                          90
+
+
+VARIABLE: lnoutput
+
+(generated variables: ddlnoutput)
+
+                                        ---------- Difference ----------
+                            Count       Minimum      Average     Maximum
+------------------------------------------------------------------------
+dlnoutput<ddlnout~t            38     -2.78e-08    -1.79e-08   -2.48e-10
+dlnoutput>ddlnout~t            52      3.48e-09     2.86e-08    3.97e-08
+                       ----------
+Jointly defined                90     -2.78e-08     8.94e-09    3.97e-08
+                       ----------
+Total                          90
+
+
+VARIABLE: lnfuelprice
+
+(generated variables: ddlnfuelprice)
+
+                                        ---------- Difference ----------
+                            Count       Minimum      Average     Maximum
+------------------------------------------------------------------------
+dlnfuel~e<ddlnfue~e            15     -3.81e-07    -3.81e-07   -3.81e-07
+dlnfuel~e=ddlnfue~e            15
+dlnfuel~e>ddlnfue~e            60      6.36e-08     2.07e-07    3.81e-07
+                       ----------
+Jointly defined                90     -3.81e-07     7.42e-08    3.81e-07
+                       ----------
+Total                          90
+
+
+VARIABLE: lf
+
+(generated variables: ddlf)
+
+                                        ---------- Difference ----------
+                            Count       Minimum      Average     Maximum
+------------------------------------------------------------------------
+dlf<ddlf                       30     -2.38e-08    -2.09e-08   -1.79e-08
+dlf>ddlf                       60      3.97e-09     1.99e-08    2.98e-08
+                       ----------
+Jointly defined                90     -2.38e-08     6.29e-09    2.98e-08
+                       ----------
+Total                          90
+r; t=0.01 20:11:20
+
+. 
+.         // FE ESTIMATOR
+.                 reg ddlncost ddlnoutput ddlnfuelprice ddlf
+
+      Source |       SS           df       MS      Number of obs   =        90
+-------------+----------------------------------   F(3, 86)        =   3827.32
+       Model |  39.0683861         3  13.0227954   Prob > F        =    0.0000
+    Residual |  .292622861        86  .003402591   R-squared       =    0.9926
+-------------+----------------------------------   Adj R-squared   =    0.9923
+       Total |   39.361009        89  .442258528   Root MSE        =    .05833
+
+-------------------------------------------------------------------------------
+     ddlncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+   ddlnoutput |   .9192846   .0290082    31.69   0.000     .8616182    .9769509
+ddlnfuelprice |   .4174918   .0147507    28.30   0.000     .3881684    .4468152
+         ddlf |  -1.070396   .1957391    -5.47   0.000    -1.459512   -.6812796
+        _cons |  -9.93e-09   .0061487    -0.00   1.000    -.0122232    .0122232
+-------------------------------------------------------------------------------
+r; t=0.01 20:11:20
+
+.                 reg dlncost dlnoutput dlnfuelprice dlf
+
+      Source |       SS           df       MS      Number of obs   =        90
+-------------+----------------------------------   F(3, 86)        =   3827.32
+       Model |  39.0683861         3  13.0227954   Prob > F        =    0.0000
+    Residual |  .292622872        86  .003402592   R-squared       =    0.9926
+-------------+----------------------------------   Adj R-squared   =    0.9923
+       Total |   39.361009        89  .442258528   Root MSE        =    .05833
+
+------------------------------------------------------------------------------
+     dlncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   dlnoutput |   .9192846   .0290082    31.69   0.000     .8616182    .9769509
+dlnfuelprice |   .4174918   .0147507    28.30   0.000     .3881684    .4468152
+         dlf |  -1.070396   .1957391    -5.47   0.000    -1.459512   -.6812796
+       _cons |  -1.22e-16   .0061487    -0.00   1.000    -.0122232    .0122232
+------------------------------------------------------------------------------
+r; t=0.00 20:11:20
+
+. 
+.                 // BUILD THE VARIANCE-COVARIANCE MATRIX (CORRECTED)
+.                         gen e2_fe=(dlncost-_b[_cons]-dlnoutput*_b[dlnoutput]-dlnfue
+> lprice*_b[dlnfuelprice]-dlf*_b[dlf])^2
+r; t=0.00 20:11:20
+
+.                         egen se2_fe=total(e2_fe)
+r; t=0.00 20:11:20
+
+.                                 ereturn list
+
+scalars:
+                  e(N) =  90
+               e(df_m) =  3
+               e(df_r) =  86
+                  e(F) =  3827.31669236292
+                 e(r2) =  .9925656663949191
+               e(rmse) =  .0583317369054005
+                e(mss) =  39.06838608478781
+                e(rss) =  .2926228716144746
+               e(r2_a) =  .9923063291761371
+                 e(ll) =  130.086145374383
+               e(ll_0) =  -90.48793958952849
+               e(rank) =  4
+
+macros:
+            e(cmdline) : "regress dlncost dlnoutput dlnfuelprice dlf"
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "ols"
+             e(depvar) : "dlncost"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+
+matrices:
+                  e(b) :  1 x 4
+                  e(V) :  4 x 4
+
+functions:
+             e(sample)   
+r; t=0.00 20:11:20
+
+.                         scalar k=e(df_m)
+r; t=0.00 20:11:20
+
+.                         scalar N=e(N)
+r; t=0.00 20:11:20
+
+.                         count if i[_n]~=i[_n-1]
+  6
+r; t=0.00 20:11:20
+
+.                         scalar n=r(N)
+r; t=0.00 20:11:20
+
+.                         scalar sigma2_fe=se2_fe/(N-n-k)
+r; t=0.00 20:11:20
+
+. 
+.                         mat acc xx=dlnoutput dlnfuelprice dlf
+(obs=90)
+r; t=0.00 20:11:20
+
+.                         mat ss_fe=sigma2_fe*inv(xx)
+r; t=0.00 20:11:20
+
+.                         mat l ss_fe
+
+symmetric ss_fe[4,4]
+                 dlnoutput  dlnfuelprice           dlf         _cons
+   dlnoutput     .00089342
+dlnfuelprice    -.00031782     .00023101
+         dlf    -.00188427    -.00076857     .04067884
+       _cons     6.310e-20    -3.188e-20     7.643e-20     .00004014
+r; t=0.00 20:11:20
+
+. 
+.                 // STANDARD-ERRORS OF EACH ONE THE b (beta_^)
+.                         di ss_fe[1,1]^.5
+.0298901
+r; t=0.00 20:11:20
+
+.                         di ss_fe[2,2]^.5
+.01519914
+r; t=0.00 20:11:20
+
+.                         di ss_fe[3,3]^.5
+.20168996
+r; t=0.00 20:11:20
+
+. 
+. // C. LSDV
+.         reg lncost lnoutput lnfuelprice lf i.i
+
+      Source |       SS           df       MS      Number of obs   =        90
+-------------+----------------------------------   F(8, 81)        =   3935.79
+       Model |   113.74827         8  14.2185338   Prob > F        =    0.0000
+    Residual |  .292622872        81  .003612628   R-squared       =    0.9974
+-------------+----------------------------------   Adj R-squared   =    0.9972
+       Total |  114.040893        89  1.28135835   Root MSE        =    .06011
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .9192846   .0298901    30.76   0.000     .8598126    .9787565
+ lnfuelprice |   .4174918   .0151991    27.47   0.000     .3872503    .4477333
+          lf |  -1.070396     .20169    -5.31   0.000    -1.471696   -.6690963
+             |
+           i |
+          2  |  -.0412359   .0251839    -1.64   0.105    -.0913441    .0088722
+          3  |  -.2089211   .0427986    -4.88   0.000    -.2940769   -.1237652
+          4  |   .1845557   .0607527     3.04   0.003     .0636769    .3054345
+          5  |   .0240547   .0799041     0.30   0.764    -.1349293    .1830387
+          6  |   .0870617   .0841995     1.03   0.304     -.080469    .2545924
+             |
+       _cons |   9.705942    .193124    50.26   0.000     9.321686     10.0902
+------------------------------------------------------------------------------
+r; t=0.00 20:11:20
+
+.                 est store LSDV
+r; t=0.00 20:11:20
+
+.                 outreg2 using mainregs, dec(4) sortvar(lnoutput lnfuelprice lf)  ke
+> ep(lnoutput lnfuelprice lf) nocons /*
+>                         */ word label addnote(Source: Own computations; Greene, 200
+> 8) append ctitle(LSDV) /*
+>                         */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+mainregs.rtf
+dir : seeout
+r; t=0.07 20:11:20
+
+.                         
+.                 // obtain the vector of betas
+.                         mat def betas = e(b)'
+r; t=0.00 20:11:20
+
+.                                 mat l betas
+
+betas[10,1]
+                     y1
+   lnoutput   .91928455
+lnfuelprice   .41749177
+         lf  -1.0703961
+       1b.i           0
+        2.i  -.04123592
+        3.i  -.20892109
+        4.i    .1845557
+        5.i   .02405471
+        6.i   .08706171
+      _cons   9.7059421
+r; t=0.00 20:11:20
+
+.                                 mat betas0 = betas[4..9,.]
+r; t=0.00 20:11:20
+
+.                                 mat l betas0
+
+betas0[6,1]
+              y1
+1b.i           0
+ 2.i  -.04123592
+ 3.i  -.20892109
+ 4.i    .1845557
+ 5.i   .02405471
+ 6.i   .08706171
+r; t=0.00 20:11:20
+
+. 
+.                 // test for the presence of fixed-effects
+.                         testparm i.i
+
+ ( 1)  2.i = 0
+ ( 2)  3.i = 0
+ ( 3)  4.i = 0
+ ( 4)  5.i = 0
+ ( 5)  6.i = 0
+
+       F(  5,    81) =   57.73
+            Prob > F =    0.0000
+r; t=0.00 20:11:20
+
+. 
+.                 // TEST FOR THE PRESENCE OF FIXED EFFECTS: manual procedure
+.                         reg lncost lnoutput lnfuelprice lf i.i  /* LSDV */
+
+      Source |       SS           df       MS      Number of obs   =        90
+-------------+----------------------------------   F(8, 81)        =   3935.79
+       Model |   113.74827         8  14.2185338   Prob > F        =    0.0000
+    Residual |  .292622872        81  .003612628   R-squared       =    0.9974
+-------------+----------------------------------   Adj R-squared   =    0.9972
+       Total |  114.040893        89  1.28135835   Root MSE        =    .06011
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .9192846   .0298901    30.76   0.000     .8598126    .9787565
+ lnfuelprice |   .4174918   .0151991    27.47   0.000     .3872503    .4477333
+          lf |  -1.070396     .20169    -5.31   0.000    -1.471696   -.6690963
+             |
+           i |
+          2  |  -.0412359   .0251839    -1.64   0.105    -.0913441    .0088722
+          3  |  -.2089211   .0427986    -4.88   0.000    -.2940769   -.1237652
+          4  |   .1845557   .0607527     3.04   0.003     .0636769    .3054345
+          5  |   .0240547   .0799041     0.30   0.764    -.1349293    .1830387
+          6  |   .0870617   .0841995     1.03   0.304     -.080469    .2545924
+             |
+       _cons |   9.705942    .193124    50.26   0.000     9.321686     10.0902
+------------------------------------------------------------------------------
+r; t=0.00 20:11:20
+
+.                                 ereturn list
+
+scalars:
+                  e(N) =  90
+               e(df_m) =  8
+               e(df_r) =  81
+                  e(F) =  3935.786802603935
+                 e(r2) =  .9974340531399312
+               e(rmse) =  .0601051415822568
+                e(mss) =  113.7482702459568
+                e(rss) =  .2926228716144741
+               e(r2_a) =  .997180626289554
+                 e(ll) =  130.086145374383
+               e(ll_0) =  -138.3581021269324
+               e(rank) =  9
+
+macros:
+            e(cmdline) : "regress lncost lnoutput lnfuelprice lf i.i"
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "ols"
+             e(depvar) : "lncost"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+
+matrices:
+                  e(b) :  1 x 10
+                  e(V) :  10 x 10
+
+functions:
+             e(sample)   
+r; t=0.00 20:11:20
+
+.                                 scalar r2lsdv=e(r2)
+r; t=0.00 20:11:20
+
+.                                 scalar mflsdv=e(df_m)
+r; t=0.00 20:11:20
+
+.                                 scalar dflsdv=e(df_r)
+r; t=0.00 20:11:20
+
+. 
+.                         reg lncost lnoutput lnfuelprice lf                      /* 
+> OLS */
+
+      Source |       SS           df       MS      Number of obs   =        90
+-------------+----------------------------------   F(3, 86)        =   2419.34
+       Model |  112.705452         3  37.5684839   Prob > F        =    0.0000
+    Residual |  1.33544153        86   .01552839   R-squared       =    0.9883
+-------------+----------------------------------   Adj R-squared   =    0.9879
+       Total |  114.040893        89  1.28135835   Root MSE        =    .12461
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .8827385   .0132545    66.60   0.000     .8563895    .9090876
+ lnfuelprice |    .453977   .0203042    22.36   0.000     .4136136    .4943404
+          lf |   -1.62751    .345302    -4.71   0.000    -2.313948   -.9410727
+       _cons |   9.516923   .2292445    41.51   0.000       9.0612    9.972645
+------------------------------------------------------------------------------
+r; t=0.00 20:11:20
+
+.                                 ereturn list
+
+scalars:
+                  e(N) =  90
+               e(df_m) =  3
+               e(df_r) =  86
+                  e(F) =  2419.34188013203
+                 e(r2) =  .9882898012328615
+               e(rmse) =  .1246129601489291
+                e(mss) =  112.7054515915825
+                e(rss) =  1.335441525988759
+               e(r2_a) =  .9878813059270311
+                 e(ll) =  61.77017860517032
+               e(ll_0) =  -138.3581021269324
+               e(rank) =  4
+
+macros:
+            e(cmdline) : "regress lncost lnoutput lnfuelprice lf"
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "ols"
+             e(depvar) : "lncost"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+
+matrices:
+                  e(b) :  1 x 4
+                  e(V) :  4 x 4
+
+functions:
+             e(sample)   
+r; t=0.00 20:11:20
+
+.                                 scalar r2pooled=e(r2)
+r; t=0.00 20:11:20
+
+.                                 scalar mfpooled=e(df_m)
+r; t=0.00 20:11:20
+
+. 
+.                         di "Test for the presence of fixed effects; F statistic:   
+> " ((r2lsdv-r2pooled)/(mflsdv-mfpooled))/((1-r2lsdv)/(dflsdv))
+Test for the presence of fixed effects; F statistic:   57.731858
+r; t=0.00 20:11:20
+
+.                         scalar fstatistic=((r2lsdv-r2pooled)/(mflsdv-mfpooled))/((1
+> -r2lsdv)/(dflsdv))
+r; t=0.00 20:11:20
+
+.                         di "Test for the presence of fixed effects; p-valor:   " Ft
+> ail(mflsdv-mfpooled,dflsdv,fstatistic)
+Test for the presence of fixed effects; p-valor:   2.807e-25
+r; t=0.00 20:11:20
+
+.         
+. // D. ESTIMATION WITH THE AUTOMATIC PROCEDURE
+.         xtreg lncost lnoutput lnfuelprice lf, fe
+
+Fixed-effects (within) regression               Number of obs     =         90
+Group variable: i                               Number of groups  =          6
+
+R-squared:                                      Obs per group:
+     Within  = 0.9926                                         min =         15
+     Between = 0.9856                                         avg =       15.0
+     Overall = 0.9873                                         max =         15
+
+                                                F(3,81)           =    3604.80
+corr(u_i, Xb) = -0.3475                         Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .9192846   .0298901    30.76   0.000     .8598126    .9787565
+ lnfuelprice |   .4174918   .0151991    27.47   0.000     .3872503    .4477333
+          lf |  -1.070396     .20169    -5.31   0.000    -1.471696   -.6690963
+       _cons |   9.713528    .229641    42.30   0.000     9.256614    10.17044
+-------------+----------------------------------------------------------------
+     sigma_u |   .1320775
+     sigma_e |  .06010514
+         rho |  .82843653   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(5, 81) = 57.73                      Prob > F = 0.0000
+r; t=0.01 20:11:20
+
+.                 est store FE
+r; t=0.00 20:11:20
+
+.                 outreg2 using mainregs, dec(4) sortvar(lnoutput lnfuelprice lf)  ke
+> ep(lnoutput lnfuelprice lf) nocons /*
+>                         */      word label addnote(Source: Own computations; Greene
+> , 2008) append ctitle(FE) /*
+>                         */ adds(RMSE, e(rmse), LogLikelihood, e(ll), F test that al
+> l u_i=0, e(F_f))
+warning: addnote ignored in appended columns
+mainregs.rtf
+dir : seeout
+r; t=0.01 20:11:20
+
+.                 
+.                 scalar beta_fe = _b[lnoutput]
+r; t=0.00 20:11:20
+
+.                 
+.                 test lnoutput = beta_ols
+
+ ( 1)  lnoutput = .8827385
+
+       F(  1,    81) =    1.49
+            Prob > F =    0.2250
+r; t=0.00 20:11:20
+
+. 
+.                         // predict the specific effect
+.                         predict mu, u
+r; t=0.00 20:11:20
+
+.                         sum mu
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+          mu |         90   -1.55e-09    .1212452  -.2165069   .1769698
+r; t=0.00 20:11:20
+
+.                         
+.                         // produce a graph with the specific effects
+.                         preserve
+r; t=0.00 20:11:20
+
+.                                 collapse (mean) mu,by(i)
+r; t=0.00 20:11:20
+
+.                                 svmat betas0
+r; t=0.00 20:11:20
+
+.                                 list
+
+     +---------------------------+
+     | i          mu     betas01 |
+     |---------------------------|
+  1. | 1   -.0075859           0 |
+  2. | 2   -.0488218   -.0412359 |
+  3. | 3   -.2165069   -.2089211 |
+  4. | 4    .1769698    .1845557 |
+  5. | 5    .0164689    .0240547 |
+     |---------------------------|
+  6. | 6    .0794759    .0870617 |
+     +---------------------------+
+r; t=0.00 20:11:20
+
+.                                 compare mu betas0       // one is the reparametriza
+> tion of the other
+
+                                        ---------- Difference ----------
+                            Count       Minimum      Average     Maximum
+------------------------------------------------------------------------
+mu<betas01                      6     -.0075859    -.0075859   -.0075859
+                       ----------
+Jointly defined                 6     -.0075859    -.0075859   -.0075859
+                       ----------
+Total                           6
+r; t=0.00 20:11:20
+
+.                                 twoway bar mu i
+r; t=0.62 20:11:21
+
+.                                 twoway bar betas0 i
+r; t=0.33 20:11:21
+
+.                         restore
+r; t=0.00 20:11:21
+
+. 
+. 
+. // E. BETWEEN-GROUPS ESTIMATOR
+.         bysort i (t): gen first=1 if _n==1                      /* WE ONLY USE n OB
+> SERVATIONS */
+(84 missing values generated)
+r; t=0.00 20:11:21
+
+. 
+.         reg mlncost mlnoutput mlnfuelprice mlf if first==1
+
+      Source |       SS           df       MS      Number of obs   =         6
+-------------+----------------------------------   F(3, 2)         =    104.12
+       Model |  4.94698294         3  1.64899431   Prob > F        =    0.0095
+    Residual |  .031676003         2  .015838002   R-squared       =    0.9936
+-------------+----------------------------------   Adj R-squared   =    0.9841
+       Total |  4.97865894         5  .995731789   Root MSE        =    .12585
+
+------------------------------------------------------------------------------
+     mlncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+   mlnoutput |   .7824552   .1087663     7.19   0.019     .3144715    1.250439
+mlnfuelprice |  -5.523978   4.478802    -1.23   0.343    -24.79471    13.74675
+         mlf |  -1.751016    2.74319    -0.64   0.589    -13.55401    10.05198
+       _cons |   85.80901   56.48302     1.52   0.268    -157.2178    328.8358
+------------------------------------------------------------------------------
+r; t=0.00 20:11:21
+
+. 
+.                 predict e if e(sample), resid
+(84 missing values generated)
+r; t=0.00 20:11:21
+
+.                 gen e2=e^2
+(84 missing values generated)
+r; t=0.00 20:11:21
+
+.                 egen se2=total(e2)
+r; t=0.00 20:11:21
+
+.                         ereturn list /* LIST THE VALUES IN STATA'S MEMORY */
+
+scalars:
+                  e(N) =  6
+               e(df_m) =  3
+               e(df_r) =  2
+                  e(F) =  104.116311494707
+                 e(r2) =  .9936376434573185
+               e(rmse) =  .1258491225766671
+                e(mss) =  4.946982940771303
+                e(rss) =  .0316760033066339
+               e(r2_a) =  .9840941086432964
+                 e(ll) =  7.218234843190304
+               e(ll_0) =  -7.95383449084642
+               e(rank) =  4
+
+macros:
+            e(cmdline) : "regress mlncost mlnoutput mlnfuelprice mlf if first==1"
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "ols"
+             e(depvar) : "mlncost"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+
+matrices:
+                  e(b) :  1 x 4
+                  e(V) :  4 x 4
+
+functions:
+             e(sample)   
+r; t=0.00 20:11:21
+
+.                 scalar k=e(df_m)
+r; t=0.00 20:11:21
+
+.                 scalar N=e(N)
+r; t=0.00 20:11:21
+
+.                 scalar sigma2_b=se2/(N-k-1)
+r; t=0.00 20:11:21
+
+.                         drop e e2 se2
+r; t=0.00 20:11:21
+
+. 
+. // F. AUTOMATIC PROCEDURE
+.         xtreg lncost lnoutput lnfuelprice lf, be
+
+Between regression (regression on group means)  Number of obs     =         90
+Group variable: i                               Number of groups  =          6
+
+R-squared:                                      Obs per group:
+     Within  = 0.8808                                         min =         15
+     Between = 0.9936                                         avg =       15.0
+     Overall = 0.1371                                         max =         15
+
+                                                F(3,2)            =     104.12
+sd(u_i + avg(e_i.)) = .1258491                  Prob > F          =     0.0095
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .7824552   .1087663     7.19   0.019     .3144715    1.250439
+ lnfuelprice |  -5.523978   4.478802    -1.23   0.343    -24.79471    13.74675
+          lf |  -1.751016    2.74319    -0.64   0.589    -13.55401    10.05198
+       _cons |   85.80901   56.48302     1.52   0.268    -157.2178    328.8358
+------------------------------------------------------------------------------
+r; t=0.01 20:11:21
+
+.                 est store BE
+r; t=0.00 20:11:21
+
+.                 outreg2 using mainregs, dec(4) sortvar(lnoutput lnfuelprice lf)  ke
+> ep(lnoutput lnfuelprice lf) nocons /*
+>                         */      word label addnote(Source: Own computations; Greene
+> , 2008) append ctitle(BE) /*
+>                         */ adds(RMSE, e(rmse), LogLikelihood, e(ll))
+warning: addnote ignored in appended columns
+mainregs.rtf
+dir : seeout
+r; t=0.07 20:11:21
+
+. 
+.                 test lnoutput = beta_ols
+
+ ( 1)  lnoutput = .8827385
+
+       F(  1,     2) =    0.85
+            Prob > F =    0.4539
+r; t=0.00 20:11:21
+
+.                 test lnoutput = beta_fe
+
+ ( 1)  lnoutput = .9192846
+
+       F(  1,     2) =    1.58
+            Prob > F =    0.3354
+r; t=0.00 20:11:21
+
+. 
+.         
+. // G. INTRODUCE TIME EFFECTS
+.         // OLS
+.                 reg lncost lnoutput lnfuelprice lf i.t
+
+      Source |       SS           df       MS      Number of obs   =        90
+-------------+----------------------------------   F(17, 72)       =    439.62
+       Model |  112.952703        17  6.64427664   Prob > F        =    0.0000
+    Residual |  1.08819022        72  .015113753   R-squared       =    0.9905
+-------------+----------------------------------   Adj R-squared   =    0.9882
+       Total |  114.040893        89  1.28135835   Root MSE        =    .12294
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .8677268   .0154082    56.32   0.000     .8370111    .8984424
+ lnfuelprice |  -.4844835   .3641085    -1.33   0.188    -1.210321    .2413535
+          lf |  -1.954404   .4423777    -4.42   0.000    -2.836268    -1.07254
+             |
+           t |
+          2  |   .0822341   .0720337     1.14   0.257    -.0613624    .2258306
+          3  |   .1599262   .0745989     2.14   0.035      .011216    .3086365
+          4  |   .2449538   .0813503     3.01   0.004     .0827849    .4071227
+          5  |   .7040272   .2425407     2.90   0.005     .2205312    1.187523
+          6  |    .915816   .3369745     2.72   0.008     .2440696    1.587562
+          7  |   1.007546   .3690931     2.73   0.008     .2717724     1.74332
+          8  |   1.158223   .4197076     2.76   0.007     .3215517    1.994895
+          9  |   1.333766   .4541888     2.94   0.004     .4283574    2.239175
+         10  |   1.617998   .5881371     2.75   0.008     .4455679    2.790428
+         11  |   1.969523   .7439351     2.65   0.010     .4865151     3.45253
+         12  |   2.155532   .8023798     2.69   0.009     .5560174    3.755047
+         13  |    2.12075   .7800367     2.72   0.008     .5657757    3.675725
+         14  |   2.056424   .7500037     2.74   0.008     .5613184    3.551529
+         15  |   2.040961   .7346895     2.78   0.007     .5763841    3.505538
+             |
+       _cons |    20.4958   4.209528     4.87   0.000     12.10426    28.88735
+------------------------------------------------------------------------------
+r; t=0.02 20:11:21
+
+. 
+.                 mat dir
+       betas0[6,1]
+        betas[10,1]
+        ss_fe[4,4]
+           xx[4,4]
+r; t=0.00 20:11:21
+
+.                         mat drop _all
+r; t=0.00 20:11:21
+
+.                                 mat dir
+r; t=0.00 20:11:21
+
+. 
+.         // FE
+.                 xtreg lncost lnoutput lnfuelprice lf i.t, fe
+
+Fixed-effects (within) regression               Number of obs     =         90
+Group variable: i                               Number of groups  =          6
+
+R-squared:                                      Obs per group:
+     Within  = 0.9955                                         min =         15
+     Between = 0.9859                                         avg =       15.0
+     Overall = 0.9885                                         max =         15
+
+                                                F(17,67)          =     873.24
+corr(u_i, Xb) = 0.3361                          Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .8172487    .031851    25.66   0.000     .7536739    .8808235
+ lnfuelprice |     .16861    .163478     1.03   0.306    -.1576935    .4949135
+          lf |  -.8828142   .2617373    -3.37   0.001    -1.405244   -.3603843
+             |
+           t |
+          2  |   .0547017   .0302618     1.81   0.075    -.0057012    .1151046
+          3  |   .0973352   .0326845     2.98   0.004     .0320967    .1625737
+          4  |   .1509845   .0370793     4.07   0.000     .0769739    .2249952
+          5  |   .2200954   .1117987     1.97   0.053    -.0030557    .4432464
+          6  |   .2659341   .1539895     1.73   0.089    -.0414302    .5732983
+          7  |   .2971599   .1690435     1.76   0.083    -.0402522    .6345721
+          8  |   .3532919   .1923205     1.84   0.071    -.0305814    .7371653
+          9  |    .421245   .2097703     2.01   0.049     .0025418    .8399482
+         10  |   .4657525   .2707517     1.72   0.090    -.0746701    1.006175
+         11  |    .581335    .339615     1.71   0.092    -.0965395    1.259209
+         12  |   .6594972   .3662185     1.80   0.076    -.0714779    1.390472
+         13  |   .6754036   .3565651     1.89   0.063    -.0363033    1.387111
+         14  |   .6744931   .3440841     1.96   0.054    -.0123016    1.361288
+         15  |   .6931382   .3378385     2.05   0.044     .0188098    1.367467
+             |
+       _cons |   12.29286   1.891685     6.50   0.000     8.517039    16.06868
+-------------+----------------------------------------------------------------
+     sigma_u |   .1306712
+     sigma_e |  .05137639
+         rho |  .86611203   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(5, 67) = 69.05                      Prob > F = 0.0000
+r; t=0.02 20:11:21
+
+.                 est store FE_time
+r; t=0.00 20:11:21
+
+.                 outreg2 using mainregs, dec(4) sortvar(lnoutput lnfuelprice lf)  ke
+> ep(lnoutput lnfuelprice lf) nocons /*
+>                         */      word label addnote(Source: Own computations; Greene
+> , 2008) append ctitle(FE_time) /*
+>                         */ adds(RMSE, e(rmse), LogLikelihood, e(ll), F test that al
+> l u_i=0, e(F_f))
+warning: addnote ignored in appended columns
+mainregs.rtf
+dir : seeout
+r; t=0.02 20:11:21
+
+.         
+.                 // test if the current estimate for the parameter of lnoutput is id
+> entical to the one obtained from OLS and FE without time effects
+.                 test lnoutput = beta_ols
+
+ ( 1)  lnoutput = .8827385
+
+       F(  1,    67) =    4.23
+            Prob > F =    0.0437
+r; t=0.00 20:11:21
+
+.                 test lnoutput = beta_fe
+
+ ( 1)  lnoutput = .9192846
+
+       F(  1,    67) =   10.26
+            Prob > F =    0.0021
+r; t=0.00 20:11:21
+
+. 
+.                 mat betas = e(b)'
+r; t=0.00 20:11:21
+
+.                 mat l betas
+
+betas[19,1]
+                     y1
+   lnoutput   .81724873
+lnfuelprice   .16861002
+         lf  -.88281419
+       1b.t           0
+        2.t   .05470167
+        3.t   .09733518
+        4.t   .15098455
+        5.t   .22009538
+        6.t   .26593407
+        7.t   .29715992
+        8.t   .35329194
+        9.t   .42124497
+       10.t   .46575255
+       11.t   .58133499
+       12.t   .65949724
+       13.t   .67540363
+       14.t   .67449313
+       15.t   .69313823
+      _cons   12.292859
+r; t=0.00 20:11:21
+
+.                 mat betas_time = betas[4..18,.]
+r; t=0.00 20:11:21
+
+.                 mat l betas_time
+
+betas_time[15,1]
+             y1
+1b.t          0
+ 2.t  .05470167
+ 3.t  .09733518
+ 4.t  .15098455
+ 5.t  .22009538
+ 6.t  .26593407
+ 7.t  .29715992
+ 8.t  .35329194
+ 9.t  .42124497
+10.t  .46575255
+11.t  .58133499
+12.t  .65949724
+13.t  .67540363
+14.t  .67449313
+15.t  .69313823
+r; t=0.00 20:11:21
+
+.                 
+.                 preserve
+r; t=0.00 20:11:21
+
+.                         clear
+r; t=0.00 20:11:21
+
+.                         set obs 15
+Number of observations (_N) was 0, now 15.
+r; t=0.00 20:11:21
+
+.                         gen time = _n
+r; t=0.00 20:11:21
+
+.                         svmat betas_time
+r; t=0.00 20:11:21
+
+.                         scatter betas_time time
+r; t=0.34 20:11:22
+
+.                 restore
+r; t=0.00 20:11:22
+
+. 
+.         // JOINT SIGNIFICANCE TEST FOR THE TIME DUMMIES
+.                 testparm i.t
+
+ ( 1)  2.t = 0
+ ( 2)  3.t = 0
+ ( 3)  4.t = 0
+ ( 4)  5.t = 0
+ ( 5)  6.t = 0
+ ( 6)  7.t = 0
+ ( 7)  8.t = 0
+ ( 8)  9.t = 0
+ ( 9)  10.t = 0
+ (10)  11.t = 0
+ (11)  12.t = 0
+ (12)  13.t = 0
+ (13)  14.t = 0
+ (14)  15.t = 0
+
+       F( 14,    67) =    3.13
+            Prob > F =    0.0009
+r; t=0.00 20:11:22
+
+. 
+. // H. RANDOM EFFECTS ESTIMATOR
+.         
+.         tab t   /* NUMBER OF YEARS */
+
+       Year |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |          6        6.67        6.67
+          2 |          6        6.67       13.33
+          3 |          6        6.67       20.00
+          4 |          6        6.67       26.67
+          5 |          6        6.67       33.33
+          6 |          6        6.67       40.00
+          7 |          6        6.67       46.67
+          8 |          6        6.67       53.33
+          9 |          6        6.67       60.00
+         10 |          6        6.67       66.67
+         11 |          6        6.67       73.33
+         12 |          6        6.67       80.00
+         13 |          6        6.67       86.67
+         14 |          6        6.67       93.33
+         15 |          6        6.67      100.00
+------------+-----------------------------------
+      Total |         90      100.00
+r; t=0.00 20:11:22
+
+.         ret li
+
+scalars:
+                  r(N) =  90
+                  r(r) =  15
+r; t=0.00 20:11:22
+
+.                 scalar T=r(r)
+r; t=0.00 20:11:22
+
+. 
+.         scalar sigma2_alpha=sigma2_b-sigma2_fe/T
+r; t=0.00 20:11:22
+
+.         scalar psi=sigma2_fe/(sigma2_fe+T*sigma2_alpha)
+r; t=0.00 20:11:22
+
+.                 scalar stheta=1-psi^(.5)
+r; t=0.00 20:11:22
+
+.                         di stheta
+.87668503
+r; t=0.00 20:11:22
+
+. 
+.                 gen double drelncost=lncost-stheta*mlncost
+r; t=0.00 20:11:22
+
+.                 gen double drelnoutput=lnoutput-stheta*mlnoutput
+r; t=0.00 20:11:22
+
+.                 gen double drelnfuelprice=lnfuelprice-stheta*mlnfuelprice
+r; t=0.00 20:11:22
+
+.                 gen double drelf=lf-stheta*mlf
+r; t=0.00 20:11:22
+
+. 
+.                 reg drelncost drelnoutput drelnfuelprice drelf
+
+      Source |       SS           df       MS      Number of obs   =        90
+-------------+----------------------------------   F(3, 86)        =   3697.11
+       Model |  40.1850477         3  13.3950159   Prob > F        =    0.0000
+    Residual |  .311587013        86  .003623105   R-squared       =    0.9923
+-------------+----------------------------------   Adj R-squared   =    0.9920
+       Total |  40.4966348        89  .455018368   Root MSE        =    .06019
+
+--------------------------------------------------------------------------------
+     drelncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+   drelnoutput |   .9066805    .025625    35.38   0.000     .8557398    .9576212
+drelnfuelprice |   .4227784   .0140248    30.15   0.000     .3948981    .4506588
+         drelf |  -1.064499   .2000703    -5.32   0.000    -1.462225    -.666772
+         _cons |   1.187265   .0259164    45.81   0.000     1.135745    1.238785
+--------------------------------------------------------------------------------
+r; t=0.00 20:11:22
+
+.                 mat V=e(V)
+r; t=0.00 20:11:22
+
+.                         di _b[_cons]/(1-stheta)                                    
+>                              // correct the estimation of the constant term and of 
+> its
+9.6279089
+r; t=0.00 20:11:22
+
+.                         di (V[4,4]/((1-stheta)^2))^.5                              
+>                      // standard error
+.21016396
+r; t=0.00 20:11:22
+
+. 
+.         // AUTOMATIC PROCEDURE
+.         xtreg lncost lnoutput lnfuelprice lf, re
+
+Random-effects GLS regression                   Number of obs     =         90
+Group variable: i                               Number of groups  =          6
+
+R-squared:                                      Obs per group:
+     Within  = 0.9925                                         min =         15
+     Between = 0.9856                                         avg =       15.0
+     Overall = 0.9876                                         max =         15
+
+                                                Wald chi2(3)      =   11091.33
+corr(u_i, X) = 0 (assumed)                      Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .9066805    .025625    35.38   0.000     .8564565    .9569045
+ lnfuelprice |   .4227784   .0140248    30.15   0.000     .3952904    .4502665
+          lf |  -1.064499   .2000703    -5.32   0.000    -1.456629    -.672368
+       _cons |   9.627909    .210164    45.81   0.000     9.215995    10.03982
+-------------+----------------------------------------------------------------
+     sigma_u |  .12488859
+     sigma_e |  .06010514
+         rho |  .81193816   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+r; t=0.02 20:11:22
+
+.                 est store RE    
+r; t=0.00 20:11:22
+
+.                 outreg2 using mainregs, dec(4) sortvar(lnoutput lnfuelprice lf)  ke
+> ep(lnoutput lnfuelprice lf) nocons /*
+>                         */ word label addnote(Source: Own computations; Greene, 200
+> 8) append ctitle(RE) /*
+>                         */ adds(RMSE, e(rmse), rho, e(rho))             /// SEE OUT
+> PUT TABLE
+>                 
+warning: addnote ignored in appended columns
+mainregs.rtf
+dir : seeout
+r; t=0.07 20:11:22
+
+.                 test lnoutput = beta_fe
+
+ ( 1)  lnoutput = .9192846
+
+           chi2(  1) =    0.24
+         Prob > chi2 =    0.6228
+r; t=0.00 20:11:22
+
+. 
+.         // TEST FOR RANDOM EFFECTS (Breush & Pagan, 1980)
+.         reg lncost lnoutput lnfuelprice lf
+
+      Source |       SS           df       MS      Number of obs   =        90
+-------------+----------------------------------   F(3, 86)        =   2419.34
+       Model |  112.705452         3  37.5684839   Prob > F        =    0.0000
+    Residual |  1.33544153        86   .01552839   R-squared       =    0.9883
+-------------+----------------------------------   Adj R-squared   =    0.9879
+       Total |  114.040893        89  1.28135835   Root MSE        =    .12461
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .8827385   .0132545    66.60   0.000     .8563895    .9090876
+ lnfuelprice |    .453977   .0203042    22.36   0.000     .4136136    .4943404
+          lf |   -1.62751    .345302    -4.71   0.000    -2.313948   -.9410727
+       _cons |   9.516923   .2292445    41.51   0.000       9.0612    9.972645
+------------------------------------------------------------------------------
+r; t=0.00 20:11:22
+
+.                 predict res, resid
+r; t=0.00 20:11:22
+
+.                 gen res2=res^2
+r; t=0.00 20:11:22
+
+.                 egen mres=mean(res),by(i)
+r; t=0.00 20:11:22
+
+.                 egen nobsT=count(i),by(i)
+r; t=0.00 20:11:22
+
+.                 bysort i (t): gen Tmres2=(nobsT*mres)^2 if _n==1
+(84 missing values generated)
+r; t=0.00 20:11:22
+
+.                 egen sTmres2=total(Tmres2)
+r; t=0.00 20:11:22
+
+.                 egen sres2=total(res2)
+r; t=0.00 20:11:22
+
+.                 count if i[_n]~=i[_n-1]
+  6
+r; t=0.00 20:11:22
+
+.                 gen n=r(N)
+r; t=0.00 20:11:22
+
+.                 di "LM = " ((n*nobsT)/(2*(nobsT-1)))*((sTmres2/sres2-1)^2)
+LM = 334.84982
+r; t=0.00 20:11:22
+
+.                 scalar LM = ((n*nobsT)/(2*(nobsT-1)))*((sTmres2/sres2-1)^2)
+r; t=0.00 20:11:22
+
+.         
+.                 // COMPUTE THE p-value FOR THE TEST
+.                         di chi2tail(1,LM)
+8.443e-75
+r; t=0.00 20:11:22
+
+. 
+.         // TEST IF THE RANDOM EFFECTS IS A VALID PROCEDURE: HAUSMAN TEST
+.                 
+.                 //manual
+.                         xtreg lncost lnoutput lnfuelprice lf, i(i) fe
+
+Fixed-effects (within) regression               Number of obs     =         90
+Group variable: i                               Number of groups  =          6
+
+R-squared:                                      Obs per group:
+     Within  = 0.9926                                         min =         15
+     Between = 0.9856                                         avg =       15.0
+     Overall = 0.9873                                         max =         15
+
+                                                F(3,81)           =    3604.80
+corr(u_i, Xb) = -0.3475                         Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .9192846   .0298901    30.76   0.000     .8598126    .9787565
+ lnfuelprice |   .4174918   .0151991    27.47   0.000     .3872503    .4477333
+          lf |  -1.070396     .20169    -5.31   0.000    -1.471696   -.6690963
+       _cons |   9.713528    .229641    42.30   0.000     9.256614    10.17044
+-------------+----------------------------------------------------------------
+     sigma_u |   .1320775
+     sigma_e |  .06010514
+         rho |  .82843653   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(5, 81) = 57.73                      Prob > F = 0.0000
+r; t=0.01 20:11:22
+
+.                                 est store fe
+r; t=0.00 20:11:22
+
+.                         mat uvar=e(V)
+r; t=0.00 20:11:22
+
+.                         mat l uvar
+
+symmetric uvar[4,4]
+                lnoutput  lnfuelprice           lf        _cons
+   lnoutput    .00089342
+lnfuelprice   -.00031782    .00023101
+         lf   -.00188427   -.00076857    .04067884
+      _cons    .00616386   -.00289259   -.01519667    .05273499
+r; t=0.00 20:11:22
+
+.                                 mat uvar=uvar[1..3,1..3]
+r; t=0.00 20:11:22
+
+.                         mat ub=e(b)
+r; t=0.00 20:11:22
+
+.                                 mat ub=ub[1,1..3]
+r; t=0.00 20:11:22
+
+.                         mat l ub
+
+ub[1,3]
+       lnoutput  lnfuelprice           lf
+y1    .91928455    .41749177   -1.0703961
+r; t=0.00 20:11:22
+
+. 
+.                         xtreg lncost lnoutput lnfuelprice lf, i(i) re
+
+Random-effects GLS regression                   Number of obs     =         90
+Group variable: i                               Number of groups  =          6
+
+R-squared:                                      Obs per group:
+     Within  = 0.9925                                         min =         15
+     Between = 0.9856                                         avg =       15.0
+     Overall = 0.9876                                         max =         15
+
+                                                Wald chi2(3)      =   11091.33
+corr(u_i, X) = 0 (assumed)                      Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      lncost | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    lnoutput |   .9066805    .025625    35.38   0.000     .8564565    .9569045
+ lnfuelprice |   .4227784   .0140248    30.15   0.000     .3952904    .4502665
+          lf |  -1.064499   .2000703    -5.32   0.000    -1.456629    -.672368
+       _cons |   9.627909    .210164    45.81   0.000     9.215995    10.03982
+-------------+----------------------------------------------------------------
+     sigma_u |  .12488859
+     sigma_e |  .06010514
+         rho |  .81193816   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+r; t=0.01 20:11:22
+
+.                                 est store re
+r; t=0.00 20:11:22
+
+. 
+.                         mat bvar=e(V)
+r; t=0.00 20:11:22
+
+.                         mat l bvar
+
+symmetric bvar[4,4]
+                lnoutput  lnfuelprice           lf        _cons
+   lnoutput    .00065664
+lnfuelprice   -.00022767    .00019669
+         lf   -.00152868   -.00089946    .04002814
+      _cons    .00453525    -.0022751   -.01274295    .04416889
+r; t=0.00 20:11:22
+
+.                                 mat bvar=bvar[1..3,1..3]
+r; t=0.00 20:11:22
+
+.                         mat bb=e(b)
+r; t=0.00 20:11:22
+
+.                         mat l bb
+
+bb[1,4]
+       lnoutput  lnfuelprice           lf        _cons
+y1    .90668048    .42277845   -1.0644986    9.6279089
+r; t=0.00 20:11:22
+
+.                                 mat bb=bb[1,1..3]
+r; t=0.00 20:11:22
+
+.                         mat test=((ub'-bb')')*inv(uvar-bvar)*(ub'-bb')
+r; t=0.00 20:11:22
+
+.                         mat l test
+
+symmetric test[1,1]
+           y1
+y1  2.1247736
+r; t=0.00 20:11:22
+
+.                         di chi2tail(colsof(bb),test[1,1])
+.54691718
+r; t=0.00 20:11:22
+
+. 
+.                 // automatic
+.                         hausman fe re
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |       fe           re         Difference       Std. err.
+-------------+----------------------------------------------------------------
+    lnoutput |    .9192846     .9066805        .0126041        .0153877
+ lnfuelprice |    .4174918     .4227784       -.0052867        .0058583
+          lf |   -1.070396    -1.064499       -.0058974        .0255088
+------------------------------------------------------------------------------
+                          b = Consistent under H0 and Ha; obtained from xtreg.
+           B = Inconsistent under Ha, efficient under H0; obtained from xtreg.
+
+Test of H0: Difference in coefficients not systematic
+
+    chi2(3) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+            =   2.12
+Prob > chi2 = 0.5469
+(V_b-V_B is not positive definite)
+r; t=0.00 20:11:22
+
+. 
+. // OLS manual programming
+. 
+.         sysuse auto, clear
+(1978 automobile data)
+r; t=0.00 20:11:22
+
+.                 
+.                 egen rmiss = rowmiss(price mpg rep78 foreign)
+r; t=0.00 20:11:22
+
+.                         tab rmiss
+
+      rmiss |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |         69       93.24       93.24
+          1 |          5        6.76      100.00
+------------+-----------------------------------
+      Total |         74      100.00
+r; t=0.00 20:11:22
+
+.                 
+.                 putmata y = price X = (mpg rep78 foreign 1) if rmiss == 0
+(1 vector, 1 matrix posted)
+r; t=0.01 20:11:22
+
+. 
+.                 mata
+------------------------------------------------- mata (type end to exit) -----------
+:                         betas = invsym(X'X)*X'*y
+
+:                         betas
+                  1
+    +----------------+
+  1 |  -292.4342409  |
+  2 |    432.800414  |
+  3 |   1023.208063  |
+  4 |   10586.48454  |
+    +----------------+
+
+:                         e = X*betas
+
+:                         n = rows(X)
+
+:                         k = cols(X)
+
+:                         n
+  69
+
+:                         k
+  4
+
+:                         varcovar = ((e'e)/(n-k))*invsym(X'X)
+
+:                         varcovar
+[symmetric]
+                  1              2              3              4
+    +-------------------------------------------------------------+
+  1 |   23671.91735                                               |
+  2 |  -28858.34212    1016695.579                                |
+  3 |  -99470.25326   -1120235.181    4895163.724                 |
+  4 |  -375412.4765   -2507327.793     4443168.57    15795094.59  |
+    +-------------------------------------------------------------+
+
+:                         betas
+                  1
+    +----------------+
+  1 |  -292.4342409  |
+  2 |    432.800414  |
+  3 |   1023.208063  |
+  4 |   10586.48454  |
+    +----------------+
+
+:                 end
+-------------------------------------------------------------------------------------
+r; t=0.00 20:11:22
+
+.                 
+.                 mata: betas
+                  1
+    +----------------+
+  1 |  -292.4342409  |
+  2 |    432.800414  |
+  3 |   1023.208063  |
+  4 |   10586.48454  |
+    +----------------+
+r; t=0.00 20:11:22
+
+.                 
+. mata
+------------------------------------------------- mata (type end to exit) -----------
+: 
+: // # 1. betas
+: 
+:         y = st_data(., "price")
+
+: 
+:         X    = st_data(., "mpg rep78 foreign")
+
+: 
+:         n0    = rows(X)
+
+: 
+:         X    = X,J(n0,1,1)
+
+: 
+:         XpX  = quadcross(X, X)
+
+: 
+:         XpXi = invsym(XpX)
+
+:         
+:                 n = XpX[4,4]            // actual sample size omiying missing value
+> s
+
+:                 k = cols(X)
+
+: 
+:         b    = XpXi*quadcross(X, y)
+
+: 
+: // # 2. varcovar
+:         
+:         e = y - X*b
+
+: 
+:         e2 = e:^2
+
+: 
+:         k = cols(X)
+
+: 
+:         V = (quadsum(e2)/(n-k))*XpXi
+
+: 
+:         se = sqrt(diagonal(V))'
+
+: 
+: end             
+-------------------------------------------------------------------------------------
+r; t=0.00 20:11:22
+
+.         
+.         mata: b'
+                  1              2              3              4
+    +-------------------------------------------------------------+
+  1 |  -292.4342409     432.800414    1023.208063    10586.48454  |
+    +-------------------------------------------------------------+
+r; t=0.00 20:11:22
+
+.         mata: V
+[symmetric]
+                  1              2              3              4
+    +-------------------------------------------------------------+
+  1 |   3627.336317                                               |
+  2 |  -4422.071556    155792.0612                                |
+  3 |  -15242.19845   -171657.8211    750104.2221                 |
+  4 |  -57525.85603   -384207.2032    680843.3163    2420341.343  |
+    +-------------------------------------------------------------+
+r; t=0.00 20:11:22
+
+.         mata: se
+                 1             2             3             4
+    +---------------------------------------------------------+
+  1 |  60.22737182   394.7050306   866.0855744   1555.744626  |
+    +---------------------------------------------------------+
+r; t=0.00 20:11:22
+
+. 
+.                 regress price mpg rep78 foreign
+
+      Source |       SS           df       MS      Number of obs   =        69
+-------------+----------------------------------   F(3, 65)        =      7.88
+       Model |   153836302         3  51278767.4   Prob > F        =    0.0001
+    Residual |   422960657        65  6507087.03   R-squared       =    0.2667
+-------------+----------------------------------   Adj R-squared   =    0.2329
+       Total |   576796959        68  8482308.22   Root MSE        =    2550.9
+
+------------------------------------------------------------------------------
+       price | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         mpg |  -292.4342   60.22737    -4.86   0.000    -412.7166   -172.1519
+       rep78 |   432.8004    394.705     1.10   0.277      -355.48    1221.081
+     foreign |   1023.208   866.0856     1.18   0.242    -706.4843      2752.9
+       _cons |   10586.48   1555.745     6.80   0.000     7479.448    13693.52
+------------------------------------------------------------------------------
+r; t=0.00 20:11:22
+
+. 
+. // robust standard-errors
+. 
+. mata
+------------------------------------------------- mata (type end to exit) -----------
+:         M    = quadcross(X, e2, X)
+
+: 
+:         V    = (n/(n-k))*XpXi*M*XpXi
+
+: 
+:         se_robust = sqrt(diagonal(V))'
+
+: end
+-------------------------------------------------------------------------------------
+r; t=0.00 20:11:22
+
+. 
+.         mata: se_robust
+                 1             2             3             4
+    +---------------------------------------------------------+
+  1 |  60.52375375   285.0358337   633.4220036   1578.253647  |
+    +---------------------------------------------------------+
+r; t=0.00 20:11:22
+
+.         
+.                 regress price mpg rep78 foreign, robust
+
+Linear regression                               Number of obs     =         69
+                                                F(3, 65)          =       8.40
+                                                Prob > F          =     0.0001
+                                                R-squared         =     0.2667
+                                                Root MSE          =     2550.9
+
+------------------------------------------------------------------------------
+             |               Robust
+       price | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         mpg |  -292.4342   60.52375    -4.83   0.000    -413.3085     -171.56
+       rep78 |   432.8004   285.0358     1.52   0.134    -136.4555    1002.056
+     foreign |   1023.208    633.422     1.62   0.111     -241.823    2288.239
+       _cons |   10586.48   1578.254     6.71   0.000     7434.494    13738.47
+------------------------------------------------------------------------------
+r; t=0.00 20:11:22
+
+.         
+. 
+. timer off 1
+r; t=0.00 20:11:22
+
+. timer list 1
+r; t=0.00 20:11:22
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/3.Panel_Data/logs/s
+> tatic_panel_detailed_programing.txt
+  log type:  text
+ closed on:  28 Dec 2021, 20:11:22
+-------------------------------------------------------------------------------------
