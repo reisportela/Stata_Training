@@ -6,7 +6,7 @@ clear all
 set more off
 set matsize 800
 
-capture cd "/Users/miguelportela/Documents/GitHub/Stata_Training/4.EconometrcsClassExercise/assignment_econometria_ii"
+capture cd "/Users/miguelportela/Documents/GitHub/Stata_Training/4.EconometricsClassExercise/assignment_econometria_ii"
 capture cd "/Users/miguelportela/Dropbox/3.aulas/2019/licenciatura/econometria_ii/"
 
     capture cd "3.assignment/logs"
