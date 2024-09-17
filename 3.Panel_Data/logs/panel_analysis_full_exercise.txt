@@ -1,2490 +1,285 @@
--------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/3.Panel_Data/logs/p
-> anel_analysis_full_exercise.txt
+       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/3.Panel_Data/logs/panel_analysis_full_exercise.
+> txt
   log type:  text
- opened on:  28 Dec 2021, 20:09:05
-r; t=0.00 20:09:05
+ opened on:  27 Oct 2022, 15:05:55
+r; t=0.00 15:05:55
 
 . 
 . // # 1. READ THE DATA AND DEFINE THE SAMPLE
 . 
 .                 use ../data/growthdata, clear
-r; t=0.00 20:09:05
-
-.                         egen nobs = count(year),by(country)             // count th
-> e number of observations per country
-r; t=0.00 20:09:05
-
-.                         
-.                         drop if nobs < 2                // drop countries where we 
-> have less than 2 observations; minimum size to run a panel data analysis
-(10 observations deleted)
-r; t=0.00 20:09:05
-
-.                                 drop nobs
-r; t=0.00 20:09:05
+r; t=0.00 15:05:55
 
 . 
-.                         keep country year lngdp education lnk openk rgdpwok k pop k
-> c kg ki
-r; t=0.00 20:09:05
+end of do-file
+
+r; t=0.00 15:05:55
+. r; t=0.28 15:06:11
+do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD93009.000000"
+
+. clear all
+r; t=0.08 22:27:22
+
+. set more off
+r; t=0.00 22:27:22
 
 . 
-. // # 2. IDENTIFY THE PANEL DIMENSION OF THE DATA
-.                 replace country = proper(country)
-(886 real changes made)
-r; t=0.00 20:09:05
+. capture cd "D:\miguel\Dropbox\ASF_Poupança Longo Prazo\Relatorio\_INQUERITO_Data_Stats"
+r; t=0.05 22:27:22
 
-.                 encode country, gen(cty_id)                                        
->                              // ALTERNATIVE TO: egen double cty_id = group(country)
-r; t=0.00 20:09:05
-
-.                         tab country
-
-           Country name |      Freq.     Percent        Cum.
-------------------------+-----------------------------------
-            Afghanistan |          9        1.02        1.02
-                Algeria |          9        1.02        2.03
-              Argentina |          9        1.02        3.05
-              Australia |          9        1.02        4.06
-                Austria |          9        1.02        5.08
-                Bahrain |          9        1.02        6.09
-             Bangladesh |          9        1.02        7.11
-               Barbados |          9        1.02        8.13
-                Belgium |          9        1.02        9.14
-                 Belize |          3        0.34        9.48
-                  Benin |          9        1.02       10.50
-                Bolivia |          9        1.02       11.51
-               Botswana |          9        1.02       12.53
-                 Brazil |          9        1.02       13.54
-                 Brunei |          3        0.34       13.88
-               Bulgaria |          9        1.02       14.90
-               Cameroon |          9        1.02       15.91
-                 Canada |          9        1.02       16.93
-                  Chile |          9        1.02       17.95
-                  China |          9        1.02       18.96
-               Colombia |          9        1.02       19.98
-             Costa Rica |          9        1.02       20.99
-                Croatia |          3        0.34       21.33
-                   Cuba |          9        1.02       22.35
-                 Cyprus |          9        1.02       23.36
-                Denmark |          9        1.02       24.38
-               Dominica |          2        0.23       24.60
-                Ecuador |          9        1.02       25.62
-                  Egypt |          9        1.02       26.64
-            El Salvador |          9        1.02       27.65
-                   Fiji |          9        1.02       28.67
-                Finland |          9        1.02       29.68
-                 France |          9        1.02       30.70
-                  Ghana |          9        1.02       31.72
-                 Greece |          9        1.02       32.73
-              Guatemala |          9        1.02       33.75
-                 Guyana |          9        1.02       34.76
-                  Haiti |          9        1.02       35.78
-               Honduras |          9        1.02       36.79
-              Hong Kong |          9        1.02       37.81
-                Hungary |          9        1.02       38.83
-                Iceland |          9        1.02       39.84
-                  India |          9        1.02       40.86
-              Indonesia |          9        1.02       41.87
-                   Iraq |          9        1.02       42.89
-                Ireland |          9        1.02       43.91
-                 Israel |          9        1.02       44.92
-                  Italy |          9        1.02       45.94
-                Jamaica |          9        1.02       46.95
-                  Japan |          9        1.02       47.97
-                 Jordan |          9        1.02       48.98
-                  Kenya |          9        1.02       50.00
-                 Kuwait |          9        1.02       51.02
-                Lesotho |          9        1.02       52.03
-                Liberia |          9        1.02       53.05
-                  Libya |          3        0.34       53.39
-                 Malawi |          9        1.02       54.40
-               Malaysia |          9        1.02       55.42
-                   Mali |          9        1.02       56.43
-                  Malta |          9        1.02       57.45
-              Mauritius |          9        1.02       58.47
-                 Mexico |          9        1.02       59.48
-             Mozambique |          9        1.02       60.50
-                Namibia |          2        0.23       60.72
-                  Nepal |          9        1.02       61.74
-            Netherlands |          9        1.02       62.75
-            New Zealand |          9        1.02       63.77
-              Nicaragua |          9        1.02       64.79
-                  Niger |          9        1.02       65.80
-                 Norway |          9        1.02       66.82
-               Pakistan |          9        1.02       67.83
-                 Panama |          9        1.02       68.85
-               Paraguay |          9        1.02       69.86
-                   Peru |          9        1.02       70.88
-            Philippines |          9        1.02       71.90
-                 Poland |          9        1.02       72.91
-               Portugal |          9        1.02       73.93
-                Romania |          9        1.02       74.94
-                 Rwanda |          9        1.02       75.96
-                Senegal |          9        1.02       76.98
-             Seychelles |          3        0.34       77.31
-           Sierra Leone |          9        1.02       78.33
-              Singapore |          9        1.02       79.35
-               Slovenia |          3        0.34       79.68
-           South Africa |          9        1.02       80.70
-                  Spain |          9        1.02       81.72
-              Sri Lanka |          9        1.02       82.73
-                  Sudan |          9        1.02       83.75
-              Swaziland |          9        1.02       84.76
-                 Sweden |          9        1.02       85.78
-            Switzerland |          9        1.02       86.79
-                  Syria |          9        1.02       87.81
-                 Taiwan |          9        1.02       88.83
-               Thailand |          9        1.02       89.84
-                   Togo |          9        1.02       90.86
-                Tunisia |          9        1.02       91.87
-                 Turkey |          9        1.02       92.89
-                 Uganda |          9        1.02       93.91
-         United Kingdom |          9        1.02       94.92
-          United States |          9        1.02       95.94
-                Uruguay |          9        1.02       96.95
-              Venezuela |          9        1.02       97.97
-                 Zambia |          9        1.02       98.98
-               Zimbabwe |          9        1.02      100.00
-------------------------+-----------------------------------
-                  Total |        886      100.00
-r; t=0.00 20:09:05
-
-.                         unique cty_id
-Number of unique values of cty_id is  104
-Number of records is  886
-r; t=0.00 20:09:05
-
-.                                 return list
-
-scalars:
-                  r(N) =  886
-                r(sum) =  104
-             r(unique) =  104
-r; t=0.00 20:09:05
-
-. codebook, compact
-
-Variable   Obs Unique      Mean       Min       Max  Label
--------------------------------------------------------------------------------------
-country    886    104         .         .         .  Country name
-year       886      9      1980      1960      2000  Year of observation
-pop        886    886  36845.36    41.662   1263638  Population (in thousands)
-kc         850    850   71.7454  5.099385  189.4834  Consumption Share of PPP Conv...
-kg         850    850   9.97619  .2877948  43.33043  Government Consumption Share ...
-ki         850    850  23.16315  1.446131  111.2905  Investment Share of PPP Conve...
-openk      850    850  63.38925  2.319838  395.9767  Openness at 2005 constant pri...
-rgdpwok    849    849  19941.57  396.7613  271192.1  PPP Converted GDP Chain per w...
-education  871    583  4.724214       .04     12.25  education
-k          235    235  5.48e+11  1.19e+09  1.12e+13  Capital
-lngdp      849    848  9.297727  5.983335  12.51058  Log Real GDP per Worker
-lnk        235    235  25.20918   20.9011  30.04742  Log Capital
-cty_id     886    104  52.92212         1       104  Country name
--------------------------------------------------------------------------------------
-r; t=0.01 20:09:05
-
-.                 preserve
-r; t=0.00 20:09:05
-
-.                         
-.                         keep if cty_id <= 10            // list a sample of countri
-> es
-(802 observations deleted)
-r; t=0.00 20:09:05
-
-.                         label var cty_id "Countries"
-r; t=0.00 20:09:05
-
-.                         latab cty_id, tf(list_countries) replace                // 
-> Produce a tex table with the tabulation
-
-\begin{table}[htbp]\centering
-\caption{\label{freq_cty_id} 
-\textbf{Countries}}
-\begin{tabular} {@{} l r r @{}} \\ \hline
-Item& Number & Per cent \\
-\hline
-Afghanistan&        9&       11\\
-Algeria&        9&       11\\
-Argentina&        9&       11\\
-Australia&        9&       11\\
-Austria&        9&       11\\
-Bahrain&        9&       11\\
-Bangladesh&        9&       11\\
-Barbados&        9&       11\\
-Belgium&        9&       11\\
-Belize&        3&        4\\
-Total&       84&      100\\
-\hline
-\multicolumn{3}{@{}l}{\footnotesize{\emph{Source:} ../data/growthdata.dta}}
-\end{tabular}
-\end{table}
-
-
-This table can be cross-referenced in the body of your text
-with the name: freq_cty_id
-
-
-The table has been written to the file: list_countries.tex
-r; t=0.00 20:09:05
-
-.                 
-.                 restore
-r; t=0.00 20:09:05
+. capture cd "/Users/miguelportela/Dropbox/ASF_Poupança Longo Prazo/Relatorio/_INQUERITO_Data_Stats"
+r; t=0.00 22:27:22
 
 . 
-.                 xtset cty_id year,delta(5)                                         
->              // the command 'xtset' defines the panel dimension of the data; DISCUS
-> S 'tsset'
-
-Panel variable: cty_id (unbalanced)
- Time variable: year, 1960 to 2000, but with gaps
-         Delta: 5 units
-r; t=0.00 20:09:05
-
-.         
-.         tsset cty_id year,delta(5)
-
-Panel variable: cty_id (unbalanced)
- Time variable: year, 1960 to 2000, but with gaps
-         Delta: 5 units
-r; t=0.00 20:09:05
-
-.         
-.                 // these variables will be used later as instruments
-.                 gen lag_educ = l1.education
-(124 missing values generated)
-r; t=0.00 20:09:05
-
-.                 gen lag2_educ = l2.educ
-(216 missing values generated)
-r; t=0.00 20:09:05
-
-.                 
-.                         save data_tmp, replace
-file data_tmp.dta saved
-r; t=0.00 20:09:05
-
-.         
-.         egen nmiss = rowmiss(lngdp education lag_educ lag2_educ lnk openk)
-r; t=0.00 20:09:05
-
-.                 tab nmiss
-
-      nmiss |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |        232       26.19       26.19
-          1 |        429       48.42       74.60
-          2 |         89       10.05       84.65
-          3 |         89       10.05       94.70
-          4 |         30        3.39       98.08
-          5 |         17        1.92      100.00
-------------+-----------------------------------
-      Total |        886      100.00
-r; t=0.00 20:09:05
-
-.                         keep if nmiss == 0              // keep only the sample for
->  which we have information on all variables used in the regressions below
-(654 observations deleted)
-r; t=0.00 20:09:05
-
-.                                 drop nmiss
-r; t=0.00 20:09:05
+. use data_dashboard, clear
+r; t=0.00 22:27:22
 
 . 
-. // # 3. DESCRIBE THE DATA
-. 
-.                 describe
+end of do-file
 
-Contains data from data_tmp.dta
- Observations:           232                  
-    Variables:            15                  28 Dec 2021 20:09
-                                              (_dta has notes)
--------------------------------------------------------------------------------------
-Variable      Storage   Display    Value
-    name         type    format    label      Variable label
--------------------------------------------------------------------------------------
-country         str23   %23s                  Country name
-year            int     %10.0g                Year of observation
-pop             double  %10.0g                Population (in thousands)
-kc              double  %10.0g                Consumption Share of PPP Converted GDP
-                                                Per Capita at 2005 constant prices
-                                                [rgdpl
-kg              double  %10.0g                Government Consumption Share of PPP
-                                                Converted GDP Per Capita at 2005
-                                                constant pr
-ki              double  %10.0g                Investment Share of PPP Converted GDP
-                                                Per Capita at 2005 constant prices
-                                                [rgdpl]
-openk           double  %10.0g                Openness at 2005 constant prices (%)
-rgdpwok         double  %10.0g                PPP Converted GDP Chain per worker at
-                                                2005 constant prices
-education       double  %10.0g                education
-k               double  %16.3f                Capital
-lngdp           float   %9.0g                 Log Real GDP per Worker
-lnk             float   %9.0g                 Log Capital
-cty_id          long    %14.0g     cty_id     Country name
-lag_educ        float   %9.0g                 
-lag2_educ       float   %9.0g                 
--------------------------------------------------------------------------------------
-Sorted by: cty_id  year
-     Note: Dataset has changed since last saved.
-r; t=0.00 20:09:05
+r; t=0.14 22:27:22
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD93009.000000"
 
-.                 codebook, compact
+. clear all
+r; t=0.07 9:34:11
 
-Variable   Obs Unique      Mean       Min       Max  Label
--------------------------------------------------------------------------------------
-country    232     47         .         .         .  Country name
-year       232      5  1980.065      1970      1990  Year of observation
-pop        232    232  41708.31   325.569  838158.8  Population (in thousands)
-kc         232    232  68.76473  9.579584  131.3724  Consumption Share of PPP Conv...
-kg         232    232   9.42293  2.905853  24.10674  Government Consumption Share ...
-ki         232    232  23.13151  7.083554  79.89515  Investment Share of PPP Conve...
-openk      232    232  52.11646  9.235157  327.0913  Openness at 2005 constant pri...
-rgdpwok    232    232  25157.13  854.6352  63991.81  PPP Converted GDP Chain per w...
-education  232    208  5.628578       .76        12  education
-k          232    232  5.54e+11  1.19e+09  1.12e+13  Capital
-lngdp      232    232  9.747236  6.750675  11.06651  Log Real GDP per Worker
-lnk        232    232    25.218   20.9011  30.04742  Log Capital
-cty_id     232     47   55.8319         3       104  Country name
-lag_educ   232    205  5.196638        .4     11.91  
-lag2_educ  232    206  4.838966       .21     11.91  
--------------------------------------------------------------------------------------
-r; t=0.00 20:09:05
+. set more off
+r; t=0.00 9:34:11
 
-.                 xtdes
-
-  cty_id:  3, 4, ..., 104                                    n =         47
-    year:  1970, 1975, ..., 1990                             T =          5
-           Delta(year) = 5 units
-           Span(year)  = 5 periods
-           (cty_id*year uniquely identifies each observation)
-
-Distribution of T_i:   min      5%     25%       50%       75%     95%     max
-                         2       5       5         5         5       5       5
-
-     Freq.  Percent    Cum. |  Pattern
- ---------------------------+---------
-       46     97.87   97.87 |  11111
-        1      2.13  100.00 |  ...11
- ---------------------------+---------
-       47    100.00         |  XXXXX
-r; t=0.00 20:09:05
-
-.                 sum
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-     country |          0
-        year |        232    1980.065    7.093693       1970       1990
-         pop |        232    41708.31    106698.2    325.569   838158.8
-          kc |        232    68.76473    12.52711   9.579584   131.3724
-          kg |        232     9.42293    4.029015   2.905853   24.10674
--------------+---------------------------------------------------------
-          ki |        232    23.13151     10.2948   7.083554   79.89515
-       openk |        232    52.11646    41.96817   9.235157   327.0913
-     rgdpwok |        232    25157.13    18038.55   854.6352   63991.81
-   education |        232    5.628578    2.772159        .76         12
-           k |        232    5.54e+11    1.59e+12   1.19e+09   1.12e+13
--------------+---------------------------------------------------------
-       lngdp |        232    9.747236    1.025845   6.750675   11.06651
-         lnk |        232      25.218    1.935488    20.9011   30.04742
-      cty_id |        232     55.8319    29.10099          3        104
-    lag_educ |        232    5.196638    2.750529         .4      11.91
-   lag2_educ |        232    4.838966    2.731897        .21      11.91
-r; t=0.00 20:09:05
-
-.                 xtsum
-
-Variable         |      Mean   Std. dev.       Min        Max |    Observations
------------------+--------------------------------------------+----------------
-country  overall |         .          .          .          . |     N =       0
-         between |                    .          .          . |     n =       0
-         within  |                    .          .          . |     T =       .
-                 |                                            |
-year     overall |  1980.065   7.093693       1970       1990 |     N =     232
-         between |             1.093987       1980     1987.5 |     n =      47
-         within  |             7.059579   1970.065   1990.065 | T-bar = 4.93617
-                 |                                            |
-pop      overall |  41708.31   106698.2    325.569   838158.8 |     N =     232
-         between |             105770.8   344.7116     691094 |     n =      47
-         within  |             15723.32  -95496.96   188773.1 | T-bar = 4.93617
-                 |                                            |
-kc       overall |  68.76473   12.52711   9.579584   131.3724 |     N =     232
-         between |             11.74613    20.3384   91.31507 |     n =      47
-         within  |             5.106255   49.69932   117.9735 | T-bar = 4.93617
-                 |                                            |
-kg       overall |   9.42293   4.029015   2.905853   24.10674 |     N =     232
-         between |             3.821008   3.808681   20.51461 |     n =      47
-         within  |             1.302532   5.198647   14.44866 | T-bar = 4.93617
-                 |                                            |
-ki       overall |  23.13151    10.2948   7.083554   79.89515 |     N =     232
-         between |             8.922231   11.50966   61.28532 |     n =      47
-         within  |             5.193285   .6627635   51.28849 | T-bar = 4.93617
-                 |                                            |
-openk    overall |  52.11646   41.96817   9.235157   327.0913 |     N =     232
-         between |             39.28184   12.28425   222.8016 |     n =      47
-         within  |             15.12592  -16.96803   168.6453 | T-bar = 4.93617
-                 |                                            |
-rgdpwok  overall |  25157.13   18038.55   854.6352   63991.81 |     N =     232
-         between |             17675.33   940.1073    59407.2 |     n =      47
-         within  |             4222.419   12877.31   39963.43 | T-bar = 4.93617
-                 |                                            |
-educat~n overall |  5.628578   2.772159        .76         12 |     N =     232
-         between |              2.70102       1.83     11.084 |     n =      47
-         within  |             .7024793   3.664578   7.958578 | T-bar = 4.93617
-                 |                                            |
-k        overall |  5.54e+11   1.59e+12   1.19e+09   1.12e+13 |     N =     232
-         between |             1.51e+12   2.44e+09   9.15e+12 |     n =      47
-         within  |             5.09e+11  -2.78e+12   4.83e+12 | T-bar = 4.93617
-                 |                                            |
-lngdp    overall |  9.747236   1.025845   6.750675   11.06651 |     N =     232
-         between |              1.01825   6.842797   10.98946 |     n =      47
-         within  |             .1614064   9.189599   10.28384 | T-bar = 4.93617
-                 |                                            |
-lnk      overall |    25.218   1.935488    20.9011   30.04742 |     N =     232
-         between |             1.892246   21.60615   29.81966 |     n =      47
-         within  |             .4261282   23.52344   26.84841 | T-bar = 4.93617
-                 |                                            |
-cty_id   overall |   55.8319   29.10099          3        104 |     N =     232
-         between |              29.3227          3        104 |     n =      47
-         within  |                    0    55.8319    55.8319 | T-bar = 4.93617
-                 |                                            |
-lag_educ overall |  5.196638   2.750529         .4      11.91 |     N =     232
-         between |             2.683859      1.332     10.534 |     n =      47
-         within  |              .694227   3.332638   7.078638 | T-bar = 4.93617
-                 |                                            |
-lag2_e~c overall |  4.838966   2.731897        .21      11.91 |     N =     232
-         between |             2.686891       .906     10.154 |     n =      47
-         within  |             .6295076   3.274966   6.824965 | T-bar = 4.93617
-r; t=0.00 20:09:05
-
-.                 
-.                 inspect education
-
-education:  education                           Number of observations
----------------------                  ---------------------------------------
-                                             Total      Integers   Nonintegers
-|      #                     Negative            -             -             -
-|  #   #   #   #             Zero                -             -             -
-|  #   #   #   #             Positive          232             2           230
-|  #   #   #   #                       -----------   -----------   -----------
-|  #   #   #   #   #         Total             232             2           230
-|  #   #   #   #   #         Missing             -
-+----------------------                -----------
-.76                  12                        232
-(More than 99 unique values)
-r; t=0.00 20:09:05
-
-.                 sum education
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-   education |        232    5.628578    2.772159        .76         12
-r; t=0.00 20:09:05
+. set rmsg on
+r; t=0.00 9:34:11
 
 . 
-.                 preserve
-r; t=0.00 20:09:05
+. capture cd "/Users/miguelportela/Dropbox/ASF_Poupança Longo Prazo/Relatorio/_INQUERITO_Data_Stats"
+r; t=0.00 9:34:11
 
-.                         collapse (mean) mean_educ = education (count) education,by(
-> country)
-r; t=0.00 20:09:05
-
-.                         sum mean_educ education if mean_educ ~= .
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-   mean_educ |         47    5.598213     2.70102       1.83     11.084
-   education |         47     4.93617     .437595          2          5
-r; t=0.00 20:09:05
-
-.                 restore
-r; t=0.00 20:09:05
+. capture cd "D:\miguel\Dropbox\ASF_Poupança Longo Prazo\Relatorio\_INQUERITO_Data_Stats"
+r; t=0.00 9:34:11
 
 . 
-.                 xtsum education
+end of do-file
 
-Variable         |      Mean   Std. dev.       Min        Max |    Observations
------------------+--------------------------------------------+----------------
-educat~n overall |  5.628578   2.772159        .76         12 |     N =     232
-         between |              2.70102       1.83     11.084 |     n =      47
-         within  |             .7024793   3.664578   7.958578 | T-bar = 4.93617
-r; t=0.00 20:09:05
+r; t=0.07 9:34:11
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD93009.000000"
 
-. 
-.                                 tabstat education,by(country)
+. clear all
+r; t=0.05 9:35:56
 
-Summary for variables: education
-Group variable: country (Country name)
+. set more off
+r; t=0.00 9:35:56
 
-         country |      Mean
------------------+----------
-       Argentina |     6.572
-       Australia |     10.02
-         Austria |     7.748
-          Canada |     9.894
-           Chile |     6.034
-        Colombia |     3.834
-      Costa Rica |     4.712
-          Cyprus |     6.844
-         Denmark |     9.288
-           Egypt |      3.25
-     El Salvador |     3.036
-         Finland |     7.898
-          France |     6.716
-          Greece |     6.406
-       Guatemala |     2.096
-        Honduras |     2.674
-           India |     2.758
-       Indonesia |      2.96
-            Iraq |     1.892
-         Ireland |     7.438
-          Israel |     8.532
-           Italy |     5.548
-         Jamaica |     3.724
-           Japan |      8.04
-           Kenya |     2.162
-          Malawi |     2.282
-           Malta |     5.982
-       Mauritius |     4.278
-     Netherlands |      8.05
-     New Zealand |     10.88
-          Norway |      8.52
-        Pakistan |      1.83
-            Peru |     4.972
-     Philippines |     5.986
-          Poland |     8.526
-        Portugal |      3.28
-    South Africa |     4.812
-       Sri Lanka |     4.766
-          Sweden |     8.834
-           Syria |     2.918
-         Tunisia |     1.916
-          Turkey |      2.91
-  United Kingdom |     8.204
-   United States |    11.084
-         Uruguay |     5.976
-       Venezuela |     4.284
-        Zimbabwe |      2.75
------------------+----------
-           Total |  5.628578
-----------------------------
-r; t=0.01 20:09:05
-
-.                                 sum education, detail
-
-                          education
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%         1.25            .76
- 5%         1.68            .91
-10%         2.22           1.25       Obs                 232
-25%        3.235           1.33       Sum of wgt.         232
-
-50%         5.39                      Mean           5.628578
-                        Largest       Std. dev.      2.772159
-75%         7.91          11.43
-90%         9.47          11.71       Variance       7.684867
-95%        10.13          11.91       Skewness       .2612439
-99%        11.71             12       Kurtosis       2.036333
-r; t=0.00 20:09:05
-
-.                                         scalar median_educ = r(p50)
-r; t=0.00 20:09:05
+. set rmsg on
+r; t=0.00 9:35:56
 
 . 
-.                                 // export descriptive statistics & graphs
-. 
-.                                         preserve
-r; t=0.00 20:09:05
+. capture cd "/Users/miguelportela/Dropbox/ASF_Poupança Longo Prazo/Relatorio/_INQUERITO_Data_Stats"
+r; t=0.00 9:35:56
 
-.                                         set dp comma
-r; t=0.00 20:09:05
-
-.                                                 tab year
-
-    Year of |
-observation |      Freq.     Percent        Cum.
-------------+-----------------------------------
-       1970 |         46       19,83       19,83
-       1975 |         46       19,83       39,66
-       1980 |         46       19,83       59,48
-       1985 |         47       20,26       79,74
-       1990 |         47       20,26      100,00
-------------+-----------------------------------
-      Total |        232      100,00
-r; t=0.00 20:09:05
-
-.                                                         sum year
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-        year |        232    1980,065    7,093693       1970       1990
-r; t=0.00 20:09:05
-
-.                                                         
-.                                                 keep if year == r(max)
-(185 observations deleted)
-r; t=0.00 20:09:05
-
-.                                                 
-.                                                 keep rgdpwok education k openk lnk 
-> kc kg lngdp
-r; t=0.00 20:09:05
-
-.                                                 order rgdpwok education k openk lnk
->  kc kg lngdp
-r; t=0.00 20:09:05
-
-.                                                 
-.                                                 replace k = k/1000000000
-(47 real changes made)
-r; t=0.00 20:09:05
-
-.                                                 replace rgdpwok = rgdpwok/1000
-(47 real changes made)
-r; t=0.00 20:09:05
-
-.                                                 format %12.3f lngdp lnk kc kg openk
-r; t=0.00 20:09:05
-
-.                                                 format %12.2f rgdpwok k education
-r; t=0.00 20:09:05
-
-.                                                 
-.                                                 outreg2 using ../paper_files/summar
-> y_statistics.doc, word dec(2) sum(detail) eqkeep(N mean p50 sd min max) replace
-
-         PPP Converted GDP Chain per worker at 2005
-                       constant prices
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     ,9262334       ,9262334
- 5%     2,827434       1,434308
-10%     4,795952       2,827434       Obs                  47
-25%     10,49563       3,763146       Sum of wgt.          47
-
-50%     18,39902                      Mean           27,94253
-                        Largest       Std. dev.      20,61063
-75%     48,38678       60,86387
-90%     57,74333        61,1825       Variance       424,7981
-95%      61,1825       61,94904       Skewness       ,3624234
-99%     63,99181       63,99181       Kurtosis       1,591759
-
-                          education
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%         2,29           2,29
- 5%          2,6           2,58
-10%         3,02            2,6       Obs                  47
-25%         3,95           2,98       Sum of wgt.          47
-
-50%         6,16                      Mean            6,44766
-                        Largest       Std. dev.      2,742321
-75%         8,74           10,5
-90%        10,13          10,85       Variance       7,520327
-95%        10,85          11,18       Skewness        ,222742
-99%           12             12       Kurtosis       1,800954
-
-                           Capital
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     2,439447       2,439447
- 5%     5,870927       5,840974
-10%     11,14583       5,870927       Obs                  47
-25%     22,31325       8,474061       Sum of wgt.          47
-
-50%     118,7036                      Mean           821,8514
-                        Largest       Std. dev.      2115,217
-75%      451,382       2622,523
-90%     2058,469       2906,675       Variance        4474142
-95%     2906,675        9160,03       Skewness       3,957017
-99%     11205,43       11205,43       Kurtosis       18,31011
-
-            Openness at 2005 constant prices (%)
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     16,09933       16,09933
- 5%     16,73268       16,53209
-10%     22,85356       16,73268       Obs                  47
-25%     32,77297       22,49411       Sum of wgt.          47
-
-50%     44,48206                      Mean           57,21819
-                        Largest       Std. dev.      39,54238
-75%     65,92025       107,3448
-90%      106,498       146,3879       Variance         1563,6
-95%     146,3879       187,0178       Skewness       2,009026
-99%     199,2949       199,2949       Kurtosis       7,182464
-
-                         Log Capital
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     21,61504       21,61504
- 5%     22,49328       22,48816
-10%     23,13433       22,49328       Obs                  47
-25%     23,82845       22,86028       Sum of wgt.          47
-
-50%      25,4999                      Mean           25,61287
-                        Largest       Std. dev.      2,005349
-75%     26,83558       28,59516
-90%     28,35298       28,69803       Variance       4,021425
-95%     28,69803       29,84587       Skewness       ,1444266
-99%     30,04742       30,04742       Kurtosis       2,427059
-
-      Consumption Share of PPP Converted GDP Per Capita
-               at 2005 constant prices [rgdpl
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     23,64763       23,64763
- 5%     53,59409       51,43904
-10%     55,82746       53,59409       Obs                  47
-25%     65,09761       55,13936       Sum of wgt.          47
-
-50%     69,55407                      Mean           68,57844
-                        Largest       Std. dev.      10,27627
-75%     74,69832       78,73748
-90%      77,8095       83,29411       Variance       105,6017
-95%     83,29411       83,65292       Skewness      -1,663867
-99%     91,16641       91,16641       Kurtosis        9,34391
-
-      Government Consumption Share of PPP Converted GDP
-               Per Capita at 2005 constant pr
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     4,296318       4,296318
- 5%     4,572012        4,41158
-10%     4,968105       4,572012       Obs                  47
-25%     6,537096       4,751633       Sum of wgt.          47
-
-50%     9,163704                      Mean           9,485137
-                        Largest       Std. dev.      3,676925
-75%      11,1761       16,32135
-90%     15,12994       16,47679       Variance       13,51978
-95%     16,47679       17,90348       Skewness       ,8028721
-99%     19,75947       19,75947       Kurtosis       3,300014
-
-                   Log Real GDP per Worker
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     6,831126       6,831126
- 5%     7,947125       7,268438
-10%     8,475528       7,947125       Obs                  47
-25%     9,258714        8,23301       Sum of wgt.          47
-
-50%     9,820053                      Mean            9,84088
-                        Largest       Std. dev.      1,044103
-75%     10,78698       11,01639
-90%     10,96376       11,02162       Variance        1,09015
-95%     11,02162       11,03407       Skewness      -,8621354
-99%     11,06651       11,06651       Kurtosis        3,29832
-
-
-../paper_files/summary_statistics.doc
-dir : seeout
-r; t=0.12 20:09:05
-
-.                                                 outreg2 using ../paper_files/summar
-> y_statistics.tex, tex(frag) dec(3) sum(detail) eqkeep(N mean p10 p50 sd min max) re
-> place
-
-         PPP Converted GDP Chain per worker at 2005
-                       constant prices
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     ,9262334       ,9262334
- 5%     2,827434       1,434308
-10%     4,795952       2,827434       Obs                  47
-25%     10,49563       3,763146       Sum of wgt.          47
-
-50%     18,39902                      Mean           27,94253
-                        Largest       Std. dev.      20,61063
-75%     48,38678       60,86387
-90%     57,74333        61,1825       Variance       424,7981
-95%      61,1825       61,94904       Skewness       ,3624234
-99%     63,99181       63,99181       Kurtosis       1,591759
-
-                          education
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%         2,29           2,29
- 5%          2,6           2,58
-10%         3,02            2,6       Obs                  47
-25%         3,95           2,98       Sum of wgt.          47
-
-50%         6,16                      Mean            6,44766
-                        Largest       Std. dev.      2,742321
-75%         8,74           10,5
-90%        10,13          10,85       Variance       7,520327
-95%        10,85          11,18       Skewness        ,222742
-99%           12             12       Kurtosis       1,800954
-
-                           Capital
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     2,439447       2,439447
- 5%     5,870927       5,840974
-10%     11,14583       5,870927       Obs                  47
-25%     22,31325       8,474061       Sum of wgt.          47
-
-50%     118,7036                      Mean           821,8514
-                        Largest       Std. dev.      2115,217
-75%      451,382       2622,523
-90%     2058,469       2906,675       Variance        4474142
-95%     2906,675        9160,03       Skewness       3,957017
-99%     11205,43       11205,43       Kurtosis       18,31011
-
-            Openness at 2005 constant prices (%)
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     16,09933       16,09933
- 5%     16,73268       16,53209
-10%     22,85356       16,73268       Obs                  47
-25%     32,77297       22,49411       Sum of wgt.          47
-
-50%     44,48206                      Mean           57,21819
-                        Largest       Std. dev.      39,54238
-75%     65,92025       107,3448
-90%      106,498       146,3879       Variance         1563,6
-95%     146,3879       187,0178       Skewness       2,009026
-99%     199,2949       199,2949       Kurtosis       7,182464
-
-                         Log Capital
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     21,61504       21,61504
- 5%     22,49328       22,48816
-10%     23,13433       22,49328       Obs                  47
-25%     23,82845       22,86028       Sum of wgt.          47
-
-50%      25,4999                      Mean           25,61287
-                        Largest       Std. dev.      2,005349
-75%     26,83558       28,59516
-90%     28,35298       28,69803       Variance       4,021425
-95%     28,69803       29,84587       Skewness       ,1444266
-99%     30,04742       30,04742       Kurtosis       2,427059
-
-      Consumption Share of PPP Converted GDP Per Capita
-               at 2005 constant prices [rgdpl
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     23,64763       23,64763
- 5%     53,59409       51,43904
-10%     55,82746       53,59409       Obs                  47
-25%     65,09761       55,13936       Sum of wgt.          47
-
-50%     69,55407                      Mean           68,57844
-                        Largest       Std. dev.      10,27627
-75%     74,69832       78,73748
-90%      77,8095       83,29411       Variance       105,6017
-95%     83,29411       83,65292       Skewness      -1,663867
-99%     91,16641       91,16641       Kurtosis        9,34391
-
-      Government Consumption Share of PPP Converted GDP
-               Per Capita at 2005 constant pr
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     4,296318       4,296318
- 5%     4,572012        4,41158
-10%     4,968105       4,572012       Obs                  47
-25%     6,537096       4,751633       Sum of wgt.          47
-
-50%     9,163704                      Mean           9,485137
-                        Largest       Std. dev.      3,676925
-75%      11,1761       16,32135
-90%     15,12994       16,47679       Variance       13,51978
-95%     16,47679       17,90348       Skewness       ,8028721
-99%     19,75947       19,75947       Kurtosis       3,300014
-
-                   Log Real GDP per Worker
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     6,831126       6,831126
- 5%     7,947125       7,268438
-10%     8,475528       7,947125       Obs                  47
-25%     9,258714        8,23301       Sum of wgt.          47
-
-50%     9,820053                      Mean            9,84088
-                        Largest       Std. dev.      1,044103
-75%     10,78698       11,01639
-90%     10,96376       11,02162       Variance        1,09015
-95%     11,02162       11,03407       Skewness      -,8621354
-99%     11,06651       11,06651       Kurtosis        3,29832
-
-
-../paper_files/summary_statistics.tex
-dir : seeout
-r; t=0.07 20:09:05
-
-.                                         set dp period
-r; t=0.00 20:09:05
-
-.                                         restore
-r; t=0.00 20:09:05
+. capture cd "D:\miguel\Dropbox\ASF_Poupança Longo Prazo\Relatorio\_INQUERITO_Data_Stats"
+r; t=0.00 9:35:56
 
 . 
-.                                         preserve
-r; t=0.00 20:09:05
-
-.                                                 collapse (mean) mean_education = ed
-> ucation mean_gdp = rgdpwok,by(year)
-r; t=0.00 20:09:05
-
-.                                                 gen ln_mean_gdp = ln(mean_gdp)
-r; t=0.00 20:09:05
-
-.                                                 
-.                                                 label var mean_education "Average e
-> ducation"
-r; t=0.00 20:09:05
-
-.                                                 label var ln_mean_gdp "Ln Average G
-> DP"
-r; t=0.00 20:09:05
-
-.                                                 
-.                                                 sum year
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-        year |          5        1980    7.905694       1970       1990
-r; t=0.00 20:09:05
-
-.                                                 local mm = r(min)
-r; t=0.00 20:09:05
-
-.                                                 local jj = r(max)
-r; t=0.00 20:09:05
-
-.                                                 twoway (line mean_education year, y
-> axis(1)) || (line ln_mean_gdp year, yaxis(2) title("`mm' - `jj'")), scheme(sj)
-r; t=0.70 20:09:05
-
-.                                                         graph export ../paper_files
-> /graphs/mean_education_gdp_year.png, replace
-file
-    /Users/miguelportela/Documents/GitHub/Stata_Training/3.Panel_Data/logs/../paper
-    > _files/graphs/mean_education_gdp_year.png saved as PNG format
-r; t=0.17 20:09:06
-
-.                                                         graph export ../paper_files
-> /graphs/mean_education_gdp_year.eps, replace
-file ../paper_files/graphs/mean_education_gdp_year.eps saved as EPS format
-r; t=0.00 20:09:06
-
-.                                         restore
-r; t=0.00 20:09:06
-
+. /*
+> /*
+> use "DADOS_CONJUNTOS_FINAL2.dta", clear
+>         compress
+>         save tmp, replace
+>         clear all
+>         capture unicode erasebackups, badidea
+>         unicode analyze tmp.dta
+>         //unicode translate tmp.dta, invalid(ignore) encoding(latin1)
+>         unicode retranslate tmp.dta, invalid(ignore) encoding(latin1)
+>         
+>         use tmp, clear
+>         compress
+>         
+>         label var A1 "Género"
+>         label var D_TIPO "Qual é o seu distrito de residência principal"
+>         label var C_TIPO "Em que CONCELHO reside?"
+>         label var NUTS2 "Em que REGIÃO reside?"
+>         save data_clean, replace
+> */
+> 
+> 
+> use data_clean, clear
+> 
+>         codebook, compact
+>         egen nmiss = rowmiss(_all)
+>         tab nmiss
+> 
+> 
+> // LABELS VALORES
+> 
+> tab A10
+> 
+> /*
+> # delimit ;
+> 
+> label define A11 0      "Não sabe ler/escrever"
+> 1       "Sabe ler e escrever / Não completou instrução primária"
+> 2       "1º Ciclo – Instrução Primária Completa"
+> 3       "2º Ciclo – 6ºano / Antigo 2ºano (completo)"
+> 4       "3º Ciclo – 9ºano / Antigo 5ºano (completo)"
+> 5       "Secundário – 11/12ºano / Antigo 7ºano (completo)"
+> 6       "Licenciatura ou Bacharelato"
+> 7       "Mestrado"
+> 8       "Doutoramento";
+> 
+> # delimit cr    
+> */
+> 
+> tab A11, miss
+>         
+> destring A11, replace force
+> label values A11 A10
+> tab A11, sort miss
+> 
+> // LABELS
+> 
+> des PI1_1_1 PI1_1_2 PI1_1_3 PI1_1_4 PI1_1_5 PI1_1_6 PI1_1_7 PI1_2_8 PI1_2_9 PI1_2_10 PI1_2_11 PI1_2_12 P
+> I1_2_13 PI1_2_14 PI1_3_15 PI1_3_16 PI1_3_17 PI1_3_18 PI1_3_19 PI1_3_20 PI1_3_21
+> 
+> // --> perdemos os labels das destas vars:
+> 
+> //label list PI1_1_1 PI1_1_2 PI1_1_3 PI1_1_4 PI1_1_5 PI1_1_6 PI1_1_7
+> 
+> //label list PI1_2_8 PI1_2_9 PI1_2_10 PI1_2_11 PI1_2_12 PI1_2_13 PI1_2_14
+> 
+> //label list PI1_3_15 PI1_3_16 PI1_3_17 PI1_3_18 PI1_3_19 PI1_3_20 PI1_3_21
+> 
+> label var PI1_1_1 "PI1.1.1. - (Hoje/1 mês) Prefere receber 19/20"
+> label var PI1_1_2 "PI1.1.2. - (Hoje/1 mês) Prefere receber 18/20"
+> label var PI1_1_3 "PI1.1.3. - (Hoje/1 mês) Prefere receber 16/20"
+> label var PI1_1_4 "PI1.1.4. - (Hoje/1 mês) Prefere receber 14/20"
+> label var PI1_1_5 "PI1.1.5. - (Hoje/1 mês) Prefere receber 11/20"
+> label var PI1_1_6 "PI1.1.6. - (Hoje/1 mês) Prefere receber 8/20"
+> label var PI1_1_7 "PI1.1.7. - (Hoje/1 mês) Prefere receber 5/20"
+> 
+> label var PI1_2_8 "PI1.2.8. - (Hoje/3 meses) Prefere receber 19/20"
+> label var PI1_2_9 "PI1.2.9. - (Hoje/3 meses) Prefere receber 18/20"
+> label var PI1_2_10 "PI1.2.10. - (Hoje/3 meses) Prefere receber 16/20"
+> label var PI1_2_11 "PI1.2.11. - (Hoje/3 meses) Prefere receber 13/20"
+> label var PI1_2_12 "PI1.2.12. - (Hoje/3 meses) Prefere receber 10/20"
+> label var PI1_2_13 "PI1.2.13. - (Hoje/3 meses) Prefere receber 7/20"
+> label var PI1_2_14 "PI1.2.14. - (Hoje/3 meses) Prefere receber 4/20"
+> label var PI1_3_15 "PI1.3.15. - (1 mês/3 meses) Prefere receber 19/20"
+> label var PI1_3_16 "PI1.3.16. - (1 mês/3 meses) Prefere receber 18/20"
+> label var PI1_3_17 "PI1.3.17. - (1 mês/3 meses) Prefere receber 16/20"
+> label var PI1_3_18 "PI1.3.18. - (1 mês/3 meses) Prefere receber 13/20"
+> label var PI1_3_19 "PI1.3.19. - (1 mês/3 meses) Prefere receber 10/20"
+> label var PI1_3_20 "PI1.3.10. - (1 mês/3 meses) Prefere receber 7/20"
+> label var PI1_3_21 "PI1.3.21. - (1 mês/3 meses) Prefere receber 4/20"
+>         
+> // --
+> 
+> des PI1_1 PI1_2 PI1_3 PI1_4 PI1_5 PI1_6 PI1_7 PI1_8 PI1_9 PI1_10 PI1_11 PI1_12 PI1_13 PI1_14 PI1_15 PI1_
+> 16 PI1_17 PI1_18 PI1_19 PI1_20
+> 
+> //label list PI1_1 PI1_2 PI1_3 PI1_4 PI1_5 PI1_6 PI1_7 PI1_8 PI1_9 PI1_10 PI1_11 PI1_12 PI1_13 PI1_14 PI
+> 1_15 PI1_16 PI1_17 PI1_18 PI1_19 PI1_20
+>         
+> label var PI1_1 "PI1.1.1. - Se sair recebe "
+> label var PI1_2 "PI1.1.2. - Se sair recebe "
+> label var PI1_3 "PI1.1.3. - Se sair recebe "
+> label var PI1_4 "PI1.1.4. - Se sair recebe "
+> label var PI1_5 "PI1.1.5. - Se sair recebe "
+> label var PI1_6 "PI1.1.6. - Se sair recebe "
+> label var PI1_7 "PI1.1.7. - Se sair recebe "
+> label var PI1_8 "PI1.2.8. - Se sair recebe "
+> label var PI1_9 "PI1.2.9. - Se sair recebe "
+> label var PI1_10 "PI1.2.10. - Se sair recebe "
+> label var PI1_11 "PI1.2.11. - Se sair recebe "
+> label var PI1_12 "PI1.2.12. - Se sair recebe "
+> label var PI1_13 "PI1.2.13. - Se sair recebe "
+> label var PI1_14 "PI1.2.14. - Se sair recebe "
+> label var PI1_15 "PI1.3.15. - Se sair recebe "
+> label var PI1_16 "PI1.3.16. - Se sair recebe "
+> label var PI1_17 "PI1.3.17. - Se sair recebe "
+> label var PI1_18 "PI1.3.18. - Se sair recebe "
+> label var PI1_19 "PI1.3.19. - Se sair recebe "
+> label var PI1_20 "PI1.3.10. - Se sair recebe "
+>         
+> // -- TEMPOS
+> des FECHAINI HORAINI DURACION DATA1 HORA_INI TIEMPOINI DATA2 HORA_FIM TIEMPOFIN TIEMPO
+> 
+> // -->> o formato da variável mudou
+> des TIEMPOINI
+> destring TIEMPOINI, replace force
+> 
+> gen minutos = TIEMPOINI/60
+> format %12.1f minutos
+> 
+> sum minutos, detail
+> 
+> count if minutos < 10
+> sum minutos if minutos < 15, detail
+> 
+> count if minutos > 50
+> sum minutos if minutos > 50, detail
+> 
+> 
+> // -- TERMINOU
+> 
+> // -->> não temos a indicação de que o questionário foi terminado
+> 
+>         //tab1 TER CI
+> 
+> //      br FECHAINI HORAINI DURACION DATA1 HORA_INI TIEMPOINI DATA2 HORA_FIM TIEMPOFIN TIEMPO TER
+> 
+> // -- ELIMINAR NÃO CONCLUÍDOS::9 questionários
+> // -- Eliminar questionários que duraram menos de 10 minutos, ou mais de 70 minutos
+> 
+> count
+> 
+> capture drop if TER ~= 1
+> capture         drop TER
+> sum minutos, detail
+> scalar mm = r(p50)*0.4
+> 
+>         drop if minutos < mm
+> 
+> count
+> 
+> drop FECHAINI HORAINI DURACION ID_CONTACTO /*CI*/ DATA1 HORA_INI TIEMPOINI DATA2 HORA_FIM TIEMPOFIN TIEM
+> PO
+> 
+> compress
+> label list A1
+> tab A1
+> 
+> gen mulher = (A1 == 2)
+>         
+>         label define mulher 0 "Homem" 1 "Mulher"
+>         label values mulher mulher
+>         tab mulher
+> 
+> ren A2 idade
+> 
+> order ESTUDIO SEG_AMOSTRA Weight D_TIPO C_TIPO NUTS2 mulher idade IDADE_ESC A4 A5 A5N A5_COD A5_1 A5_1_O
+> UT A7 A10 A11 T1 T1_OUT T2 T2_OUT T2_1 T2_1_OUT T3 T3_OUT T3_1 T3_1_OUT
+> 
+> drop A1 - CONT_TRAB
+> 
+> compress
+> save data_clean_2, replace
+> 
+> //export excel using "../Dashboard/INQUERITO_DADOS.xlsx", firstrow(variables) replace
+> //savespss "../Dashboard/INQUERITO_DADOS.sav", replace
+> //xmlsave "../Dashboard/INQUERITO_DADOS.xml", replace
+> 
+>         keep COMENTARIOS
+>         replace COMENTARIOS = trim(itrim(trim(itrim(COMENTARIOS))))
+>         replace COMENTARIOS = trim(itrim(trim(itrim(COMENTARIOS))))
+>         keep if COMENTARIOS ~= ""
+>         keep if COMENTARIOS ~= " "
+>         compress
+>         export delimited using "../Dashboard/Comentarios.txt", replace
+>         export excel using "../Dashboard/Comentarios.xlsx", replace
+> 
+> */
 . 
-.                                                 sum year
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-        year |        232    1980.065    7.093693       1970       1990
-r; t=0.00 20:09:06
-
-.                                                 local mm = r(min)
-r; t=0.00 20:09:06
-
-.                                                 local jj = r(max)
-r; t=0.00 20:09:06
-
-.                                         
-.                                         twoway kdensity lngdp if education <= media
-> n_educ,legend(on label(1 "Low education")) || kdensity lngdp if education > median_
-> educ, /*
->                                                 */ legend(on label(2 "High educatio
-> n")) title("`mm' - `jj'") scheme(s2mono) graphregion(color(white)) xtitle("Ln GDP")
->  /*
->                                                 */ ytitle("Density") legend(region(
-> lcolor(white))) xlabel(5(2)13)
-r; t=0.51 20:09:06
-
-.                                         
-.                                                 graph export ../paper_files/graphs/
-> lngdp_education.png, replace                                 
-file
-    /Users/miguelportela/Documents/GitHub/Stata_Training/3.Panel_Data/logs/../paper
-    > _files/graphs/lngdp_education.png saved as PNG format
-r; t=0.15 20:09:06
-
-.                                                 graph export ../paper_files/graphs/
-> lngdp_education.eps, replace
-file ../paper_files/graphs/lngdp_education.eps saved as EPS format
-r; t=0.00 20:09:06
-
+. // ---
 . 
-. // # 4. OLS
-.         
-.         codebook year, compact
-
-Variable   Obs Unique      Mean   Min   Max  Label
--------------------------------------------------------------------------------------
-year       232      5  1980.065  1970  1990  Year of observation
--------------------------------------------------------------------------------------
-r; t=0.00 20:09:06
-
-. 
-.                 reg lngdp education lnk openk b2000.year                // define 2
-> 000 as the base year
-note: 1990.year omitted because of collinearity.
-note: 2000b.year identifies no observations in the sample.
-
-      Source |       SS           df       MS      Number of obs   =       232
--------------+----------------------------------   F(7, 224)       =     46.67
-       Model |  144.217244         7  20.6024634   Prob > F        =    0.0000
-    Residual |  98.8776031       224  .441417871   R-squared       =    0.5933
--------------+----------------------------------   Adj R-squared   =    0.5805
-       Total |  243.094847       231  1.05235864   Root MSE        =    .66439
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |   .2089394   .0195018    10.71   0.000     .1705089    .2473698
-         lnk |    .204511   .0309698     6.60   0.000     .1434816    .2655404
-       openk |   .0066179   .0012015     5.51   0.000     .0042501    .0089857
-             |
-        year |
-       1970  |   .3509542   .1421847     2.47   0.014     .0707635     .631145
-       1975  |    .301086    .140299     2.15   0.033     .0246113    .5775606
-       1980  |   .1849566   .1385275     1.34   0.183    -.0880273    .4579405
-       1985  |   .1286162   .1376291     0.93   0.351    -.1425974    .3998297
-       1990  |          0  (omitted)
-       2000  |          0  (empty)
-             |
-       _cons |   2.876932   .7761294     3.71   0.000     1.347483    4.406381
-------------------------------------------------------------------------------
-r; t=0.05 20:09:06
-
-.                         testparm i.year                                            
->              // evaluate the statistical significance of year dummy variables
-
- ( 1)  1970.year = 0
- ( 2)  1975.year = 0
- ( 3)  1980.year = 0
- ( 4)  1985.year = 0
-
-       F(  4,   224) =    1.92
-            Prob > F =    0.1088
-r; t=0.00 20:09:06
-
-.                                                                                    
->              
-.                 reg lngdp education lnk openk
-
-      Source |       SS           df       MS      Number of obs   =       232
--------------+----------------------------------   F(3, 228)       =    104.67
-       Model |  140.835389         3  46.9451298   Prob > F        =    0.0000
-    Residual |  102.259458       228  .448506393   R-squared       =    0.5793
--------------+----------------------------------   Adj R-squared   =    0.5738
-       Total |  243.094847       231  1.05235864   Root MSE        =    .66971
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |    .201098   .0194309    10.35   0.000      .162811     .239385
-         lnk |   .1958077   .0309167     6.33   0.000     .1348888    .2567266
-       openk |   .0061191   .0011969     5.11   0.000     .0037606    .0084776
-       _cons |   3.358554   .7576365     4.43   0.000      1.86569    4.851419
-------------------------------------------------------------------------------
-r; t=0.00 20:09:06
-
-.                         estimates store OLS
-r; t=0.00 20:09:06
-
-.                 
-.                         estat hettest                                              
->              // Breusch-Pagan / Cook-Weisberg test for heteroskedasticity
-
-Breusch–Pagan/Cook–Weisberg test for heteroskedasticity 
-Assumption: Normal error terms
-Variable: Fitted values of lngdp
-
-H0: Constant variance
-
-    chi2(1) =  39.27
-Prob > chi2 = 0.0000
-r; t=0.00 20:09:06
-
-.                         estat hettest, iid
-
-Breusch–Pagan/Cook–Weisberg test for heteroskedasticity 
-Assumption: i.i.d. error terms
-Variable: Fitted values of lngdp
-
-H0: Constant variance
-
-    chi2(1) =  34.30
-Prob > chi2 = 0.0000
-r; t=0.00 20:09:06
-
-.                         estat imtest, white                                        
->              // White's test for Ho: homoskedasticity
-
-White's test
-H0: Homoskedasticity
-Ha: Unrestricted heteroskedasticity
-
-    chi2(9) =  49.10
-Prob > chi2 = 0.0000
-
-Cameron & Trivedi's decomposition of IM-test
-
---------------------------------------------------
-              Source |       chi2     df         p
----------------------+----------------------------
-  Heteroskedasticity |      49.10      9    0.0000
-            Skewness |      25.86      3    0.0000
-            Kurtosis |       0.77      1    0.3806
----------------------+----------------------------
-               Total |      75.73     13    0.0000
---------------------------------------------------
-r; t=0.01 20:09:06
-
-.                         estat ic
-
-Akaike's information criterion and Bayesian information criterion
-
------------------------------------------------------------------------------
-       Model |          N   ll(null)  ll(model)      df        AIC        BIC
--------------+---------------------------------------------------------------
-         OLS |        232  -334.6126  -234.1637       4   476.3275   490.1144
------------------------------------------------------------------------------
-Note: BIC uses N = number of observations. See [R] BIC note.
-r; t=0.00 20:09:06
-
-.                         
-.                         estat vif                                                  
->                      // information on possible collinearity
-
-    Variable |       VIF       1/VIF  
--------------+----------------------
-         lnk |      1.84    0.542238
-   education |      1.49    0.669170
-       openk |      1.30    0.769432
--------------+----------------------
-    Mean VIF |      1.55
-r; t=0.01 20:09:06
-
-.                         
-.                         // net install collin, from(https://stats.idre.ucla.edu/sta
-> t/stata/ado/analysis)
-.                         collin education lnk
-(obs=232)
-
-  Collinearity Diagnostics
-
-                        SQRT                   R-
-  Variable      VIF     VIF    Tolerance    Squared
-----------------------------------------------------
- education      1.48    1.22    0.6742      0.3258
-       lnk      1.48    1.22    0.6742      0.3258
-----------------------------------------------------
-  Mean VIF      1.48
-
-                           Cond
-        Eigenval          Index
----------------------------------
-    1     2.8731          1.0000
-    2     0.1248          4.7990
-    3     0.0021         36.6950
----------------------------------
- Condition Number        36.6950 
- Eigenvalues & Cond Index computed from scaled raw sscp (w/ intercept)
- Det(correlation matrix)    0.6742
-r; t=0.00 20:09:06
-
-.                         
-.                         //ssc install lmcol
-.                         lmcol education lnk
-
-==============================================================================
-* Ordinary Least Squares (OLS)
-==============================================================================
-  education = lnk
-------------------------------------------------------------------------------
-  Sample Size       =         232
-  Wald Test         =    111.1383   |   P-Value > Chi2(1)       =      0.0000
-  F-Test            =    111.1383   |   P-Value > F(1 , 230)    =      0.0000
- (Buse 1973) R2     =      0.3258   |   Raw Moments R2          =      0.8688
- (Buse 1973) R2 Adj =      0.3229   |   Raw Moments R2 Adj      =      0.8683
-  Root MSE (Sigma)  =      2.2812   |   Log Likelihood Function =   -519.5178
-------------------------------------------------------------------------------
-- R2h= 0.3258   R2h Adj= 0.3229  F-Test =  111.14 P-Value > F(1 , 230) 0.0000
-- R2v= 0.3258   R2v Adj= 0.3229  F-Test =  111.14 P-Value > F(1 , 230) 0.0000
-------------------------------------------------------------------------------
-   education | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-         lnk |   .8175122   .0775465    10.54   0.000     .6647198    .9703046
-       _cons |  -14.98745   1.961295    -7.64   0.000    -18.85185   -11.12305
-------------------------------------------------------------------------------
-r; t=0.07 20:09:07
-
-.                         
-.                         // ssc install fgtest
-.                         fgtest education lnk
-
-======================================================================
-* Farrar-Glauber Multicollinearity Tests
-======================================================================
-  Ho: No Multicollinearity - Ha: Multicollinearity
-
-* (1) Farrar-Glauber Multicollinearity Chi2-Test:
-    Chi2 Test =    0.0000    P-Value > Chi2(0)     .
-
-* (2) Farrar-Glauber Multicollinearity F-Test:
-+--------------------------------------------------------+
-|   Variable |   F_Test |      DF1 |      DF2 |  P_Value |
-|------------+----------+----------+----------+----------|
-|        lnk |        . |  231.000 |    0.000 |        . |
-+--------------------------------------------------------+
-
-* (3) Farrar-Glauber Multicollinearity t-Test:
-+-------------------+
-| Variable |    lnk |
-|----------+--------|
-|      lnk |      . |
-+-------------------+
-r; t=0.01 20:09:07
-
-. 
-.                                         // interpretation: we do not have a colline
-> arity problem between education and lnk
-.                                 set seed 234
-r; t=0.00 20:09:07
-
-.                                         // generate collinearity to learn the inter
-> pretation of the output
-.                                         gen educb = education + uniform()
-r; t=0.00 20:09:07
-
-.                                         reg lngdp education educb lnk
-
-      Source |       SS           df       MS      Number of obs   =       232
--------------+----------------------------------   F(3, 228)       =     88.40
-       Model |   130.71447         3    43.57149   Prob > F        =    0.0000
-    Residual |  112.380377       228   .49289639   R-squared       =    0.5377
--------------+----------------------------------   Adj R-squared   =    0.5316
-       Total |  243.094847       231  1.05235864   Root MSE        =    .70207
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |   -.068307   .1555751    -0.44   0.661    -.3748558    .2382417
-       educb |   .2759003   .1530827     1.80   0.073    -.0257374    .5775379
-         lnk |   .1306212   .0291847     4.48   0.000     .0731151    .1881274
-       _cons |   5.140775   .6902011     7.45   0.000     3.780787    6.500763
-------------------------------------------------------------------------------
-r; t=0.00 20:09:07
-
-.                                                 correlate education educb
-(obs=232)
-
-             | educat~n    educb
--------------+------------------
-   education |   1.0000
-       educb |   0.9941   1.0000
-
-r; t=0.00 20:09:07
-
-.                                                 estat vif                          
->                                                      // information on possible col
-> linearity
-
-    Variable |       VIF       1/VIF  
--------------+----------------------
-   education |     87.17    0.011472
-       educb |     85.53    0.011691
-         lnk |      1.50    0.668732
--------------+----------------------
-    Mean VIF |     58.07
-r; t=0.01 20:09:07
-
-.                                                 collin education lnk
-(obs=232)
-
-  Collinearity Diagnostics
-
-                        SQRT                   R-
-  Variable      VIF     VIF    Tolerance    Squared
-----------------------------------------------------
- education      1.48    1.22    0.6742      0.3258
-       lnk      1.48    1.22    0.6742      0.3258
-----------------------------------------------------
-  Mean VIF      1.48
-
-                           Cond
-        Eigenval          Index
----------------------------------
-    1     2.8731          1.0000
-    2     0.1248          4.7990
-    3     0.0021         36.6950
----------------------------------
- Condition Number        36.6950 
- Eigenvalues & Cond Index computed from scaled raw sscp (w/ intercept)
- Det(correlation matrix)    0.6742
-r; t=0.00 20:09:07
-
-.                                                 lmcol education lnk
-
-==============================================================================
-* Ordinary Least Squares (OLS)
-==============================================================================
-  education = lnk
-------------------------------------------------------------------------------
-  Sample Size       =         232
-  Wald Test         =    111.1383   |   P-Value > Chi2(1)       =      0.0000
-  F-Test            =    111.1383   |   P-Value > F(1 , 230)    =      0.0000
- (Buse 1973) R2     =      0.3258   |   Raw Moments R2          =      0.8688
- (Buse 1973) R2 Adj =      0.3229   |   Raw Moments R2 Adj      =      0.8683
-  Root MSE (Sigma)  =      2.2812   |   Log Likelihood Function =   -519.5178
-------------------------------------------------------------------------------
-- R2h= 0.3258   R2h Adj= 0.3229  F-Test =  111.14 P-Value > F(1 , 230) 0.0000
-- R2v= 0.3258   R2v Adj= 0.3229  F-Test =  111.14 P-Value > F(1 , 230) 0.0000
-------------------------------------------------------------------------------
-   education | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-         lnk |   .8175122   .0775465    10.54   0.000     .6647198    .9703046
-       _cons |  -14.98745   1.961295    -7.64   0.000    -18.85185   -11.12305
-------------------------------------------------------------------------------
-r; t=0.05 20:09:07
-
-.                                                 fgtest education educb
-
-======================================================================
-* Farrar-Glauber Multicollinearity Tests
-======================================================================
-  Ho: No Multicollinearity - Ha: Multicollinearity
-
-* (1) Farrar-Glauber Multicollinearity Chi2-Test:
-    Chi2 Test =    0.0000    P-Value > Chi2(0)     .
-
-* (2) Farrar-Glauber Multicollinearity F-Test:
-+--------------------------------------------------------+
-|   Variable |   F_Test |      DF1 |      DF2 |  P_Value |
-|------------+----------+----------+----------+----------|
-|      educb |        . |  231.000 |    0.000 |        . |
-+--------------------------------------------------------+
-
-* (3) Farrar-Glauber Multicollinearity t-Test:
-+-------------------+
-| Variable |  educb |
-|----------+--------|
-|    educb |      . |
-+-------------------+
-r; t=0.00 20:09:07
-
-.                                         
-.                                         drop educb
-r; t=0.00 20:09:07
-
-.                                         
-.                 reg lngdp education lnk openk
-
-      Source |       SS           df       MS      Number of obs   =       232
--------------+----------------------------------   F(3, 228)       =    104.67
-       Model |  140.835389         3  46.9451298   Prob > F        =    0.0000
-    Residual |  102.259458       228  .448506393   R-squared       =    0.5793
--------------+----------------------------------   Adj R-squared   =    0.5738
-       Total |  243.094847       231  1.05235864   Root MSE        =    .66971
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |    .201098   .0194309    10.35   0.000      .162811     .239385
-         lnk |   .1958077   .0309167     6.33   0.000     .1348888    .2567266
-       openk |   .0061191   .0011969     5.11   0.000     .0037606    .0084776
-       _cons |   3.358554   .7576365     4.43   0.000      1.86569    4.851419
-------------------------------------------------------------------------------
-r; t=0.00 20:09:07
-
-.                         regcheck                                                   
->                                                      // examines regression assumpt
-> ions
-+------------------------------------------------------------------------------------
-> --------------------------+
-     Regression assumptions:                    |  Test:                             
->          We seek values
-|------------------------------------------------------------------------------------
-> --------------------------|
-  1) heterokedasticity problem                  |  Breusch-Pagan hettest             
->             > 0.05
-                                                |  Chi2(1): 39.266      
-                                                |  p-value: 0.000       
-|------------------------------------------------------------------------------------
-> --------------------------|
-  2) no multicollinearity problem               |  Variance inflation factor         
->             < 5.00
-                                                |  lnk : 1.84        
-                                                |  education : 1.49        
-                                                |  openk : 1.30        
-|------------------------------------------------------------------------------------
-> --------------------------|
-  3) residuals are not normally distributed     |  Shapiro-Wilk W normality test     
->             > 0.01
-                                                |  z: 4.261       
-                                                |  p-value: 0.000       
-|------------------------------------------------------------------------------------
-> --------------------------|
-  4) no specification problem                   |  Linktest                          
->             > 0.05
-                                                |  t: -3.206      
-                                                |  p-value: 0.002       
-|------------------------------------------------------------------------------------
-> --------------------------|
-  5) functional form problem                    |  Test for appropriate functional fo
-> rm          > 0.05
-                                                |  F(3,225):4.239       
-                                                |  p-value: 0.006       
-|------------------------------------------------------------------------------------
-> --------------------------|
-  6) no influential observations                |  Cook's distance                   
->             < 1.00
-                                                |  no distance is above the cutoff
-+------------------------------------------------------------------------------------
-> --------------------------+
-r; t=0.02 20:09:07
-
-. 
-.                 reg lngdp education lnk openk, robust
-
-Linear regression                               Number of obs     =        232
-                                                F(3, 228)         =      97.99
-                                                Prob > F          =     0.0000
-                                                R-squared         =     0.5793
-                                                Root MSE          =     .66971
-
-------------------------------------------------------------------------------
-             |               Robust
-       lngdp | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |    .201098   .0190355    10.56   0.000     .1635901    .2386059
-         lnk |   .1958077   .0309013     6.34   0.000     .1349191    .2566963
-       openk |   .0061191   .0012517     4.89   0.000     .0036528    .0085854
-       _cons |   3.358554   .7826694     4.29   0.000     1.816365    4.900744
-------------------------------------------------------------------------------
-r; t=0.00 20:09:07
-
-.                 reg lngdp education lnk openk, cluster(cty_id)
-
-Linear regression                               Number of obs     =        232
-                                                F(3, 46)          =      24.00
-                                                Prob > F          =     0.0000
-                                                R-squared         =     0.5793
-                                                Root MSE          =     .66971
-
-                                (Std. err. adjusted for 47 clusters in cty_id)
-------------------------------------------------------------------------------
-             |               Robust
-       lngdp | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |    .201098   .0383008     5.25   0.000     .1240024    .2781935
-         lnk |   .1958077     .06254     3.13   0.003     .0699213    .3216941
-       openk |   .0061191   .0018742     3.26   0.002     .0023465    .0098917
-       _cons |   3.358554   1.583501     2.12   0.039     .1711323    6.545977
-------------------------------------------------------------------------------
-r; t=0.00 20:09:07
-
-.                         scalar beta_education_ols = _b[education]
-r; t=0.00 20:09:07
-
-. 
-. // # 5. IV example
-.         
-.         tsset cty_id year,delta(5)
-
-Panel variable: cty_id (unbalanced)
- Time variable: year, 1970 to 1990
-         Delta: 5 units
-r; t=0.00 20:09:07
-
-.         
-.         // instruments defined above
-.         
-.                 // gen lag_educ = l.education
-.                 // gen lag2_educ = l2.educ
-.         
-.         ivreg2 lngdp (education = lag_educ lag2_educ) lnk openk
-
-IV (2SLS) estimation
---------------------
-
-Estimates efficient for homoskedasticity only
-Statistics consistent for homoskedasticity only
-
-                                                      Number of obs =      232
-                                                      F(  3,   228) =   104.46
-                                                      Prob > F      =   0.0000
-Total (centered) SS     =   243.094847                Centered R2   =   0.5793
-Total (uncentered) SS   =  22285.09237                Uncentered R2 =   0.9954
-Residual SS             =  102.2699431                Root MSE      =    .6639
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |    .204069    .019603    10.41   0.000     .1656479    .2424901
-         lnk |   .1932162   .0308138     6.27   0.000     .1328221    .2536102
-       openk |   .0061033   .0011868     5.14   0.000     .0037772    .0084294
-       _cons |    3.40801   .7535442     4.52   0.000     1.931091     4.88493
-------------------------------------------------------------------------------
-Underidentification test (Anderson canon. corr. LM statistic):         224.037
-                                                   Chi-sq(2) P-val =    0.0000
-------------------------------------------------------------------------------
-Weak identification test (Cragg-Donald Wald F statistic):             3193.352
-Stock-Yogo weak ID test critical values: 10% maximal IV size             19.93
-                                         15% maximal IV size             11.59
-                                         20% maximal IV size              8.75
-                                         25% maximal IV size              7.25
-Source: Stock-Yogo (2005).  Reproduced by permission.
-------------------------------------------------------------------------------
-Sargan statistic (overidentification test of all instruments):           0.085
-                                                   Chi-sq(1) P-val =    0.7703
-------------------------------------------------------------------------------
-Instrumented:         education
-Included instruments: lnk openk
-Excluded instruments: lag_educ lag2_educ
-------------------------------------------------------------------------------
-r; t=0.20 20:09:07
-
-.                 est store IV
-r; t=0.00 20:09:07
-
-.         
-. // # 6. First-Differences example
-.         
-.         reg d.lngdp d.education d.lnk d.openk
-
-      Source |       SS           df       MS      Number of obs   =       185
--------------+----------------------------------   F(3, 181)       =     17.47
-       Model |  .858678228         3  .286226076   Prob > F        =    0.0000
-    Residual |  2.96586778       181   .01638601   R-squared       =    0.2245
--------------+----------------------------------   Adj R-squared   =    0.2117
-       Total |  3.82454601       184  .020785576   Root MSE        =    .12801
-
-------------------------------------------------------------------------------
-     D.lngdp | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |
-         D1. |  -.0292368   .0219179    -1.33   0.184    -.0724843    .0140107
-             |
-         lnk |
-         D1. |   .1651826   .0237253     6.96   0.000     .1183689    .2119962
-             |
-       openk |
-         D1. |  -.0013053   .0005147    -2.54   0.012    -.0023208   -.0002897
-             |
-       _cons |   .0406384    .013909     2.92   0.004     .0131937     .068083
-------------------------------------------------------------------------------
-r; t=0.00 20:09:07
-
-.                 est store FD
-r; t=0.00 20:09:07
-
-.         
-. // # 7. FIXED EFFECTS ESTIMATOR
-.         
-.         xtset cty_id year
-
-Panel variable: cty_id (unbalanced)
- Time variable: year, 1970 to 1990, but with gaps
-         Delta: 1 unit
-r; t=0.00 20:09:07
-
-. 
-.         xtreg lngdp education lnk openk, fe
-
-Fixed-effects (within) regression               Number of obs     =        232
-Group variable: cty_id                          Number of groups  =         47
-
-R-squared:                                      Obs per group:
-     Within  = 0.4423                                         min =          2
-     Between = 0.3214                                         avg =        4.9
-     Overall = 0.3251                                         max =          5
-
-                                                F(3,182)          =      48.11
-corr(u_i, Xb) = 0.0698                          Prob > F          =     0.0000
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |    .027511   .0179627     1.53   0.127    -.0079309    .0629529
-         lnk |   .2242767   .0298003     7.53   0.000     .1654782    .2830751
-       openk |  -.0020405   .0006067    -3.36   0.001    -.0032376   -.0008433
-       _cons |   4.042921   .6816499     5.93   0.000     2.697968    5.387873
--------------+----------------------------------------------------------------
-     sigma_u |  .84098639
-     sigma_e |  .13580123
-         rho |  .97458734   (fraction of variance due to u_i)
-------------------------------------------------------------------------------
-F test that all u_i=0: F(46, 182) = 116.59                   Prob > F = 0.0000
-r; t=0.01 20:09:07
-
-.                 est store FE
-r; t=0.00 20:09:07
-
-. 
-.                 scalar beta_education_fe = _b[education]
-r; t=0.00 20:09:07
-
-.                 
-.                 test education = beta_education_ols
-
- ( 1)  education = .201098
-
-       F(  1,   182) =   93.39
-            Prob > F =    0.0000
-r; t=0.00 20:09:07
-
-.                 
-.                 // COMPARE WITH THE 'LSDV' ESTIMATES
-.                         
-.                         reg lngdp education lnk openk i.cty_id
-
-      Source |       SS           df       MS      Number of obs   =       232
--------------+----------------------------------   F(49, 182)      =    265.30
-       Model |  239.738408        49  4.89262057   Prob > F        =    0.0000
-    Residual |  3.35643907       182  .018441973   R-squared       =    0.9862
--------------+----------------------------------   Adj R-squared   =    0.9825
-       Total |  243.094847       231  1.05235864   Root MSE        =     .1358
-
----------------------------------------------------------------------------------
-          lngdp | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
-----------------+----------------------------------------------------------------
-      education |    .027511   .0179627     1.53   0.127    -.0079309    .0629529
-            lnk |   .2242767   .0298003     7.53   0.000     .1654782    .2830751
-          openk |  -.0020405   .0006067    -3.36   0.001    -.0032376   -.0008433
-                |
-         cty_id |
-     Australia  |   .7016716   .0997823     7.03   0.000     .5047927    .8985505
-       Austria  |   1.085141   .0920872    11.78   0.000      .903445    1.266837
-        Canada  |   .7167558   .0971504     7.38   0.000     .5250699    .9084416
-         Chile  |   .1129563   .0977727     1.16   0.249    -.0799575      .30587
-      Colombia  |   .0407992   .0935561     0.44   0.663    -.1437949    .2253933
-    Costa Rica  |   .9676763   .1179583     8.20   0.000     .7349347    1.200418
-        Cyprus  |   1.033944   .1526778     6.77   0.000     .7326981     1.33519
-       Denmark  |   .8711601   .1049149     8.30   0.000     .6641543    1.078166
-         Egypt  |  -.3470133   .1275309    -2.72   0.007    -.5986425   -.0953842
-   El Salvador  |   .4717161   .1135358     4.15   0.000     .2477003    .6957319
-       Finland  |   .7786093   .0931082     8.36   0.000      .594899    .9623195
-        France  |   .5309356   .1000133     5.31   0.000     .3336009    .7282702
-        Greece  |   1.058017   .0905736    11.68   0.000     .8793079    1.236727
-     Guatemala  |    .600993   .1156022     5.20   0.000     .3729001     .829086
-      Honduras  |   .3819338   .1432572     2.67   0.008     .0992752    .6645924
-         India  |  -1.870274   .1160578   -16.12   0.000    -2.099265   -1.641282
-     Indonesia  |  -1.234405   .1033921   -11.94   0.000    -1.438407   -1.030404
-          Iraq  |   1.199514   .1422314     8.43   0.000     .9188796    1.480148
-       Ireland  |   1.078807   .1100727     9.80   0.000     .8616239    1.295989
-        Israel  |   1.213751    .115925    10.47   0.000     .9850214    1.442481
-         Italy  |    .629005   .1045458     6.02   0.000     .4227273    .8352827
-       Jamaica  |   .8324218   .1285705     6.47   0.000     .5787415    1.086102
-         Japan  |   .1562004   .1063743     1.47   0.144    -.0536849    .3660858
-         Kenya  |  -1.161162   .1113818   -10.43   0.000    -1.380928   -.9413965
-        Malawi  |  -1.169643   .1400134    -8.35   0.000    -1.445901   -.8933844
-         Malta  |   1.660048   .2125075     7.81   0.000     1.240753    2.079344
-     Mauritius  |   .5106747   .1620301     3.15   0.002     .1909757    .8303736
-   Netherlands  |   1.109785   .0912833    12.16   0.000      .929675    1.289894
-   New Zealand  |   1.012694   .1367651     7.40   0.000     .7428445    1.282543
-        Norway  |   1.179278   .0996797    11.83   0.000     .9826014    1.375954
-      Pakistan  |  -.8320037   .1083881    -7.68   0.000    -1.045863   -.6181449
-          Peru  |   .1129234   .0920787     1.23   0.222    -.0687557    .2946025
-   Philippines  |  -.7877752   .1032086    -7.63   0.000    -.9914145    -.584136
-        Poland  |  -.2339385   .0915222    -2.56   0.011    -.4145196   -.0533575
-      Portugal  |   .6604469   .0972399     6.79   0.000     .4685843    .8523095
-  South Africa  |   .2405681   .0919227     2.62   0.010     .0591969    .4219393
-     Sri Lanka  |  -.8184074   .1168949    -7.00   0.000    -1.049051    -.587764
-        Sweden  |   .8018246   .0943982     8.49   0.000      .615569    .9880802
-         Syria  |   .1740508   .1088989     1.60   0.112    -.0408159    .3889175
-       Tunisia  |   .2596118   .1206614     2.15   0.033     .0215368    .4976868
-        Turkey  |  -.0499509    .101631    -0.49   0.624    -.2504775    .1505756
-United Kingdom  |   .4275865   .0912885     4.68   0.000     .2474665    .6077064
- United States  |   .1749532   .1134155     1.54   0.125    -.0488251    .3987314
-       Uruguay  |   .2528222   .1147268     2.20   0.029     .0264566    .4791878
-     Venezuela  |    .679611    .093584     7.26   0.000     .4949618    .8642601
-      Zimbabwe  |  -2.171549   .1099102   -19.76   0.000    -2.388411   -1.954687
-                |
-          _cons |   3.757339   .7130707     5.27   0.000     2.350391    5.164288
----------------------------------------------------------------------------------
-r; t=0.01 20:09:07
-
-.                                 est store LSDV
-r; t=0.00 20:09:07
-
-.                                 
-.                                         est tab FE LSDV, se keep(education lnk open
-> k)
-
-----------------------------------------
-    Variable |     FE          LSDV     
--------------+--------------------------
-   education |    .027511      .027511  
-             |  .01796271    .01796271  
-         lnk |  .22427668    .22427668  
-             |  .02980027    .02980027  
-       openk | -.00204048   -.00204048  
-             |  .00060673    .00060673  
-----------------------------------------
-                            Legend: b/se
-r; t=0.01 20:09:07
-
-. 
-. 
-. // # 8. RANDOM EFFECTS ESTIMATOR
-. 
-.         xtreg lngdp education lnk openk, re
-
-Random-effects GLS regression                   Number of obs     =        232
-Group variable: cty_id                          Number of groups  =         47
-
-R-squared:                                      Obs per group:
-     Within  = 0.4345                                         min =          2
-     Between = 0.3868                                         avg =        4.9
-     Overall = 0.3871                                         max =          5
-
-                                                Wald chi2(3)      =     163.47
-corr(u_i, X) = 0 (assumed)                      Prob > chi2       =     0.0000
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |   .0551059   .0174752     3.15   0.002     .0208552    .0893566
-         lnk |   .1965679   .0282448     6.96   0.000     .1412091    .2519266
-       openk |  -.0017184   .0006175    -2.78   0.005    -.0029287   -.0005082
-       _cons |   4.562499   .6560141     6.95   0.000     3.276735    5.848263
--------------+----------------------------------------------------------------
-     sigma_u |  .64362554
-     sigma_e |  .13580123
-         rho |   .9573789   (fraction of variance due to u_i)
-------------------------------------------------------------------------------
-r; t=0.02 20:09:07
-
-.                 est store RE
-r; t=0.00 20:09:07
-
-. 
-.                 // hypothesis testing
-. 
-.                         xtreg lngdp education ki kg kc openk, fe
-
-Fixed-effects (within) regression               Number of obs     =        232
-Group variable: cty_id                          Number of groups  =         47
-
-R-squared:                                      Obs per group:
-     Within  = 0.4022                                         min =          2
-     Between = 0.4536                                         avg =        4.9
-     Overall = 0.4441                                         max =          5
-
-                                                F(5,180)          =      24.22
-corr(u_i, Xb) = 0.3703                          Prob > F          =     0.0000
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |   .1281289    .014868     8.62   0.000     .0987909    .1574669
-          ki |   .0065975   .0021229     3.11   0.002     .0024086    .0107864
-          kg |   .0013032    .007768     0.17   0.867    -.0140248    .0166312
-          kc |  -.0096678   .0021504    -4.50   0.000     -.013911   -.0054246
-       openk |   -.000934   .0007742    -1.21   0.229    -.0024616    .0005936
-       _cons |   9.574646    .186363    51.38   0.000     9.206909    9.942383
--------------+----------------------------------------------------------------
-     sigma_u |  .81424332
-     sigma_e |  .14137121
-         rho |  .97073724   (fraction of variance due to u_i)
-------------------------------------------------------------------------------
-F test that all u_i=0: F(46, 180) = 112.11                   Prob > F = 0.0000
-r; t=0.01 20:09:07
-
-.                                 test education
-
- ( 1)  education = 0
-
-       F(  1,   180) =   74.27
-            Prob > F =    0.0000
-r; t=0.00 20:09:07
-
-.                                 test kg=kc
-
- ( 1)  kg - kc = 0
-
-       F(  1,   180) =    1.63
-            Prob > F =    0.2031
-r; t=0.00 20:09:07
-
-.                                 test ki kg kc
-
- ( 1)  ki = 0
- ( 2)  kg = 0
- ( 3)  kc = 0
-
-       F(  3,   180) =   13.40
-            Prob > F =    0.0000
-r; t=0.00 20:09:07
-
-.                                 testparm k*             // it gives the same result
-> s as in the previous line, but you may use the wildcard, *
-
- ( 1)  ki = 0
- ( 2)  kg = 0
- ( 3)  kc = 0
-
-       F(  3,   180) =   13.40
-            Prob > F =    0.0000
-r; t=0.00 20:09:07
-
-.                                 testparm kc-ki  // a different form of writing the 
-> test, be haware of the order of the variables in the data
-
- ( 1)  ki = 0
- ( 2)  kg = 0
- ( 3)  kc = 0
-
-       F(  3,   180) =   13.40
-            Prob > F =    0.0000
-r; t=0.00 20:09:07
-
-.                                                                 // describe the dat
-> a before you type 'kc-ki'
-. 
-.         // HAUSMAN test
-.         
-.                 hausman FE RE
-
-                 ---- Coefficients ----
-             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
-             |       FE           RE         Difference       Std. err.
--------------+----------------------------------------------------------------
-   education |     .027511     .0551059       -.0275949        .0041566
-         lnk |    .2242767     .1965679        .0277088         .009502
-       openk |   -.0020405    -.0017184        -.000322               .
-------------------------------------------------------------------------------
-                          b = Consistent under H0 and Ha; obtained from xtreg.
-           B = Inconsistent under Ha, efficient under H0; obtained from xtreg.
-
-Test of H0: Difference in coefficients not systematic
-
-    chi2(3) = (b-B)'[(V_b-V_B)^(-1)](b-B)
-            =  64.64
-Prob > chi2 = 0.0000
-(V_b-V_B is not positive definite)
-r; t=0.00 20:09:07
-
-. 
-.         // the Hausman test rejects the validity of the RE model
-.         
-. 
-. // # 9. RANDOM EFFECTS IV ESTIMATOR
-. 
-.         xtivreg lngdp (education = lag_educ lag2_educ) lnk openk, re
-
-G2SLS random-effects IV regression              Number of obs     =        232
-Group variable: cty_id                          Number of groups  =         47
-
-R-squared:                                      Obs per group:
-     Within  = 0.4262                                         min =          2
-     Between = 0.4132                                         avg =        4.9
-     Overall = 0.4115                                         max =          5
-
-                                                Wald chi2(3)      =     162.51
-corr(u_i, X) = 0 (assumed)                      Prob > chi2       =     0.0000
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |    .070181    .022922     3.06   0.002     .0252547    .1151073
-         lnk |   .1800167   .0326072     5.52   0.000     .1161077    .2439256
-       openk |  -.0017606   .0006192    -2.84   0.004    -.0029742    -.000547
-       _cons |    4.89773   .7344215     6.67   0.000      3.45829     6.33717
--------------+----------------------------------------------------------------
-     sigma_u |  .64666516
-     sigma_e |  .13588401
-         rho |  .95771241   (fraction of variance due to u_i)
-------------------------------------------------------------------------------
-Instrumented: education
- Instruments: lnk openk lag_educ lag2_educ
-r; t=0.02 20:09:07
-
-.                 est store RE_IV
-r; t=0.00 20:09:07
-
-.                 // ssc install xtoverid
-.                         xtoverid
-
-Test of overidentifying restrictions: 
-Cross-section time-series model: xtivreg g2sls   
-Sargan-Hansen statistic   0.007  Chi-sq(1)    P-value = 0.9340
-r; t=0.01 20:09:07
-
-. 
-. 
-. // # 10. EXPORT THE regression OUTPUT
-. 
-.         // # 10.1 SEE output within Stata
-. 
-.                 estimates table OLS IV FD FE RE RE_IV, star(.1 .05 .01) keep(educat
-> ion lnk) stats(r2 ll N F) b(%5.3f) title(Growth regressions) ///
->                         stfmt(%6.3f)
-
-Growth regressions
-
--------------------------------------------------------------------------------
-    Variable |    OLS           IV           FD           FE           RE      
--------------+-----------------------------------------------------------------
-   education |   0.201***     0.204***                  0.028        0.055***  
-         lnk |   0.196***     0.193***                  0.224***     0.197***  
--------------+-----------------------------------------------------------------
-          r2 |   0.579        0.579        0.225        0.442                  
-          ll | -234.164      -234.176      119.816      162.166                  
-           N |     232          232          185          232          232     
-           F | 104.670      104.460       17.468       48.107                  
--------------------------------------------------------------------------------
-                                            Legend: * p<.1; ** p<.05; *** p<.01
-
-
----------------------------
-    Variable |   RE_IV     
--------------+-------------
-   education |   0.070***  
-         lnk |   0.180***  
--------------+-------------
-          r2 |             
-          ll |             
-           N |     232     
-           F |             
----------------------------
-Legend: * p<.1; ** p<.05; *** p<.01
-r; t=0.01 20:09:07
-
-. 
-.                 estimates table OLS IV FD FE RE RE_IV, keep(education lnk) stats(r2
->  ll N F) b(%5.4f) title(Growth regressions) ///
->                         se(%4.3f)
-
-Growth regressions
-
---------------------------------------------------------------------------
-    Variable |   OLS       IV        FD        FE        RE       RE_IV   
--------------+------------------------------------------------------------
-   education |  0.2011    0.2041              0.0275    0.0551    0.0702  
-             |   0.019     0.020               0.018     0.017     0.023  
-         lnk |  0.1958    0.1932              0.2243    0.1966    0.1800  
-             |   0.031     0.031               0.030     0.028     0.033  
--------------+------------------------------------------------------------
-          r2 |  0.5793    0.5793    0.2245    0.4423                      
-          ll | -2.3e+02   -2.3e+02   119.8161   162.1656                      
-           N |     232       232       185       232       232       232  
-           F | 104.6699   104.4600   17.4677   48.1072                      
---------------------------------------------------------------------------
-                                                              Legend: b/se
-r; t=0.01 20:09:07
-
-. 
-.         // # 10.2 'esttab' ==> export the regression output to a .tex file
-. 
-.                         esttab OLS IV FD FE RE RE_IV using ../paper_files/regressio
-> n_analysis.tex, replace ///
->                                 keep(education lnk openk) ///
->                                 mtitle("Model (1)" "Model (2)" "Model (3)" "Model (
-> 4)" "Model (5)" "Model (6)") nonumbers ///
->                                 coeflabel (education "Education" lnk "Log Capital" 
-> openk "Openness") ///
->                                 b(%5.2f) se(%5.3f) star(* 0.1 ** 0.05 *** 0.01) ///
->                                 scalars("N Observations" "ll Log likelihood" "r2 \$
-> R^{2}\$" "F F statistic (overall)" "rmse Root MSE") ///
->                                 aic t(3) ///
->                                 nonotes addnotes("Notes: standard errors in parenth
-> esis. Significance levels: *, 10\%;" "**, 5\%; ***, 1\%. The dependent variable is 
-> ln real GDP per workers." "Source: own computations.")
-(output written to ../paper_files/regression_analysis.tex)
-r; t=0.05 20:09:07
-
-. 
-. 
-. // ### SPECIFICATION TESTS FOR PANEL DATA ### //
-. 
-. // # 11. test for heteroskedasticity within panel data
-. 
-.         // optimal solution proposed by Greene, Econometric Analysis
-. 
-.                 // net install xttest3.pkg, replace
-.                 xtreg lngdp education lnk openk, fe
-
-Fixed-effects (within) regression               Number of obs     =        232
-Group variable: cty_id                          Number of groups  =         47
-
-R-squared:                                      Obs per group:
-     Within  = 0.4423                                         min =          2
-     Between = 0.3214                                         avg =        4.9
-     Overall = 0.3251                                         max =          5
-
-                                                F(3,182)          =      48.11
-corr(u_i, Xb) = 0.0698                          Prob > F          =     0.0000
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |    .027511   .0179627     1.53   0.127    -.0079309    .0629529
-         lnk |   .2242767   .0298003     7.53   0.000     .1654782    .2830751
-       openk |  -.0020405   .0006067    -3.36   0.001    -.0032376   -.0008433
-       _cons |   4.042921   .6816499     5.93   0.000     2.697968    5.387873
--------------+----------------------------------------------------------------
-     sigma_u |  .84098639
-     sigma_e |  .13580123
-         rho |  .97458734   (fraction of variance due to u_i)
-------------------------------------------------------------------------------
-F test that all u_i=0: F(46, 182) = 116.59                   Prob > F = 0.0000
-r; t=0.01 20:09:07
-
-.                         xttest3
-
-Modified Wald test for groupwise heteroskedasticity
-in fixed effect regression model
-
-H0: sigma(i)^2 = sigma^2 for all i
-
-chi2 (47)  =    4256.66
-Prob>chi2 =      0.0000
-
-r; t=0.00 20:09:07
-
-. // ==>> start here
-.         // ALTERNATIVE
-.                 
-.         // you will find here a discussion on tests for heteroskedasticity & autoco
-> rrelation
-. 
-.         // http://www.stata.com/support/faqs/statistics/panel-level-heteroskedastic
-> ity-and-autocorrelation/
-.         // this is how you implement it
-.         // one difficulty with this solution is that it may present difficulties in
->  convergence
-.                 
-.                 xtgls lngdp education lnk openk, panels(heteroskedastic) igls toler
-> ance(1e-5) iterate(75)
-Iteration 1: tolerance = .07922866
-Iteration 2: tolerance = .07237196
-Iteration 3: tolerance = .04616287
-Iteration 4: tolerance = .03823904
-Iteration 5: tolerance = .04056211
-Iteration 6: tolerance = .04081284
-Iteration 7: tolerance = .03406314
-Iteration 8: tolerance = .02498322
-Iteration 9: tolerance = .01683353
-Iteration 10: tolerance = .01026305
-Iteration 11: tolerance = .00554835
-Iteration 12: tolerance = .00267486
-Iteration 13: tolerance = .00114795
-Iteration 14: tolerance = .00040631
-Iteration 15: tolerance = .00006941
-Iteration 16: tolerance = .00007124
-Iteration 17: tolerance = .00012012
-Iteration 18: tolerance = .00012776
-Iteration 19: tolerance = .00011818
-Iteration 20: tolerance = .0001026
-Iteration 21: tolerance = .00008611
-Iteration 22: tolerance = .00007087
-Iteration 23: tolerance = .00005763
-Iteration 24: tolerance = .00004651
-Iteration 25: tolerance = .00003735
-Iteration 26: tolerance = .0000299
-Iteration 27: tolerance = .00002389
-Iteration 28: tolerance = .00001905
-Iteration 29: tolerance = .00001518
-Iteration 30: tolerance = .00001209
-Iteration 31: tolerance = 9.628e-06
-
-
-Cross-sectional time-series FGLS regression
-
-Coefficients:  generalized least squares
-Panels:        heteroskedastic
-Correlation:   no autocorrelation
-
-Estimated covariances      =        47          Number of obs     =        232
-Estimated autocorrelations =         0          Number of groups  =         47
-Estimated coefficients     =         4          Obs per group:
-                                                              min =          2
-                                                              avg =    4.93617
-                                                              max =          5
-                                                Wald chi2(3)      =    3797.34
-Log likelihood             = -77.25723          Prob > chi2       =     0.0000
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |   .1604146   .0042348    37.88   0.000     .1521145    .1687148
-         lnk |   .0884115   .0075286    11.74   0.000     .0736558    .1031672
-       openk |   .0015529    .000482     3.22   0.001     .0006082    .0024975
-       _cons |   6.761474   .1960682    34.49   0.000     6.377188    7.145761
-------------------------------------------------------------------------------
-r; t=0.09 20:09:07
-
-.                         estimates store hetero
-r; t=0.00 20:09:07
-
-. 
-.                 xtgls lngdp education lnk openk
-
-Cross-sectional time-series FGLS regression
-
-Coefficients:  generalized least squares
-Panels:        homoskedastic
-Correlation:   no autocorrelation
-
-Estimated covariances      =         1          Number of obs     =        232
-Estimated autocorrelations =         0          Number of groups  =         47
-Estimated coefficients     =         4          Obs per group:
-                                                              min =          2
-                                                              avg =    4.93617
-                                                              max =          5
-                                                Wald chi2(3)      =     319.52
-Log likelihood             = -234.1637          Prob > chi2       =     0.0000
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |    .201098   .0192626    10.44   0.000     .1633439     .238852
-         lnk |   .1958077    .030649     6.39   0.000     .1357368    .2558786
-       openk |   .0061191   .0011866     5.16   0.000     .0037935    .0084448
-       _cons |   3.358554   .7510767     4.47   0.000     1.886471    4.830638
-------------------------------------------------------------------------------
-r; t=0.01 20:09:07
-
-.                 local df = e(N_g) - 1
-r; t=0.00 20:09:07
-
-.                 lrtest hetero . , df(`df')
-
-Likelihood-ratio test
-Assumption: . nested within hetero
-
-LR chi2(46) = 313.81
-Prob > chi2 = 0.0000
-r; t=0.00 20:09:07
-
-. 
-.         
-.         // I recommend the use of xttest3 
-. 
-. 
-. // # 12. test for cross-sectional correlation in fixed effects model
-.         
-.         // net install xttest2.pkg, replace
-.         xtreg lngdp education lnk openk, fe
-
-Fixed-effects (within) regression               Number of obs     =        232
-Group variable: cty_id                          Number of groups  =         47
-
-R-squared:                                      Obs per group:
-     Within  = 0.4423                                         min =          2
-     Between = 0.3214                                         avg =        4.9
-     Overall = 0.3251                                         max =          5
-
-                                                F(3,182)          =      48.11
-corr(u_i, Xb) = 0.0698                          Prob > F          =     0.0000
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |    .027511   .0179627     1.53   0.127    -.0079309    .0629529
-         lnk |   .2242767   .0298003     7.53   0.000     .1654782    .2830751
-       openk |  -.0020405   .0006067    -3.36   0.001    -.0032376   -.0008433
-       _cons |   4.042921   .6816499     5.93   0.000     2.697968    5.387873
--------------+----------------------------------------------------------------
-     sigma_u |  .84098639
-     sigma_e |  .13580123
-         rho |  .97458734   (fraction of variance due to u_i)
-------------------------------------------------------------------------------
-F test that all u_i=0: F(46, 182) = 116.59                   Prob > F = 0.0000
-r; t=0.01 20:09:07
-
-.                         
-.                 // the command will issue an error message as there are few
-.                 // common observations across panel
-. 
-.                                 capture xttest2
-r; t=0.03 20:09:07
-
-.                         
-.                                         //run the command without capture to see th
-> e error message
-. 
-. // # 13. test for serial correlation within panel data & cross-sectional
-. 
-.         //net install st0039.pkg
-.         
-.         tsset cty_id year,delta(5)
-
-Panel variable: cty_id (unbalanced)
- Time variable: year, 1970 to 1990
-         Delta: 5 units
-r; t=0.00 20:09:07
-
-.         
-.         // test as discussed by Wooldridge (2002) and implemented by Drukker (2003)
-.         xtserial lngdp education lnk openk
-
-Wooldridge test for autocorrelation in panel data
-H0: no first-order autocorrelation
-    F(  1,      45) =     55.788
-           Prob > F =      0.0000
-r; t=0.00 20:09:07
-
-.         
-.         
-.         // ALTERNATIVE in Stata: set of specification tests for linear panel-data m
-> odels
-.                 
-.                 preserve
-r; t=0.00 20:09:07
-
-.                         
-.                         // build a balanced panel
-.                         
-.                         xtreg lngdp education lnk openk, re
-
-Random-effects GLS regression                   Number of obs     =        232
-Group variable: cty_id                          Number of groups  =         47
-
-R-squared:                                      Obs per group:
-     Within  = 0.4345                                         min =          2
-     Between = 0.3868                                         avg =        4.9
-     Overall = 0.3871                                         max =          5
-
-                                                Wald chi2(3)      =     163.47
-corr(u_i, X) = 0 (assumed)                      Prob > chi2       =     0.0000
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |   .0551059   .0174752     3.15   0.002     .0208552    .0893566
-         lnk |   .1965679   .0282448     6.96   0.000     .1412091    .2519266
-       openk |  -.0017184   .0006175    -2.78   0.005    -.0029287   -.0005082
-       _cons |   4.562499   .6560141     6.95   0.000     3.276735    5.848263
--------------+----------------------------------------------------------------
-     sigma_u |  .64362554
-     sigma_e |  .13580123
-         rho |   .9573789   (fraction of variance due to u_i)
-------------------------------------------------------------------------------
-r; t=0.02 20:09:07
-
-.                                 keep if e(sample)
-(0 observations deleted)
-r; t=0.00 20:09:07
-
-. 
-.                         egen nobs = count(year),by(cty_id)
-r; t=0.00 20:09:07
-
-.                         tab nobs
-
-       nobs |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          2 |          2        0.86        0.86
-          5 |        230       99.14      100.00
-------------+-----------------------------------
-      Total |        232      100.00
-r; t=0.00 20:09:07
-
-.                                 sum nobs
-
-    Variable |        Obs        Mean    Std. dev.       Min        Max
--------------+---------------------------------------------------------
-        nobs |        232    4.974138    .2779394          2          5
-r; t=0.00 20:09:07
-
-.                         keep if nobs == r(max)
-(2 observations deleted)
-r; t=0.00 20:09:07
-
-.                         drop nobs
-r; t=0.00 20:09:07
-
-.                         
-.                         xtreg lngdp education lnk openk, re
-
-Random-effects GLS regression                   Number of obs     =        230
-Group variable: cty_id                          Number of groups  =         46
-
-R-squared:                                      Obs per group:
-     Within  = 0.4346                                         min =          5
-     Between = 0.3847                                         avg =        5.0
-     Overall = 0.3850                                         max =          5
-
-                                                Wald chi2(3)      =     162.05
-corr(u_i, X) = 0 (assumed)                      Prob > chi2       =     0.0000
-
-------------------------------------------------------------------------------
-       lngdp | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |   .0538074   .0175709     3.06   0.002     .0193691    .0882457
-         lnk |   .1979637   .0283511     6.98   0.000     .1423965    .2535309
-       openk |  -.0017087   .0006192    -2.76   0.006    -.0029223   -.0004952
-       _cons |    4.54614   .6578749     6.91   0.000     3.256729    5.835551
--------------+----------------------------------------------------------------
-     sigma_u |  .64877243
-     sigma_e |   .1361631
-         rho |  .95780963   (fraction of variance due to u_i)
-------------------------------------------------------------------------------
-r; t=0.02 20:09:07
-
-.                                 // findit xttest1
-.                                 // net install sg164_1.pkg
-.                                 xttest1                                            
->                              
-
-Tests for the error component model:
-
-        lngdp[cty_id,t] = Xb + u[cty_id] + v[cty_id,t]
-           v[cty_id,t] = lambda v[cty_id,(t-1)] + e[cty_id,t]
-
-        Estimated results:
-                         |       Var     sd = sqrt(Var)
-                ---------+-----------------------------
-                   lngdp |   1.057375       1.028287
-                       e |   .0185404      .1361631
-                       u |   .4209057      .64877243
-
-        Tests:
-           Random Effects, Two Sided:
-           ALM(Var(u)=0)         =  107.00 Pr>chi2(1) =  0.0000
-
-           Random Effects, One Sided:
-           ALM(Var(u)=0)         =   10.34 Pr>N(0,1)  =  0.0000
-
-           Serial Correlation:
-           ALM(lambda=0)         =   40.29 Pr>chi2(1) =  0.0000
-
-           Joint Test:
-           LM(Var(u)=0,lambda=0) =  383.90 Pr>chi2(2) =  0.0000
-
-r; t=0.00 20:09:07
-
-.                 
-.                 restore
-r; t=0.00 20:09:07
-
-.         
-.         // CONCLUSION: the above results lead us to conclude that we reject the bas
-> e hypothesis
-.         // of the FE model that we have homoskedasticy & no serial correlation in t
-> he error term
-. 
-.         // the cluster-robust standard errors allow for heteroscedasticity and seri
-> al correlation
-.         // correct solution would be
-. 
-.         // you can also apply specification tests for error-component models    
-.         // this is only relevante in case the Hausman test does not reject the vali
-> dity of the RE model
-.         
-. 
-. // # 14. FINAL MODEL
-.         
-.         xtreg lngdp education lnk openk i.year, fe cluster(cty_id)
-
-Fixed-effects (within) regression               Number of obs     =        232
-Group variable: cty_id                          Number of groups  =         47
-
-R-squared:                                      Obs per group:
-     Within  = 0.4568                                         min =          2
-     Between = 0.2041                                         avg =        4.9
-     Overall = 0.2133                                         max =          5
-
-                                                F(7,46)           =      27.67
-corr(u_i, Xb) = 0.0401                          Prob > F          =     0.0000
-
-                                (Std. err. adjusted for 47 clusters in cty_id)
-------------------------------------------------------------------------------
-             |               Robust
-       lngdp | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-   education |  -.0179964   .0375279    -0.48   0.634    -.0935361    .0575432
-         lnk |   .2125841   .0566699     3.75   0.000     .0985134    .3266548
-       openk |  -.0019852   .0009644    -2.06   0.045    -.0039264    -.000044
-             |
-        year |
-       1975  |   .0170308   .0409239     0.42   0.679    -.0653447    .0994062
-       1980  |   .0638748   .0667798     0.96   0.344     -.070546    .1982956
-       1985  |   .0954113   .0614462     1.55   0.127    -.0282734    .2190961
-       1990  |   .1002199   .0801754     1.25   0.218    -.0611648    .2616046
-             |
-       _cons |   4.535371   1.383237     3.28   0.002      1.75106    7.319683
--------------+----------------------------------------------------------------
-     sigma_u |  .90910952
-     sigma_e |  .13552267
-         rho |  .97826067   (fraction of variance due to u_i)
-------------------------------------------------------------------------------
-r; t=0.01 20:09:07
-
-.                 est store FE_cluster
-r; t=0.00 20:09:07
-
-.                         testparm i.yea
-
- ( 1)  1975.year = 0
- ( 2)  1980.year = 0
- ( 3)  1985.year = 0
- ( 4)  1990.year = 0
-
-       F(  4,    46) =    1.70
-            Prob > F =    0.1674
-r; t=0.00 20:09:07
-
-.                         test education
-
- ( 1)  education = 0
-
-       F(  1,    46) =    0.23
-            Prob > F =    0.6338
-r; t=0.00 20:09:07
-
-. 
-.                         tab year if e(sample)
-
-    Year of |
-observation |      Freq.     Percent        Cum.
-------------+-----------------------------------
-       1970 |         46       19.83       19.83
-       1975 |         46       19.83       39.66
-       1980 |         46       19.83       59.48
-       1985 |         47       20.26       79.74
-       1990 |         47       20.26      100.00
-------------+-----------------------------------
-      Total |        232      100.00
-r; t=0.00 20:09:07
-
-.                         
-.                 esttab OLS IV FE RE FE_cluster using ../paper_files/regression_anal
-> ysis.tex, replace ///
->                         keep(education lnk openk) ///
->                         mtitle("OLS" "IV" "FE" "RE" "FE (cluster)") nonumbers ///
->                         coeflabel (education "Education" lnk "Log Capital" openk "O
-> penness") ///
->                         b(%5.4f) se(%5.2f) star(* 0.1 ** 0.05 *** 0.01) ///
->                         scalars("N Observations" "ll Log likelihood" "r2 \$R^{2}\$"
->  "F F statistic (overall)" "rmse Root MSE") ///
->                         aic t(3) ///
->                         nonotes addnotes("Notes: standard errors in parenthesis. Si
-> gnificance levels: *, 10\%;" "**, 5\%; ***, 1\%. The dependent variable is ln real 
-> GDP per workers." "Source: own computations.")
-(output written to ../paper_files/regression_analysis.tex)
-r; t=0.04 20:09:07
-
-.                         
-. timer off 1
-r; t=0.00 20:09:07
-
-. timer list
-   1:      2.79 /        1 =       2.7870
-r; t=0.00 20:09:07
-
-. 
-. log close
-      name:  <unnamed>
-       log:  /Users/miguelportela/Documents/GitHub/Stata_Training/3.Panel_Data/logs/p
-> anel_analysis_full_exercise.txt
-  log type:  text
- closed on:  28 Dec 2021, 20:09:07
--------------------------------------------------------------------------------------
+. capture log close

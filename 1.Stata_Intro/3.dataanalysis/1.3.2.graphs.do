@@ -13,7 +13,7 @@
 	
 		capture cd "C:\Users\reisportela_win\Dropbox\Stata/stata_training\day1\3.dataanalysis\graphs"
 		capture cd "D:\miguel\Dropbox\Stata/stata_training\day1\3.dataanalysis\graphs"
-		capture cd "/Users/miguelportela/Dropbox/Stata/stata_training/day1/3.dataanalysis/graphs"
+		capture cd "/Users/miguelportela/Documents/GitHub/Stata_Training/1.Stata_Intro/3.dataanalysis/graphs"
 capture log close
 log using logs/graphs.txt, text replace
 

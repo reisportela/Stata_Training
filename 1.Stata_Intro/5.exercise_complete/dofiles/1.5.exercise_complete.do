@@ -15,7 +15,7 @@
 
 		capture cd "C:\Users\reisportela_win\Dropbox\Stata/stata_training\day1\5.exercise_complete\logs"
 		capture cd "D:\miguel\Dropbox\Stata/stata_training\day1\5.exercise_complete\logs"
-		capture cd "/Users/miguelportela/Dropbox/Stata/stata_training/day1/5.exercise_complete/logs/"
+		capture cd "/Users/miguelportela/Documents/GitHub/Stata_Training/1.Stata_Intro/5.exercise_complete/logs"
 
 // DAY 1: Complete exercise
 
@@ -271,7 +271,7 @@ log using exercise_complete_output.txt, text replace
 			
 			twoway (kdensity lngdp if year == 1970) || (kdensity lngdp if year == 1990, lpattern(dash_dot_dot)), ///
 				legend(label(1 "Year: 1960") label(2 "Year: 2000") region(lwidth(none))) title(Income: 1960 vs. 2000) ///
-				xtitle("Log (Income)") ytitle("Density") scheme(sj) graphregion(color(white)) bgcolor(white)
+				xtitle("Log (Income VVVV)") ytitle("Density") scheme(s2color) graphregion(color(white)) bgcolor(white)
 				
 				graph export ../text/income_density.png, replace
 				graph export ../text/income_density.eps, replace
@@ -318,7 +318,7 @@ outreg, clear
 		outreg using ../text/growth_analysis_frag, tex fragment replace rtitles("Education" \ "" \ "Capital" \ "" \ "Openness degree" \ "")  /*
 				*/ drop(_cons) /*
 				*/ ctitle("","Simple model") /*
-				*/ nodisplay varlabels bdec(2) se starlevels(10 5 1) starloc(1) summstat(r2\rmse \ N) summtitle("R2"\"RMSE" \ "N")
+				*/ nodisplay varlabels bdec(4) se starlevels(10 5 1) starloc(1) summstat(r2\rmse \ N) summtitle("R2"\"RMSE" \ "N")
 	
 	estimates restore r2
 		outreg using ../text/growth_analysis_frag, tex fragment merge rtitles("Education" \ "" \ "Capital" \ "" \ "Openness degree" \ "")  /*
@@ -330,7 +330,7 @@ outreg, clear
 		outreg using ../text/growth_analysis_frag, tex fragment merge rtitles("Education" \ "" \ "Capital" \ "" \ "Openness degree" \ "")  /*
 				*/ drop(_cons 1975.year 1980.year 1985.year 1990.year) /*
 				*/ ctitle("","Full model") /*
-				*/ nodisplay varlabels bdec(4) se starlevels(10 5 1) starloc(1) summstat(r2\rmse \ N) summtitle("R2"\"RMSE" \ "N")
+				*/ nodisplay varlabels bdec(1) se starlevels(10 5 1) starloc(1) summstat(r2\rmse \ N) summtitle("R2"\"RMSE" \ "N")
 
 // # 3.2.2 export the output to latex FULL DOC
 
